@@ -234,9 +234,6 @@
     <data name="User.UpdateFailed" xml:space="preserve">
         <value>An error occurred while updating the user profile. Please try again.</value>
     </data>
-    <data name="Organization.AlreadyExists" xml:space="preserve">
-        <value>An organization with this Tax Number or Registration Number already exists in the system.</value>
-    </data>
     <data name="Exception.InvitationTitle" xml:space="preserve">
         <value>User Invitation Failed</value>
     </data>
@@ -279,44 +276,11 @@
     <data name="Exception.AddressTitle" xml:space="preserve">
         <value>Address Operation Failed</value>
     </data>
-    <data name="Exception.OrganizationTitle" xml:space="preserve">
-        <value>Organization Operation Failed</value>
-    </data>
-    <data name="Validation.OrganizationNameRequired" xml:space="preserve">
-        <value>Organization name is required.</value>
-    </data>
-    <data name="Validation.OrganizationNameLength" xml:space="preserve">
-        <value>Organization name must be between 2 and 255 characters.</value>
-    </data>
     <data name="Validation.DescriptionRequired" xml:space="preserve">
         <value>Description is required.</value>
     </data>
     <data name="Validation.DescriptionLength" xml:space="preserve">
         <value>Description must be between 10 and 2000 characters.</value>
-    </data>
-    <data name="Validation.InvalidOrganizationType" xml:space="preserve">
-        <value>The selected organization type is invalid.</value>
-    </data>
-    <data name="Validation.RegistrationDateRequired" xml:space="preserve">
-        <value>Establishment date is required.</value>
-    </data>
-    <data name="Validation.RegistrationDateInPast" xml:space="preserve">
-        <value>Establishment date cannot be in the future.</value>
-    </data>
-    <data name="Validation.TaxNumberRequired" xml:space="preserve">
-        <value>Tax number is required.</value>
-    </data>
-    <data name="Validation.InvalidTaxNumber" xml:space="preserve">
-        <value>Tax number must be exactly 10 characters long.</value>
-    </data>
-    <data name="Validation.RegistrationNumberLength" xml:space="preserve">
-        <value>Registration number must be between 5 and 50 characters.</value>
-    </data>
-    <data name="Validation.CompanyEmailRequired" xml:space="preserve">
-        <value>Corporate email address is required.</value>
-    </data>
-    <data name="Validation.CompanyPhoneRequired" xml:space="preserve">
-        <value>Corporate phone number is required.</value>
     </data>
     <data name="Validation.AddressTitleRequired" xml:space="preserve">
         <value>Address title is required.</value>
@@ -345,9 +309,6 @@
     <data name="Validation.InvalidCoordinates" xml:space="preserve">
         <value>Invalid latitude or longitude value.</value>
     </data>
-    <data name="Organization.EntityName" xml:space="preserve">
-        <value>Organization</value>
-    </data>
     <data name="Validation.SearchTermLength" xml:space="preserve">
         <value>Search term cannot exceed 128 characters.</value>
     </data>
@@ -357,33 +318,6 @@
     <data name="Validation.InvalidPageSize" xml:space="preserve">
         <value>Page size must be 1 or greater.</value>
     </data>
-    <data name="Email.OrganizationAssignedSubject" xml:space="preserve">
-        <value>You Have Been Assigned to an Organization</value>
-    </data>
-    <data name="Email.OrganizationAssignedBody" xml:space="preserve">
-        <value>You have been successfully assigned as an authorized manager for {{OrganizationName}}. You can now log in to the platform to manage its operations.</value>
-    </data>
-    <data name="Email.OrganizationAssignedButton" xml:space="preserve">
-        <value>Go to Dashboard</value>
-    </data>
-    <data name="Email.OrganizationAssignedNotice" xml:space="preserve">
-        <value>If you believe this assignment was made in error, please contact the system administrator immediately.</value>
-    </data>
-    <data name="Organization.ManagerAlreadyExists" xml:space="preserve">
-        <value>This user is already a manager for the specified organization.</value>
-    </data>
-    <data name="Organization.AlreadyPrimaryManager" xml:space="preserve">
-        <value>This user is already the primary manager of the organization.</value>
-    </data>
-    <data name="Validation.DisplayNameRequired" xml:space="preserve">
-        <value>Display name is required.</value>
-    </data>
-    <data name="Validation.DisplayNameLength" xml:space="preserve">
-        <value>Display name must be between 2 and 255 characters.</value>
-    </data>
-    <data name="Validation.InvalidWebSiteUrl" xml:space="preserve">
-        <value>Please enter a valid website URL.</value>
-    </data>
     <data name="Validation.FacilityNameRequired" xml:space="preserve">
         <value>Facility name is required.</value>
     </data>
@@ -392,9 +326,6 @@
     </data>
     <data name="Validation.CapacityInvalid" xml:space="preserve">
         <value>Capacity must be greater than zero.</value>
-    </data>
-    <data name="Validation.HumanCapacityInvalid" xml:space="preserve">
-        <value>Human capacity must be greater than zero.</value>
     </data>
     <data name="Validation.CriticalThresholdInvalid" xml:space="preserve">
         <value>Critical threshold cannot be negative.</value>
@@ -425,9 +356,6 @@
     </data>
     <data name="Facility.UnauthorizedFacilityAccess" xml:space="preserve">
         <value>You are not authorized to manage facilities that belong to other organizations.</value>
-    </data>
-    <data name="Organization.UnauthorizedOrganizationAccess" xml:space="preserve">
-        <value>You are not authorized to view the details of this organization.</value>
     </data>
     <data name="Exception.UnauthorizedAccess" xml:space="preserve">
         <value>Insufficient Authority</value>
@@ -600,9 +528,6 @@
     <data name="Item.NameMaxLength" xml:space="preserve">
         <value>Item name cannot exceed 128 characters.</value>
     </data>
-    <data name="Facility.CannotStoreItems" xml:space="preserve">
-        <value>This type of facility cannot store items.</value>
-    </data>
     <data name="Facility.MustBeApproved" xml:space="preserve">
         <value>The facility must be approved before operations can be performed.</value>
     </data>
@@ -698,9 +623,6 @@
     </data>
     <data name="Dispatch.ReceiptItemMissing" xml:space="preserve">
         <value>Some items from the dispatch are missing in the receipt payload. Please specify the received or damaged quantities for all items.</value>
-    </data>
-    <data name="Dispatch.SourceItemNotInDispatch" xml:space="preserve">
-        <value>The item attempting to be received is not part of the original dispatch.</value>
     </data>
     <data name="Dispatch.ReceiptQuantityInvalid" xml:space="preserve">
         <value>The received or damaged quantity is invalid. Total quantity must be greater than zero.</value>

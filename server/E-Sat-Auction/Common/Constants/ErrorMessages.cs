@@ -71,7 +71,6 @@ public static class ErrorMessages
         public const string ReceiverNameRequired = "Dispatch.ReceiverNameRequired";
         public const string ReceiverPhoneRequired = "Dispatch.ReceiverPhoneRequired";
         public const string SourceFacilityRequired = "Dispatch.SourceFacilityRequired";
-        public const string SourceItemNotInDispatch = "Dispatch.SourceItemNotInDispatch";
         public const string SourceItemRequired = "Dispatch.SourceItemRequired";
         public const string StandardizedItemCannotBeAdHoc = "Dispatch.StandardizedItemCannotBeAdHoc";
         public const string StatusNotPending = "Dispatch.StatusNotPending";
@@ -94,7 +93,6 @@ public static class ErrorMessages
         public const string InventoryTitle = "Exception.InventoryTitle";
         public const string InvitationTitle = "Exception.InvitationTitle";
         public const string NotFoundMessage = "Exception.NotFoundMessage";
-        public const string OrganizationTitle = "Exception.OrganizationTitle";
         public const string PayloadTitle = "Exception.PayloadTitle";
         public const string ProductTitle = "Exception.ProductTitle";
         public const string RegistrationTitle = "Exception.RegistrationTitle";
@@ -113,7 +111,6 @@ public static class ErrorMessages
     public static class Facility
     {
         public const string AlreadyPrimaryManager = "Facility.AlreadyPrimaryManager";
-        public const string CannotStoreItems = "Facility.CannotStoreItems";
         public const string EntityName = "Facility.EntityName";
         public const string ManagerAlreadyExists = "Facility.ManagerAlreadyExists";
         public const string MustBeApproved = "Facility.MustBeApproved";
@@ -142,15 +139,6 @@ public static class ErrorMessages
         public const string UnknownItem = "Item.Unknown";
     }
 
-    public static class Organization
-    {
-        public const string AlreadyExists = "Organization.AlreadyExists";
-        public const string AlreadyPrimaryManager = "Organization.AlreadyPrimaryManager";
-        public const string EntityName = "Organization.EntityName";
-        public const string ManagerAlreadyExists = "Organization.ManagerAlreadyExists";
-        public const string UnauthorizedAccess = "Organization.UnauthorizedOrganizationAccess";
-    }
-    
     public static class Product
     {
         public const string AlreadyActive = "Product.AlreadyActive";
@@ -198,14 +186,10 @@ public static class ErrorMessages
         public const string CapacityInvalid = "Validation.CapacityInvalid";
         public const string CityLength = "Validation.CityLength";
         public const string CityRequired = "Validation.CityRequired";
-        public const string CompanyEmailRequired = "Validation.CompanyEmailRequired";
-        public const string CompanyPhoneRequired = "Validation.CompanyPhoneRequired";
         public const string ConfirmPassword = "Validation.ConfirmPassword";
         public const string CriticalThresholdInvalid = "Validation.CriticalThresholdInvalid";
         public const string DescriptionLength = "Validation.DescriptionLength";
         public const string DescriptionRequired = "Validation.DescriptionRequired";
-        public const string DisplayNameLength = "Validation.DisplayNameLength";
-        public const string DisplayNameRequired = "Validation.DisplayNameRequired";
         public const string DistrictLength = "Validation.DistrictLength";
         public const string DistrictRequired = "Validation.DistrictRequired";
         public const string EmailRequired = "Validation.EmailRequired";
@@ -214,14 +198,12 @@ public static class ErrorMessages
         public const string FirstNameLength = "Validation.FirstNameLength";
         public const string FirstNameRequired = "Validation.FirstNameRequired";
         public const string GenderRequired = "Validation.GenderRequired";
-        public const string HumanCapacityInvalid = "Validation.HumanCapacityInvalid";
         public const string IdentifierRequired = "Validation.IdentifierRequired";
         public const string InvalidCoordinates = "Validation.InvalidCoordinates";
         public const string InvalidEmail = "Validation.InvalidEmail";
         public const string InvalidGender = "Validation.InvalidGender";
         public const string InvalidIdentifier = "Validation.InvalidIdentifier";
         public const string InvalidInvitationLink = "Validation.InvalidInvitationLink";
-        public const string InvalidOrganizationType = "Validation.InvalidOrganizationType";
         public const string InvalidPageNumber = "Validation.InvalidPageNumber";
         public const string InvalidPageSize = "Validation.InvalidPageSize";
         public const string InvalidPhone = "Validation.InvalidPhone";
@@ -229,15 +211,11 @@ public static class ErrorMessages
         public const string InvalidRole = "Validation.InvalidRole";
         public const string InvalidUserIdentifier = "Validation.InvalidUserIdentifier";
         public const string InvalidVerificationLink = "Validation.InvalidVerificationLink";
-        public const string InvalidTaxNumber = "Validation.InvalidTaxNumber";
         public const string InvalidTC = "Validation.InvalidTC";
-        public const string InvalidWebSiteUrl = "Validation.InvalidWebSiteUrl";
         public const string LastNameLength = "Validation.LastNameLength";
         public const string LastNameRequired = "Validation.LastNameRequired";
         public const string OpenAddressLength = "Validation.OpenAddressLength";
         public const string OpenAddressRequired = "Validation.OpenAddressRequired";
-        public const string OrganizationNameLength = "Validation.OrganizationNameLength";
-        public const string OrganizationNameRequired = "Validation.OrganizationNameRequired";
         public const string PageSizeExceeded = "Validation.PageSizeExceeded";
         public const string PasswordLower = "Validation.PasswordLower";
         public const string PasswordMinLength = "Validation.PasswordMinLength";
@@ -246,11 +224,7 @@ public static class ErrorMessages
         public const string PasswordUpper = "Validation.PasswordUpper";
         public const string PhoneRequired = "Validation.PhoneRequired";
         public const string RefreshTokenRequired = "Validation.RefreshTokenRequired";
-        public const string RegistrationDateInPast = "Validation.RegistrationDateInPast";
-        public const string RegistrationDateRequired = "Validation.RegistrationDateRequired";
-        public const string RegistrationNumberLength = "Validation.RegistrationNumberLength";
         public const string SearchTermLength = "Validation.SearchTermLength";
-        public const string TaxNumberRequired = "Validation.TaxNumberRequired";
         public const string TargetRoleRequired = "Validation.TargetRoleRequired";
     }
 }

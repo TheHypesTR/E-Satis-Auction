@@ -234,9 +234,6 @@
     <data name="User.UpdateFailed" xml:space="preserve">
         <value>Kullanıcı profili güncellenirken bir hata oluştu. Lütfen tekrar deneyin.</value>
     </data>
-    <data name="Organization.AlreadyExists" xml:space="preserve">
-        <value>Sistemde bu Vergi Numarası veya Sicil Numarasına sahip bir kurum zaten mevcut.</value>
-    </data>
     <data name="Exception.InvitationTitle" xml:space="preserve">
         <value>Kullanıcı Daveti Başarısız</value>
     </data>
@@ -279,44 +276,11 @@
     <data name="Exception.AddressTitle" xml:space="preserve">
         <value>Adres İşlemi Başarısız</value>
     </data>
-    <data name="Exception.OrganizationTitle" xml:space="preserve">
-        <value>Kurum İşlemi Başarısız</value>
-    </data>
-    <data name="Validation.OrganizationNameRequired" xml:space="preserve">
-        <value>Kurum adı zorunludur.</value>
-    </data>
-    <data name="Validation.OrganizationNameLength" xml:space="preserve">
-        <value>Kurum adı 2 ile 255 karakter arasında olmalıdır.</value>
-    </data>
     <data name="Validation.DescriptionRequired" xml:space="preserve">
         <value>Açıklama zorunludur.</value>
     </data>
     <data name="Validation.DescriptionLength" xml:space="preserve">
         <value>Açıklama 10 ile 2000 karakter arasında olmalıdır.</value>
-    </data>
-    <data name="Validation.InvalidOrganizationType" xml:space="preserve">
-        <value>Seçilen kurum türü geçersiz.</value>
-    </data>
-    <data name="Validation.RegistrationDateRequired" xml:space="preserve">
-        <value>Kuruluş/Tescil tarihi zorunludur.</value>
-    </data>
-    <data name="Validation.RegistrationDateInPast" xml:space="preserve">
-        <value>Kuruluş tarihi gelecekte bir tarih olamaz.</value>
-    </data>
-    <data name="Validation.TaxNumberRequired" xml:space="preserve">
-        <value>Vergi numarası zorunludur.</value>
-    </data>
-    <data name="Validation.InvalidTaxNumber" xml:space="preserve">
-        <value>Vergi numarası tam 10 haneli olmalıdır.</value>
-    </data>
-    <data name="Validation.RegistrationNumberLength" xml:space="preserve">
-        <value>Sicil numarası 5 ile 50 karakter arasında olmalıdır.</value>
-    </data>
-    <data name="Validation.CompanyEmailRequired" xml:space="preserve">
-        <value>Kurumsal e-posta adresi zorunludur.</value>
-    </data>
-    <data name="Validation.CompanyPhoneRequired" xml:space="preserve">
-        <value>Kurumsal telefon numarası zorunludur.</value>
     </data>
     <data name="Validation.AddressTitleRequired" xml:space="preserve">
         <value>Adres başlığı zorunludur.</value>
@@ -345,9 +309,6 @@
     <data name="Validation.InvalidCoordinates" xml:space="preserve">
         <value>Geçersiz enlem veya boylam değeri.</value>
     </data>
-    <data name="Organization.EntityName" xml:space="preserve">
-        <value>Kurum</value>
-    </data>
     <data name="Validation.InvalidPageNumber" xml:space="preserve">
         <value>Sayfa numarası 1 veya daha büyük olmalıdır.</value>
     </data>
@@ -357,33 +318,6 @@
     <data name="Validation.SearchTermLength" xml:space="preserve">
         <value>Arama metni 128 karakterden uzun olamaz.</value>
     </data>
-    <data name="Email.OrganizationAssignedSubject" xml:space="preserve">
-        <value>Bir Kuruma Yönetici Olarak Atandınız</value>
-    </data>
-    <data name="Email.OrganizationAssignedBody" xml:space="preserve">
-        <value>{{OrganizationName}} kurumu için yetkili yönetici olarak başarıyla atandınız. Operasyonları yönetmek için platforma giriş yapabilirsiniz.</value>
-    </data>
-    <data name="Email.OrganizationAssignedButton" xml:space="preserve">
-        <value>Kontrol Paneline Git</value>
-    </data>
-    <data name="Email.OrganizationAssignedNotice" xml:space="preserve">
-        <value>Bu atamanın hatalı olduğunu düşünüyorsanız, lütfen derhal sistem yöneticisiyle iletişime geçin.</value>
-    </data>
-    <data name="Organization.ManagerAlreadyExists" xml:space="preserve">
-        <value>Bu kullanıcı zaten belirtilen kurumun yöneticisidir.</value>
-    </data>
-    <data name="Organization.AlreadyPrimaryManager" xml:space="preserve">
-        <value>Bu kullanıcı zaten kurumun birincil yöneticisidir.</value>
-    </data>
-    <data name="Validation.DisplayNameRequired" xml:space="preserve">
-        <value>Görünen ad zorunludur.</value>
-    </data>
-    <data name="Validation.DisplayNameLength" xml:space="preserve">
-        <value>Görünen ad 2 ile 255 karakter arasında olmalıdır.</value>
-    </data>
-    <data name="Validation.InvalidWebSiteUrl" xml:space="preserve">
-        <value>Lütfen geçerli bir web sitesi adresi giriniz.</value>
-    </data>
     <data name="Validation.FacilityNameRequired" xml:space="preserve">
         <value>Tesis adı zorunludur.</value>
     </data>
@@ -392,9 +326,6 @@
     </data>
     <data name="Validation.CapacityInvalid" xml:space="preserve">
         <value>Kapasite sıfırdan büyük olmalıdır.</value>
-    </data>
-    <data name="Validation.HumanCapacityInvalid" xml:space="preserve">
-        <value>İnsan kapasitesi sıfırdan büyük olmalıdır.</value>
     </data>
     <data name="Validation.CriticalThresholdInvalid" xml:space="preserve">
         <value>Kritik eşik değeri negatif olamaz.</value>
@@ -425,9 +356,6 @@
     </data>
     <data name="Facility.UnauthorizedFacilityAccess" xml:space="preserve">
         <value>Sadece yöneticisi olduğunuz kurumlara ait tesislerde işlem yapabilirsiniz.</value>
-    </data>
-    <data name="Organization.UnauthorizedOrganizationAccess" xml:space="preserve">
-        <value>Bu kurumun detaylarını görüntüleme yetkiniz bulunmamaktadır.</value>
     </data>
     <data name="Exception.UnauthorizedAccess" xml:space="preserve">
         <value>Yetersiz Yetki</value>
@@ -600,9 +528,6 @@
     <data name="Item.NameMaxLength" xml:space="preserve">
         <value>Ürün adı 128 karakteri geçemez.</value>
     </data>
-    <data name="Facility.CannotStoreItems" xml:space="preserve">
-        <value>Bu tesis türünde stok depolanamaz.</value>
-    </data>
     <data name="Facility.MustBeApproved" xml:space="preserve">
         <value>İşlem yapılabilmesi için tesisin onaylanmış olması gerekmektedir.</value>
     </data>
@@ -698,9 +623,6 @@
     </data>
     <data name="Dispatch.ReceiptItemMissing" xml:space="preserve">
         <value>Sevkiyatta bulunan bazı ürünler kabul listesinde eksik. Lütfen tüm ürünlerin kabul veya hasar durumunu giriniz.</value>
-    </data>
-    <data name="Dispatch.SourceItemNotInDispatch" xml:space="preserve">
-        <value>Kabul edilmek istenen ürün bu sevkiyatın orijinal listesinde bulunmamaktadır.</value>
     </data>
     <data name="Dispatch.ReceiptQuantityInvalid" xml:space="preserve">
         <value>Kabul edilen veya hasarlı miktar geçersiz. Toplam miktar sıfırdan büyük olmalıdır.</value>

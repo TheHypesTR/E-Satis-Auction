@@ -12,10 +12,6 @@ public static class EmailMessages
     public const string InviteButton = "Email.InviteButton";
     public const string InviteNotice = "Email.InviteNotice";
     public const string InviteSubject = "Email.InviteSubject";
-    public const string OrganizationAssignedBody = "Email.OrganizationAssignedBody";
-    public const string OrganizationAssignedButton = "Email.OrganizationAssignedButton";
-    public const string OrganizationAssignedNotice = "Email.OrganizationAssignedNotice";
-    public const string OrganizationAssignedSubject = "Email.OrganizationAssignedSubject";
     public const string PasswordChangedBody = "Email.PasswordChangedBody";
     public const string PasswordChangedNotice = "Email.PasswordChangedNotice";
     public const string PasswordChangedSubject = "Email.PasswordChangedSubject";

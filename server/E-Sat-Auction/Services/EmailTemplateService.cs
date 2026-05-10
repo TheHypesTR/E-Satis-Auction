@@ -66,20 +66,6 @@ public class EmailTemplateService : IEmailTemplateService
             .Replace("{{FallbackText}}", "")
             .Replace("{{SecurityNotice}}", _localizer[EmailMessages.PasswordChangedNotice].Value);
     }
-    
-    public async Task<string> GenerateOrganizationAssignedEmailAsync(string firstName, string organizationName, string loginLink)
-    {
-        string mailBody = await GetBaseTemplateAsync(firstName);
-
-        return mailBody
-            .Replace("{{BodyText}}", _localizer[EmailMessages.OrganizationAssignedBody].Value
-                .Replace("{{OrganizationName}}", organizationName))
-            .Replace("{{ButtonDisplay}}", "block")
-            .Replace("{{ActionLink}}", loginLink)
-            .Replace("{{ButtonText}}", _localizer[EmailMessages.OrganizationAssignedButton].Value)
-            .Replace("{{FallbackText}}", _localizer[EmailMessages.FallbackText].Value)
-            .Replace("{{SecurityNotice}}", _localizer[EmailMessages.OrganizationAssignedNotice].Value);
-    }
 
     public async Task<string> GenerateFacilityAssignedEmailAsync(string firstName, string facilityName, string loginLink)
     {

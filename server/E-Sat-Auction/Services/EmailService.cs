@@ -56,14 +56,7 @@ public class EmailService : IEmailService
         string subject = _localizer[EmailMessages.PasswordChangedSubject].Value;
         await SendEmailAsync(toEmail, subject, mailBody);
     }
-
-    public async Task SendOrganizationAssignedEmailAsync(string toEmail, string firstName, string organizationName, string dashboardLink)
-    {
-        string mailBody = await _templateService.GenerateOrganizationAssignedEmailAsync(firstName, organizationName, dashboardLink);
-        string subject = _localizer[EmailMessages.OrganizationAssignedSubject].Value;
-        await SendEmailAsync(toEmail, subject, mailBody);
-    }
-
+    
     public async Task SendFacilityAssignedEmailAsync(string toEmail, string firstName, string facilityName, string dashboardLink)
     {
         string mailBody = await _templateService.GenerateFacilityAssignedEmailAsync(firstName, facilityName, dashboardLink);
