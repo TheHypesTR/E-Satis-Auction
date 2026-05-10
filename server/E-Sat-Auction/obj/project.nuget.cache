@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sVZ/1KiLATc=",
+  "dgSpecHash": "0ZrO4yTJv+c=",
   "success": true,
-  "projectFilePath": "E:\\Personal\\Projects\\E-Sat-Auction\\server\\E-Sat-Auction\\E-Sat-Auction.csproj",
+  "projectFilePath": "E:\\Personal\\Projects\\e-Sat-Auction\\server\\e-Sat-Auction\\e-Sat-Auction.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dunda\\.nuget\\packages\\bouncycastle.cryptography\\2.6.2\\bouncycastle.cryptography.2.6.2.nupkg.sha512",
     "C:\\Users\\dunda\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512",

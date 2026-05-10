@@ -1,0 +1,6 @@
+@e_Sat_Auction_HostAddress = http://localhost:5067
+
+GET {{e_Sat_Auction_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

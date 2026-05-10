@@ -1,1 +1,1 @@
-# e-Satis-Auction
+# Doğal Afet Koordinasyon ve Yönetim Platformu

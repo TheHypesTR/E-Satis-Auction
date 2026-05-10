@@ -17,23 +17,23 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.TargetFrameworkIdentifier = .NETCoreApp
 build_property.TargetFrameworkVersion = v10.0
-build_property.RootNamespace = E_Sat_Auction
-build_property.RootNamespace = E_Sat_Auction
-build_property.ProjectDir = E:\Personal\Projects\E-Sat-Auction\server\E-Sat-Auction\
+build_property.RootNamespace = e_Sat_Auction
+build_property.RootNamespace = e_Sat_Auction
+build_property.ProjectDir = E:\Personal\Projects\e-Sat-Auction\server\e-Sat-Auction\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = E:\Personal\Projects\E-Sat-Auction\server\E-Sat-Auction
+build_property.MSBuildProjectDirectory = E:\Personal\Projects\e-Sat-Auction\server\e-Sat-Auction
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[E:/Personal/Projects/E-Sat-Auction/server/E-Sat-Auction/Resources/SharedResource.en.resx]
+[E:/Personal/Projects/e-Sat-Auction/server/e-Sat-Auction/Resources/SharedResource.en.resx]
 build_metadata.AdditionalFiles.TargetPath = Resources\SharedResource.en.resx
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Personal/Projects/E-Sat-Auction/server/E-Sat-Auction/Resources/SharedResource.tr.resx]
+[E:/Personal/Projects/e-Sat-Auction/server/e-Sat-Auction/Resources/SharedResource.tr.resx]
 build_metadata.AdditionalFiles.TargetPath = Resources\SharedResource.tr.resx
 build_metadata.AdditionalFiles.CssScope = 

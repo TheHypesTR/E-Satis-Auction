@@ -1,0 +1,747 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Auth.InvalidToken" xml:space="preserve">
+        <value>Geçersiz veya süresi dolmuş token. Lütfen tekrar giriş yapın.</value>
+    </data>
+    <data name="Auth.InvalidCredentials" xml:space="preserve">
+        <value>Geçersiz e-posta veya şifre.</value>
+    </data>
+    <data name="Auth.AccountSuspended" xml:space="preserve">
+        <value>Bu hesap askıya alınmış.</value>
+    </data>
+    <data name="Auth.AccountResigned" xml:space="preserve">
+        <value>Bu hesap kapatılmış.</value>
+    </data>
+    <data name="Auth.EmailAlreadyRegistered" xml:space="preserve">
+        <value>Bu e-posta adresi zaten kayıtlı.</value>
+    </data>
+    <data name="Auth.TCNAlreadyRegistered" xml:space="preserve">
+        <value>Bu TC Kimlik Numarası sistemde zaten kayıtlı.</value>
+    </data>
+    <data name="Validation.FirstNameRequired" xml:space="preserve">
+        <value>İsim alanı zorunludur ve sadece boşluktan oluşamaz.</value>
+    </data>
+    <data name="Validation.FirstNameLength" xml:space="preserve">
+        <value>İsim 2 ile 64 karakter arasında olmalıdır.</value>
+    </data>
+    <data name="Validation.LastNameRequired" xml:space="preserve">
+        <value>Soyisim alanı zorunludur.</value>
+    </data>
+    <data name="Validation.LastNameLength" xml:space="preserve">
+        <value>Soyisim 2 ile 64 karakter arasında olmalıdır.</value>
+    </data>
+    <data name="Validation.EmailRequired" xml:space="preserve">
+        <value>E-posta adresi zorunludur.</value>
+    </data>
+    <data name="Validation.InvalidEmail" xml:space="preserve">
+        <value>Geçersiz e-posta formatı.</value>
+    </data>
+    <data name="Validation.PhoneRequired" xml:space="preserve">
+        <value>Telefon numarası zorunludur.</value>
+    </data>
+    <data name="Validation.InvalidPhone" xml:space="preserve">
+        <value>Geçersiz telefon formatı. Lütfen uluslararası format kullanın (+905551234567).</value>
+    </data>
+    <data name="Validation.PasswordRequired" xml:space="preserve">
+        <value>Şifre alanı zorunludur.</value>
+    </data>
+    <data name="Validation.PasswordMinLength" xml:space="preserve">
+        <value>Şifre en az 8 karakter olmalıdır.</value>
+    </data>
+    <data name="Validation.PasswordUpper" xml:space="preserve">
+        <value>Şifre en az bir büyük harf içermelidir.</value>
+    </data>
+    <data name="Validation.PasswordLower" xml:space="preserve">
+        <value>Şifre en az bir küçük harf içermelidir.</value>
+    </data>
+    <data name="Validation.PasswordNumber" xml:space="preserve">
+        <value>Şifre en az bir rakam içermelidir.</value>
+    </data>
+    <data name="Validation.ConfirmPassword" xml:space="preserve">
+        <value>Şifreler eşleşmiyor.</value>
+    </data>
+    <data name="Validation.InvalidTC" xml:space="preserve">
+        <value>Geçersiz TC Kimlik Numarası.</value>
+    </data>
+    <data name="Validation.GenderRequired" xml:space="preserve">
+        <value>Lütfen bir cinsiyet seçiniz.</value>
+    </data>
+    <data name="Validation.InvalidGender" xml:space="preserve">
+        <value>Seçilen cinsiyet değeri geçersiz.</value>
+    </data>
+    <data name="Validation.BirthDateRequired" xml:space="preserve">
+        <value>Doğum tarihi zorunludur.</value>
+    </data>
+    <data name="Validation.BirthDateInPast" xml:space="preserve">
+        <value>Doğum tarihi geçmiş bir tarih olmalıdır.</value>
+    </data>
+    <data name="Validation.BirthDateInvalid" xml:space="preserve">
+        <value>Girilen doğum tarihi çok eski, lütfen kontrol edin.</value>
+    </data>
+    <data name="Validation.RefreshTokenRequired" xml:space="preserve">
+        <value>Yenileme Tokeni zorunludur.</value>
+    </data>
+    <data name="Auth.ForgotPasswordSuccess" xml:space="preserve">
+        <value>Eğer e-posta adresiniz sistemimize kayıtlıysa, şifre sıfırlama bağlantısı gönderilmiştir.</value>
+    </data>
+    <data name="Auth.ResetPasswordSuccess" xml:space="preserve">
+        <value>Şifreniz başarıyla sıfırlandı. Artık giriş yapabilirsiniz.</value>
+    </data>
+    <data name="Exception.ValidationErrorTitle" xml:space="preserve">
+        <value>Doğrulama Hatası</value>
+    </data>
+    <data name="Exception.ValidationErrorDetail" xml:space="preserve">
+        <value>Bir veya daha fazla doğrulama hatası oluştu.</value>
+    </data>
+    <data name="Exception.ResourceNotFoundTitle" xml:space="preserve">
+        <value>Kaynak Bulunamadı</value>
+    </data>
+    <data name="Validation.InvalidResetLink" xml:space="preserve">
+        <value>Şifre sıfırlama bağlantısı geçersiz veya süresi dolmuş. Lütfen yeni bir bağlantı talep edin.</value>
+    </data>
+    <data name="Email.ResetPasswordSubject" xml:space="preserve">
+        <value>Şifre Sıfırlama Talebi</value>
+    </data>
+    <data name="Email.PasswordChangedSubject" xml:space="preserve">
+        <value>Şifreniz Başarıyla Değiştirildi</value>
+    </data>
+    <data name="Email.Greeting" xml:space="preserve">
+        <value>Merhaba</value>
+    </data>
+    <data name="Email.ResetPasswordBody" xml:space="preserve">
+        <value>Hesabınız için bir şifre sıfırlama talebi aldık. Yeni şifrenizi belirlemek için aşağıdaki butona tıklayabilirsiniz:</value>
+    </data>
+    <data name="Email.ResetPasswordButton" xml:space="preserve">
+        <value>Şifremi Sıfırla</value>
+    </data>
+    <data name="Email.FallbackText" xml:space="preserve">
+        <value>Eğer butona tıklayamıyorsanız, aşağıdaki bağlantıyı tarayıcınıza kopyalayabilirsiniz:</value>
+    </data>
+    <data name="Email.SecurityNotice" xml:space="preserve">
+        <value>Eğer bu talebi siz yapmadıysanız, lütfen bu e-postayı dikkate almayınız. Şifreniz güvendedir.</value>
+    </data>
+    <data name="Email.RightsReserved" xml:space="preserve">
+        <value>Tüm hakları saklıdır.</value>
+    </data>
+    <data name="Email.PasswordChangedBody" xml:space="preserve">
+        <value>Şifreniz başarıyla değiştirilmiştir. Bu işlemi siz gerçekleştirdiyseniz başka bir işlem yapmanıza gerek yoktur.</value>
+    </data>
+    <data name="Email.PasswordChangedNotice" xml:space="preserve">
+        <value>Eğer bu işlemi siz yapmadıysanız, lütfen derhal sistem yöneticinizle iletişime geçin.</value>
+    </data>
+    <data name="Exception.TooManyRequestsTitle" xml:space="preserve">
+        <value>Çok Fazla İstek</value>
+    </data>
+    <data name="Exception.TooManyRequestsDetail" xml:space="preserve">
+        <value>Çok fazla istek gönderdiniz. Lütfen bir süre bekleyip daha sonra tekrar deneyin.</value>
+    </data>
+    <data name="Email.VerifyEmailSubject" xml:space="preserve">
+        <value>E-Posta Adresinizi Doğrulayın</value>
+    </data>
+    <data name="Email.VerifyEmailBody" xml:space="preserve">
+        <value>Emergency Platform HUB'a hoş geldiniz! Kayıt işleminizi tamamlamak ve hesabınızı aktifleştirmek için lütfen aşağıdaki butona tıklayarak e-posta adresinizi doğrulayın:</value>
+    </data>
+    <data name="Email.VerifyEmailButton" xml:space="preserve">
+        <value>Hesabımı Doğrula</value>
+    </data>
+    <data name="Email.VerifyEmailNotice" xml:space="preserve">
+        <value>Eğer platformumuzda bir hesap oluşturmadıysanız, bu e-postayı güvenle görmezden gelebilirsiniz.</value>
+    </data>
+    <data name="Validation.InvalidVerificationLink" xml:space="preserve">
+        <value>E-posta doğrulama bağlantısı geçersiz veya süresi dolmuş. Lütfen yeni bir doğrulama bağlantısı talep edin.</value>
+    </data>
+    <data name="Auth.EmailVerificationSuccess" xml:space="preserve">
+        <value>E-posta adresiniz başarıyla doğrulandı. Artık sisteme giriş yapabilirsiniz.</value>
+    </data>
+    <data name="Auth.ResendVerificationEmailSuccess" xml:space="preserve">
+        <value>Eğer e-posta adresiniz sistemimizde kayıtlıysa ve henüz doğrulanmamışsa, gelen kutunuza yeni bir doğrulama bağlantısı gönderilmiştir.</value>
+    </data>
+    <data name="Auth.EmailNotVerified" xml:space="preserve">
+        <value>Lütfen giriş yapmadan önce e-posta adresinizi doğrulayın. Doğrulama e-postasını almadıysanız yeni bir tane talep edebilirsiniz.</value>
+    </data>
+    <data name="Exception.CredentialsTitle" xml:space="preserve">
+        <value>Kimlik Doğrulama Başarısız</value>
+    </data>
+    <data name="Exception.AccountTitle" xml:space="preserve">
+        <value>Hesap Sorunu</value>
+    </data>
+    <data name="Exception.VerificationTitle" xml:space="preserve">
+        <value>Doğrulama Gerekiyor</value>
+    </data>
+    <data name="Exception.PayloadTitle" xml:space="preserve">
+        <value>Geçersiz Veri Paketi</value>
+    </data>
+    <data name="Exception.BusinessErrorTitle" xml:space="preserve">
+        <value>İşlem Başarısız</value>
+    </data>
+    <data name="Exception.NotFoundMessage" xml:space="preserve">
+        <value>Sistemde '{1}' anahtarına sahip '{0}' kaydı bulunamadı.</value>
+    </data>
+    <data name="Exception.TokenTitle" xml:space="preserve">
+        <value>Token Hatası</value>
+    </data>
+    <data name="Exception.RegistrationTitle" xml:space="preserve">
+        <value>Kayıt İşlemi Başarısız</value>
+    </data>
+    <data name="User.EntityName" xml:space="preserve">
+        <value>Kullanıcı</value>
+    </data>
+    <data name="Auth.AccountLocked" xml:space="preserve">
+        <value>Çok sayıda hatalı giriş denemesi nedeniyle hesabınız geçici olarak kilitlenmiştir. Lütfen daha sonra tekrar deneyiniz.</value>
+    </data>
+    <data name="Auth.TokenGenerationFailed" xml:space="preserve">
+        <value>Güvenlik anahtarı oluşturulurken bir hata meydana geldi. Lütfen tekrar deneyiniz.</value>
+    </data>
+    <data name="Email.InviteSubject" xml:space="preserve">
+        <value>Emergency Platform HUB'a Davet Edildiniz!</value>
+    </data>
+    <data name="Email.InviteBody" xml:space="preserve">
+        <value>Emergency Platform HUB'a yetkili üye olarak katılmaya davet edildiniz. Hesap kurulumunuzu tamamlamak ve şifrenizi belirlemek için lütfen aşağıdaki butona tıklayın:</value>
+    </data>
+    <data name="Email.InviteButton" xml:space="preserve">
+        <value>Daveti Kabul Et ve Profili Tamamla</value>
+    </data>
+    <data name="Email.InviteNotice" xml:space="preserve">
+        <value>Bu daveti beklemiyorsanız, bu e-postayı güvenle görmezden gelebilirsiniz. Onayınız olmadan hiçbir hesap aktifleştirilmeyecektir.</value>
+    </data>
+    <data name="User.InvitationFailed" xml:space="preserve">
+        <value>Davet edilen kullanıcı için hesap oluşturulurken bir hata meydana geldi.</value>
+    </data>
+    <data name="User.NotInvited" xml:space="preserve">
+        <value>Bu hesap zaten aktif veya 'Davet Edildi' statüsünde değil. Davet tamamlama işlemini kullanamazsınız.</value>
+    </data>
+    <data name="User.PasswordSetFailed" xml:space="preserve">
+        <value>Yeni şifre belirlenemedi. Davet bağlantısının süresi dolmuş veya geçersiz olabilir.</value>
+    </data>
+    <data name="User.UpdateFailed" xml:space="preserve">
+        <value>Kullanıcı profili güncellenirken bir hata oluştu. Lütfen tekrar deneyin.</value>
+    </data>
+    <data name="Organization.AlreadyExists" xml:space="preserve">
+        <value>Sistemde bu Vergi Numarası veya Sicil Numarasına sahip bir kurum zaten mevcut.</value>
+    </data>
+    <data name="Exception.InvitationTitle" xml:space="preserve">
+        <value>Kullanıcı Daveti Başarısız</value>
+    </data>
+    <data name="Validation.InvalidInvitationLink" xml:space="preserve">
+        <value>Davet bağlantısı geçersiz veya süresi dolmuş. Lütfen yeni bir bağlantı talep edin.</value>
+    </data>
+    <data name="Validation.InviterIdRequired" xml:space="preserve">
+        <value>Davet eden kişinin kimliği zorunludur.</value>
+    </data>
+    <data name="Validation.TargetRoleRequired" xml:space="preserve">
+        <value>Atanacak rol belirtilmelidir.</value>
+    </data>
+    <data name="User.UnauthorizedRoleAssignment" xml:space="preserve">
+        <value>Bu rolü atamak için gerekli yetki seviyesine sahip değilsiniz.</value>
+    </data>
+    <data name="Validation.InvalidRole" xml:space="preserve">
+        <value>Seçilen rol değeri geçersiz.</value>
+    </data>
+    <data name="User.InvitationSuccess" xml:space="preserve">
+        <value>Kullanıcı sisteme başarıyla davet edildi.</value>
+    </data>
+    <data name="User.ProfileCompletedSuccess" xml:space="preserve">
+        <value>Profiliniz başarıyla tamamlandı. Artık sisteme giriş yapabilirsiniz.</value>
+    </data>
+    <data name="Validation.IdentifierRequired" xml:space="preserve">
+        <value>E-posta adresi veya T.C. Kimlik Numarası zorunludur.</value>
+    </data>
+    <data name="Validation.InvalidUserIdentifier" xml:space="preserve">
+        <value>Girilen değer geçerli bir e-posta adresi veya 11 haneli T.C. Kimlik Numarası olmalıdır.</value>
+    </data>
+    <data name="User.CannotInviteSelf" xml:space="preserve">
+        <value>Kendinizi davet edemezsiniz.</value>
+    </data>
+    <data name="User.TargetHasHigherOrEqualRole" xml:space="preserve">
+        <value>Hedef kullanıcı zaten bu role veya daha üst bir yetkiye sahip.</value>
+    </data>
+    <data name="Exception.RoleAssignmentTitle" xml:space="preserve">
+        <value>Rol Atama İşlemi Başarısız</value>
+    </data>
+    <data name="Exception.AddressTitle" xml:space="preserve">
+        <value>Adres İşlemi Başarısız</value>
+    </data>
+    <data name="Exception.OrganizationTitle" xml:space="preserve">
+        <value>Kurum İşlemi Başarısız</value>
+    </data>
+    <data name="Validation.OrganizationNameRequired" xml:space="preserve">
+        <value>Kurum adı zorunludur.</value>
+    </data>
+    <data name="Validation.OrganizationNameLength" xml:space="preserve">
+        <value>Kurum adı 2 ile 255 karakter arasında olmalıdır.</value>
+    </data>
+    <data name="Validation.DescriptionRequired" xml:space="preserve">
+        <value>Açıklama zorunludur.</value>
+    </data>
+    <data name="Validation.DescriptionLength" xml:space="preserve">
+        <value>Açıklama 10 ile 2000 karakter arasında olmalıdır.</value>
+    </data>
+    <data name="Validation.InvalidOrganizationType" xml:space="preserve">
+        <value>Seçilen kurum türü geçersiz.</value>
+    </data>
+    <data name="Validation.RegistrationDateRequired" xml:space="preserve">
+        <value>Kuruluş/Tescil tarihi zorunludur.</value>
+    </data>
+    <data name="Validation.RegistrationDateInPast" xml:space="preserve">
+        <value>Kuruluş tarihi gelecekte bir tarih olamaz.</value>
+    </data>
+    <data name="Validation.TaxNumberRequired" xml:space="preserve">
+        <value>Vergi numarası zorunludur.</value>
+    </data>
+    <data name="Validation.InvalidTaxNumber" xml:space="preserve">
+        <value>Vergi numarası tam 10 haneli olmalıdır.</value>
+    </data>
+    <data name="Validation.RegistrationNumberLength" xml:space="preserve">
+        <value>Sicil numarası 5 ile 50 karakter arasında olmalıdır.</value>
+    </data>
+    <data name="Validation.CompanyEmailRequired" xml:space="preserve">
+        <value>Kurumsal e-posta adresi zorunludur.</value>
+    </data>
+    <data name="Validation.CompanyPhoneRequired" xml:space="preserve">
+        <value>Kurumsal telefon numarası zorunludur.</value>
+    </data>
+    <data name="Validation.AddressTitleRequired" xml:space="preserve">
+        <value>Adres başlığı zorunludur.</value>
+    </data>
+    <data name="Validation.AddressTitleLength" xml:space="preserve">
+        <value>Adres başlığı 2 ile 100 karakter arasında olmalıdır.</value>
+    </data>
+    <data name="Validation.CityRequired" xml:space="preserve">
+        <value>İl zorunludur.</value>
+    </data>
+    <data name="Validation.CityLength" xml:space="preserve">
+        <value>İl 2 ile 100 karakter arasında olmalıdır.</value>
+    </data>
+    <data name="Validation.DistrictRequired" xml:space="preserve">
+        <value>İlçe zorunludur.</value>
+    </data>
+    <data name="Validation.DistrictLength" xml:space="preserve">
+        <value>İlçe 2 ile 100 karakter arasında olmalıdır.</value>
+    </data>
+    <data name="Validation.OpenAddressRequired" xml:space="preserve">
+        <value>Açık adres zorunludur.</value>
+    </data>
+    <data name="Validation.OpenAddressLength" xml:space="preserve">
+        <value>Açık adres 10 ile 500 karakter arasında olmalıdır.</value>
+    </data>
+    <data name="Validation.InvalidCoordinates" xml:space="preserve">
+        <value>Geçersiz enlem veya boylam değeri.</value>
+    </data>
+    <data name="Organization.EntityName" xml:space="preserve">
+        <value>Kurum</value>
+    </data>
+    <data name="Validation.InvalidPageNumber" xml:space="preserve">
+        <value>Sayfa numarası 1 veya daha büyük olmalıdır.</value>
+    </data>
+    <data name="Validation.InvalidPageSize" xml:space="preserve">
+        <value>Sayfa boyutu 1 veya daha büyük olmalıdır.</value>
+    </data>
+    <data name="Validation.SearchTermLength" xml:space="preserve">
+        <value>Arama metni 128 karakterden uzun olamaz.</value>
+    </data>
+    <data name="Email.OrganizationAssignedSubject" xml:space="preserve">
+        <value>Bir Kuruma Yönetici Olarak Atandınız</value>
+    </data>
+    <data name="Email.OrganizationAssignedBody" xml:space="preserve">
+        <value>{{OrganizationName}} kurumu için yetkili yönetici olarak başarıyla atandınız. Operasyonları yönetmek için platforma giriş yapabilirsiniz.</value>
+    </data>
+    <data name="Email.OrganizationAssignedButton" xml:space="preserve">
+        <value>Kontrol Paneline Git</value>
+    </data>
+    <data name="Email.OrganizationAssignedNotice" xml:space="preserve">
+        <value>Bu atamanın hatalı olduğunu düşünüyorsanız, lütfen derhal sistem yöneticisiyle iletişime geçin.</value>
+    </data>
+    <data name="Organization.ManagerAlreadyExists" xml:space="preserve">
+        <value>Bu kullanıcı zaten belirtilen kurumun yöneticisidir.</value>
+    </data>
+    <data name="Organization.AlreadyPrimaryManager" xml:space="preserve">
+        <value>Bu kullanıcı zaten kurumun birincil yöneticisidir.</value>
+    </data>
+    <data name="Validation.DisplayNameRequired" xml:space="preserve">
+        <value>Görünen ad zorunludur.</value>
+    </data>
+    <data name="Validation.DisplayNameLength" xml:space="preserve">
+        <value>Görünen ad 2 ile 255 karakter arasında olmalıdır.</value>
+    </data>
+    <data name="Validation.InvalidWebSiteUrl" xml:space="preserve">
+        <value>Lütfen geçerli bir web sitesi adresi giriniz.</value>
+    </data>
+    <data name="Validation.FacilityNameRequired" xml:space="preserve">
+        <value>Tesis adı zorunludur.</value>
+    </data>
+    <data name="Validation.FacilityNameLength" xml:space="preserve">
+        <value>Tesis adı 2 ile 255 karakter arasında olmalıdır.</value>
+    </data>
+    <data name="Validation.CapacityInvalid" xml:space="preserve">
+        <value>Kapasite sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="Validation.HumanCapacityInvalid" xml:space="preserve">
+        <value>İnsan kapasitesi sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="Validation.CriticalThresholdInvalid" xml:space="preserve">
+        <value>Kritik eşik değeri negatif olamaz.</value>
+    </data>
+    <data name="Validation.InvalidFacilityType" xml:space="preserve">
+        <value>Seçilen tesis türü geçersiz.</value>
+    </data>
+    <data name="Facility.EntityName" xml:space="preserve">
+        <value>Tesis</value>
+    </data>
+    <data name="Facility.ManagerAlreadyExists" xml:space="preserve">
+        <value>Bu kullanıcı zaten belirtilen tesisin yöneticisidir.</value>
+    </data>
+    <data name="Facility.AlreadyPrimaryManager" xml:space="preserve">
+        <value>Bu kullanıcı zaten tesisin birincil yöneticisidir.</value>
+    </data>
+    <data name="Email.FacilityAssignedSubject" xml:space="preserve">
+        <value>Bir Tesise Yetkili Olarak Atandınız</value>
+    </data>
+    <data name="Email.FacilityAssignedBody" xml:space="preserve">
+        <value>{{FacilityName}} tesisi için yetkili yönetici olarak başarıyla atandınız. Tesis operasyonlarını ve envanteri yönetmek için platforma giriş yapabilirsiniz.</value>
+    </data>
+    <data name="Email.FacilityAssignedButton" xml:space="preserve">
+        <value>Tesis Paneline Git</value>
+    </data>
+    <data name="Email.FacilityAssignedNotice" xml:space="preserve">
+        <value>Eğer bu atamanın hatalı olduğunu düşünüyorsanız, lütfen derhal kurum yöneticinizle iletişime geçin.</value>
+    </data>
+    <data name="Facility.UnauthorizedFacilityAccess" xml:space="preserve">
+        <value>Sadece yöneticisi olduğunuz kurumlara ait tesislerde işlem yapabilirsiniz.</value>
+    </data>
+    <data name="Organization.UnauthorizedOrganizationAccess" xml:space="preserve">
+        <value>Bu kurumun detaylarını görüntüleme yetkiniz bulunmamaktadır.</value>
+    </data>
+    <data name="Exception.UnauthorizedAccess" xml:space="preserve">
+        <value>Yetersiz Yetki</value>
+    </data>
+    <data name="Category.OptionOnlyForSelectList" xml:space="preserve">
+        <value>Seçenekler yalnızca 'Seçim Listesi' tipindeki özelliklere eklenebilir.</value>
+    </data>
+    <data name="Exception.CategoryTitle" xml:space="preserve">
+        <value>Kategori Hatası</value>
+    </data>
+    <data name="Exception.InventoryTitle" xml:space="preserve">
+        <value>Envanter Hatası</value>
+    </data>
+    <data name="Category.AttributeCodeRequired" xml:space="preserve">
+        <value>Dinamik özellik için benzersiz bir kod (Code) girilmesi zorunludur.</value>
+    </data>
+    <data name="Item.QuantityCannotBeNegative" xml:space="preserve">
+        <value>Stok miktarı sıfırdan küçük olamaz.</value>
+    </data>
+    <data name="Category.AttributeCategoryRequired" xml:space="preserve">
+        <value>Özellik için bir kategori seçilmesi zorunludur.</value>
+    </data>
+    <data name="Category.AttributeNameRequired" xml:space="preserve">
+        <value>Özellik adı boş bırakılamaz.</value>
+    </data>
+    <data name="Category.AttributeRequired" xml:space="preserve">
+        <value>Eklenecek özellik boş olamaz.</value>
+    </data>
+    <data name="Category.DuplicateAttributeCode" xml:space="preserve">
+        <value>Bu kod (Code) bu kategoride zaten kullanılmaktadır. Lütfen benzersiz bir kod girin.</value>
+    </data>
+    <data name="Category.OptionValueRequired" xml:space="preserve">
+        <value>Seçenek değeri boş bırakılamaz.</value>
+    </data>
+    <data name="Category.DuplicateOptionValue" xml:space="preserve">
+        <value>Bu seçenek değeri zaten mevcut.</value>
+    </data>
+    <data name="Item.FacilityRequired" xml:space="preserve">
+        <value>Bu stok için hedef tesis (depo) belirtilmelidir.</value>
+    </data>
+    <data name="Item.CategoryRequired" xml:space="preserve">
+        <value>Bu stok için bir kategori belirtilmelidir.</value>
+    </data>
+    <data name="Item.DynamicAttributeKeyRequired" xml:space="preserve">
+        <value>Dinamik özellik anahtarı (Key) boş olamaz.</value>
+    </data>
+    <data name="Item.DynamicAttributeValueRequired" xml:space="preserve">
+        <value>Dinamik özellik değeri (Value) boş olamaz.</value>
+    </data>
+    <data name="Exception.ProductTitle" xml:space="preserve">
+        <value>Ürün Hatası</value>
+    </data>
+    <data name="Item.ProductIdRequiredForStandardized" xml:space="preserve">
+        <value>Standart bir ürün eklerken 'Ürün' seçilmesi zorunludur.</value>
+    </data>
+    <data name="Item.ProductIdMustBeNullForAdHoc" xml:space="preserve">
+        <value>Serbest (Ad-Hoc) bağış girişlerinde standart bir ürün seçilemez.</value>
+    </data>
+    <data name="Item.NameRequiredForAdHoc" xml:space="preserve">
+        <value>Serbest (Ad-Hoc) bağışlar için bir ürün adı girilmesi zorunludur.</value>
+    </data>
+    <data name="Product.SkuRequired" xml:space="preserve">
+        <value>Ürün stok kodu (SKU) boş bırakılamaz.</value>
+    </data>
+    <data name="Product.NameRequired" xml:space="preserve">
+        <value>Ürün adı boş bırakılamaz.</value>
+    </data>
+    <data name="Product.CategoryRequired" xml:space="preserve">
+        <value>Ürün için bir kategori seçilmesi zorunludur.</value>
+    </data>
+    <data name="Product.AttributeKeyRequired" xml:space="preserve">
+        <value>Temel özellik anahtarı boş olamaz.</value>
+    </data>
+    <data name="Product.AttributeValueRequired" xml:space="preserve">
+        <value>Temel özellik değeri boş olamaz.</value>
+    </data>
+    <data name="Product.InactiveProductUpdateNotAllowed" xml:space="preserve">
+        <value>Pasif duruma alınmış bir ürünün özellikleri güncellenemez.</value>
+    </data>
+    <data name="Category.NameMaxLength" xml:space="preserve">
+        <value>Kategori adı 128 karakterden uzun olamaz.</value>
+    </data>
+    <data name="Category.DescriptionMaxLength" xml:space="preserve">
+        <value>Kategori açıklaması 500 karakterden uzun olamaz.</value>
+    </data>
+    <data name="Category.AttributeNameMaxLength" xml:space="preserve">
+        <value>Özellik adı 128 karakterden uzun olamaz.</value>
+    </data>
+    <data name="Category.AttributeCodeMaxLength" xml:space="preserve">
+        <value>Özellik kodu 128 karakterden uzun olamaz.</value>
+    </data>
+    <data name="Category.AttributeCodeInvalidCharacters" xml:space="preserve">
+        <value>Özellik kodu geçersiz karakterler içeriyor. Lütfen yalnızca harf, rakam ve boşluk kullanın.</value>
+    </data>
+    <data name="Category.OptionValueMaxLength" xml:space="preserve">
+        <value>Seçenek değeri 256 karakterden uzun olamaz.</value>
+    </data>
+    <data name="Category.NameRequired" xml:space="preserve">
+        <value>Kategori adı boş bırakılamaz.</value>
+    </data>
+    <data name="Category.DuplicateAttributeCodeInRequest" xml:space="preserve">
+        <value>İstek içinde aynı özellik kodu (Code) birden fazla kez kullanılmış. Özellik kodları benzersiz olmalıdır.</value>
+    </data>
+    <data name="Category.NameAlreadyExists" xml:space="preserve">
+        <value>Bu isimde bir kategori zaten mevcut.</value>
+    </data>
+    <data name="Category.EntityName" xml:space="preserve">
+        <value>Kategori</value>
+    </data>
+    <data name="Category.AlreadyActive" xml:space="preserve">
+        <value>Bu kategori zaten aktif durumda.</value>
+    </data>
+    <data name="Category.AlreadyInactive" xml:space="preserve">
+        <value>Bu kategori zaten pasif durumda.</value>
+    </data>
+    <data name="CategoryAttribute.EntityName" xml:space="preserve">
+        <value>Kategori Özelliği</value>
+    </data>
+    <data name="CategoryAttributeOption.EntityName" xml:space="preserve">
+        <value>Kategori Özellik Seçeneği</value>
+    </data>
+    <data name="Category.AttributeMutationRequiresInactiveCategory" xml:space="preserve">
+        <value>Özelliklerde değişiklik yapabilmek için kategorinin pasif (inactive) durumda olması gerekir.</value>
+    </data>
+    <data name="Category.AttributeMutationBlockedByDependentData" xml:space="preserve">
+        <value>Bu kategoriye veya özelliğe bağlı ürünler/envanterler bulunduğu için yapısal değişiklik yapılamaz.</value>
+    </data>
+    <data name="Validation.InvalidIdentifier" xml:space="preserve">
+        <value>Geçersiz bir kimlik, tanımlayıcı veya veri tipi seçtiniz.</value>
+    </data>
+    <data name="Product.SkuMaxLength" xml:space="preserve">
+        <value>Ürün SKU değeri 64 karakteri geçemez.</value>
+    </data>
+    <data name="Product.SkuInvalidFormat" xml:space="preserve">
+        <value>Ürün SKU değeri yalnızca büyük harf, rakam ve tire (-) içerebilir.</value>
+    </data>
+    <data name="Product.NameMaxLength" xml:space="preserve">
+        <value>Ürün adı 128 karakteri geçemez.</value>
+    </data>
+    <data name="Product.SkuAlreadyExists" xml:space="preserve">
+        <value>Bu SKU değerine sahip bir ürün zaten mevcut.</value>
+    </data>
+    <data name="Product.InvalidAttributeKey" xml:space="preserve">
+        <value>Gönderilen özelliklerden biri veya birkaçı geçersiz ya da bu kategori için ürün seviyesinde tanımlanmamış.</value>
+    </data>
+    <data name="Product.RequiredAttributeMissing" xml:space="preserve">
+        <value>Bu kategori için zorunlu olan bir ürün özelliği eksik gönderildi.</value>
+    </data>
+    <data name="Category.MustBeActiveToCreateProduct" xml:space="preserve">
+        <value>Altına ürün eklenebilmesi için kategorinin aktif durumda olması gerekmektedir.</value>
+    </data>
+    <data name="Category.CannotDeleteLastOption" xml:space="preserve">
+        <value>Son seçenek silinemez. Seçim listesi tipindeki özellikler en az bir seçeneğe sahip olmalıdır.</value>
+    </data>
+    <data name="Product.InvalidAttributeValue" xml:space="preserve">
+        <value>Seçilen değer bu özellik için geçerli değil. Lütfen listedeki önceden tanımlanmış seçeneklerden birini kullanın.</value>
+    </data>
+    <data name="Product.EntityName" xml:space="preserve">
+        <value>Ürün</value>
+    </data>
+    <data name="Item.EntityName" xml:space="preserve">
+        <value>Stok Kalemi</value>
+    </data>
+    <data name="Product.AlreadyActive" xml:space="preserve">
+        <value>Bu ürün zaten aktif durumda.</value>
+    </data>
+    <data name="Product.AlreadyInactive" xml:space="preserve">
+        <value>Bu ürün zaten pasif durumda.</value>
+    </data>
+    <data name="Item.NameMaxLength" xml:space="preserve">
+        <value>Ürün adı 128 karakteri geçemez.</value>
+    </data>
+    <data name="Facility.CannotStoreItems" xml:space="preserve">
+        <value>Bu tesis türünde stok depolanamaz.</value>
+    </data>
+    <data name="Facility.MustBeApproved" xml:space="preserve">
+        <value>İşlem yapılabilmesi için tesisin onaylanmış olması gerekmektedir.</value>
+    </data>
+    <data name="Auth.UnauthorizedAccess" xml:space="preserve">
+        <value>Bu kaynağa erişim veya işlem yapma yetkiniz bulunmamaktadır.</value>
+    </data>
+    <data name="Exception.SecurityTitle" xml:space="preserve">
+        <value>Güvenlik Hatası</value>
+    </data>
+    <data name="Item.RequiredAttributeMissing" xml:space="preserve">
+        <value>Bu öğe için zorunlu bir nitelik eksik bırakılmış.</value>
+    </data>
+    <data name="Item.InvalidAttributeKey" xml:space="preserve">
+        <value>Sağlanan nitelik anahtarı geçersiz veya şemada bulunamadı.</value>
+    </data>
+    <data name="Item.InvalidAttributeValue" xml:space="preserve">
+        <value>Sağlanan nitelik değeri, seçili nitelik için geçersiz.</value>
+    </data>
+    <data name="Validation.PageSizeExceeded" xml:space="preserve">
+        <value>İstenen sayfa boyutu, izin verilen maksimum 100 sınırını aşıyor.</value>
+    </data>
+    <data name="Item.DuplicateDynamicAttributeKey" xml:space="preserve">
+        <value>Aynı nitelik anahtarı birden fazla kez kullanılmış. Lütfen tüm nitelik anahtarlarının benzersiz olduğundan emin olun.</value>
+    </data>
+    <data name="Product.ProductNotEligibleForInventory" xml:space="preserve">
+        <value>Pasif duruma alınmış bir ürün üzerinden stok girişi/güncellemesi yapılamaz.</value>
+    </data>
+    <data name="Dispatch.DispatchRequired" xml:space="preserve">
+        <value>Sevkiyat bilgisi zorunludur.</value>
+    </data>
+    <data name="Dispatch.ExclusiveTargetRequired" xml:space="preserve">
+        <value>Sevkiyat için ya geçerli bir hedef depo ya da hedef adres seçilmelidir. İkisi birden seçilemez veya boş bırakılamaz.</value>
+    </data>
+    <data name="Dispatch.ItemNameRequired" xml:space="preserve">
+        <value>Ürün adı zorunludur.</value>
+    </data>
+    <data name="Dispatch.QuantityMustBePositive" xml:space="preserve">
+        <value>Sevk edilecek miktar sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="Dispatch.SourceFacilityRequired" xml:space="preserve">
+        <value>Kaynak depo seçimi zorunludur.</value>
+    </data>
+    <data name="Dispatch.SourceItemRequired" xml:space="preserve">
+        <value>Sevk edilecek kaynak ürün zorunludur.</value>
+    </data>
+    <data name="Dispatch.TargetAddressInvalid" xml:space="preserve">
+        <value>Geçersiz hedef adres.</value>
+    </data>
+    <data name="Dispatch.TargetFacilityInvalid" xml:space="preserve">
+        <value>Geçersiz hedef depo.</value>
+    </data>
+    <data name="Exception.DispatchTitle" xml:space="preserve">
+        <value>Sevkiyat İşlemi Hatası</value>
+    </data>
+    <data name="Dispatch.InsufficientStock" xml:space="preserve">
+        <value>Bu işlem için depoda yeterli stok bulunmamaktadır.</value>
+    </data>
+    <data name="Dispatch.ItemsRequired" xml:space="preserve">
+        <value>Sevkiyat oluşturmak için en az bir ürün eklemelisiniz.</value>
+    </data>
+    <data name="Dispatch.ItemStatusInvalid" xml:space="preserve">
+        <value>Ürünün mevcut durumu bu sevkiyat işlemi için uygun değil.</value>
+    </data>
+    <data name="Dispatch.NotesMaxLength" xml:space="preserve">
+        <value>Notlar en fazla 1024 karakter olabilir.</value>
+    </data>
+    <data name="Dispatch.ReceiverNameMaxLength" xml:space="preserve">
+        <value>Alıcı adı en fazla 128 karakter olabilir.</value>
+    </data>
+    <data name="Dispatch.ReceiverNameRequired" xml:space="preserve">
+        <value>Teslim alacak kişinin adı zorunludur.</value>
+    </data>
+    <data name="Dispatch.ReceiverPhoneRequired" xml:space="preserve">
+        <value>Teslim alacak kişinin iletişim numarası zorunludur.</value>
+    </data>
+    <data name="Dispatch.StatusNotPending" xml:space="preserve">
+        <value>Sadece bekleme durumundaki sevkiyatlar yola çıkarılabilir.</value>
+    </data>
+    <data name="Item.DecreaseAmountMustBePositive" xml:space="preserve">
+        <value>Stoktan düşülecek miktar sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="Dispatch.DuplicateItemsNotAllowed" xml:space="preserve">
+        <value>Aynı ürün sevkiyat listesine birden fazla kez eklenemez. Lütfen miktar güncellemesi yapın.</value>
+    </data>
+    <data name="Dispatch.EntityName" xml:space="preserve">
+        <value>Sevkiyat</value>
+    </data>
+    <data name="Dispatch.StatusNotInTransit" xml:space="preserve">
+        <value>Bu işlem sadece yolda (In Transit) olan sevkiyatlar için yapılabilir.</value>
+    </data>
+    <data name="Dispatch.TargetFacilityRequiredForReceipt" xml:space="preserve">
+        <value>Sevkiyatı kabul edebilmek için hedefin bir tesis (depo) olması gerekmektedir. Adrese teslimatlar sistem üzerinden kabul edilemez.</value>
+    </data>
+    <data name="Dispatch.ReceiptItemMissing" xml:space="preserve">
+        <value>Sevkiyatta bulunan bazı ürünler kabul listesinde eksik. Lütfen tüm ürünlerin kabul veya hasar durumunu giriniz.</value>
+    </data>
+    <data name="Dispatch.SourceItemNotInDispatch" xml:space="preserve">
+        <value>Kabul edilmek istenen ürün bu sevkiyatın orijinal listesinde bulunmamaktadır.</value>
+    </data>
+    <data name="Dispatch.ReceiptQuantityInvalid" xml:space="preserve">
+        <value>Kabul edilen veya hasarlı miktar geçersiz. Toplam miktar sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="Dispatch.ReceiptQuantityMismatch" xml:space="preserve">
+        <value>Girilen toplam miktar (Kabul Edilen + Hasarlı), sevkiyata çıkan orijinal miktar ile eşleşmiyor.</value>
+    </data>
+    <data name="Dispatch.StandardizedItemCannotBeAdHoc" xml:space="preserve">
+        <value>Standart (katalog) olarak yola çıkan bir ürün, hedef depoda Ad-Hoc olarak kabul edilemez.</value>
+    </data>
+    <data name="Dispatch.DeliveryNoteMaxLength" xml:space="preserve">
+        <value>Teslimat notu en fazla 1024 karakter olabilir.</value>
+    </data>
+    <data name="Dispatch.TargetAddressRequiredForDelivery" xml:space="preserve">
+        <value>Bu işlemi gerçekleştirmek için sevkiyatın bir hedef adresi (TargetAddress) olmalıdır.</value>
+    </data>
+    <data name="Dispatch.TargetFacilityMustBeNullForDelivery" xml:space="preserve">
+        <value>Depolara yapılan sevkiyatlar adrese teslimat işlemiyle kapatılamaz. Lütfen depo kabul işlemini kullanın.</value>
+    </data>
+    <data name="Address.EntityName" xml:space="preserve">
+        <value>Adres</value>
+    </data>
+    <data name="Item.IncreaseAmountMustBePositive" xml:space="preserve">
+        <value>Artırılacak stok miktarı sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="Validation.InvalidDateRange" xml:space="preserve">
+        <value>Başlangıç tarihi, bitiş tarihinden sonra olamaz.</value>
+    </data>
+    <data name="Item.Unknown" xml:space="preserve">
+        <value>Bilinmeyen Öğe</value>
+    </data>
+    <data name="Product.Unknown" xml:space="preserve">
+        <value>Bilinmeyen Ürün</value>
+    </data>
+    <data name="Facility.Unknown" xml:space="preserve">
+        <value>Bilinmeyen Depo</value>
+    </data>
+    <data name="User.UnknownUser" xml:space="preserve">
+        <value>Bilinmeyen Kullanıcı</value>
+    </data>
+    <data name="User.SystemUser" xml:space="preserve">
+        <value>Acil Durum Merkezi</value>
+    </data>
+</root>

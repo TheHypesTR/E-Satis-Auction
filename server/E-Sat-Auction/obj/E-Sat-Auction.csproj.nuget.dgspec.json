@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Personal\\Projects\\E-Sat-Auction\\server\\E-Sat-Auction\\E-Sat-Auction.csproj": {}
+    "E:\\Personal\\Projects\\e-Sat-Auction\\server\\e-Sat-Auction\\e-Sat-Auction.csproj": {}
   },
   "projects": {
-    "E:\\Personal\\Projects\\E-Sat-Auction\\server\\E-Sat-Auction\\E-Sat-Auction.csproj": {
+    "E:\\Personal\\Projects\\e-Sat-Auction\\server\\e-Sat-Auction\\e-Sat-Auction.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Personal\\Projects\\E-Sat-Auction\\server\\E-Sat-Auction\\E-Sat-Auction.csproj",
-        "projectName": "E_Sat_Auction",
-        "projectPath": "E:\\Personal\\Projects\\E-Sat-Auction\\server\\E-Sat-Auction\\E-Sat-Auction.csproj",
+        "projectUniqueName": "E:\\Personal\\Projects\\e-Sat-Auction\\server\\e-Sat-Auction\\e-Sat-Auction.csproj",
+        "projectName": "e_Sat_Auction",
+        "projectPath": "E:\\Personal\\Projects\\e-Sat-Auction\\server\\e-Sat-Auction\\e-Sat-Auction.csproj",
         "packagesPath": "C:\\Users\\dunda\\.nuget\\packages\\",
-        "outputPath": "E:\\Personal\\Projects\\E-Sat-Auction\\server\\E-Sat-Auction\\obj\\",
+        "outputPath": "E:\\Personal\\Projects\\e-Sat-Auction\\server\\e-Sat-Auction\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dunda\\AppData\\Roaming\\NuGet\\NuGet.Config"

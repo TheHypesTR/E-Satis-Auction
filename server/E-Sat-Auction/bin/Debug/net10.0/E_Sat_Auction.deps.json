@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v10.0": {
-      "E_Sat_Auction/1.0.0": {
+      "e_Sat_Auction/1.0.0": {
         "dependencies": {
           "FluentValidation.DependencyInjectionExtensions": "12.1.1",
           "MailKit": "4.16.0",
@@ -24,13 +24,13 @@
           "Scalar.AspNetCore": "2.14.11"
         },
         "runtime": {
-          "E_Sat_Auction.dll": {}
+          "e_Sat_Auction.dll": {}
         },
         "resources": {
-          "en/E_Sat_Auction.resources.dll": {
+          "en/e_Sat_Auction.resources.dll": {
             "locale": "en"
           },
-          "tr/E_Sat_Auction.resources.dll": {
+          "tr/e_Sat_Auction.resources.dll": {
             "locale": "tr"
           }
         }
@@ -1842,7 +1842,7 @@
     }
   },
   "libraries": {
-    "E_Sat_Auction/1.0.0": {
+    "e_Sat_Auction/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

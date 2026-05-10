@@ -1,0 +1,747 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Auth.InvalidToken" xml:space="preserve">
+        <value>Invalid or expired refresh token. Please login again.</value>
+    </data>
+    <data name="Auth.InvalidCredentials" xml:space="preserve">
+        <value>Invalid email or password.</value>
+    </data>
+    <data name="Auth.AccountSuspended" xml:space="preserve">
+        <value>This account is suspended.</value>
+    </data>
+    <data name="Auth.AccountResigned" xml:space="preserve">
+        <value>This account is resigned.</value>
+    </data>
+    <data name="Auth.EmailAlreadyRegistered" xml:space="preserve">
+        <value>This email is already registered.</value>
+    </data>
+    <data name="Auth.TCNAlreadyRegistered" xml:space="preserve">
+        <value>This TC Identity Number is already registered in the system.</value>
+    </data>
+    <data name="Validation.FirstNameRequired" xml:space="preserve">
+        <value>First name is required and cannot be empty or whitespace.</value>
+    </data>
+    <data name="Validation.FirstNameLength" xml:space="preserve">
+        <value>First name must be between 2 and 64 characters.</value>
+    </data>
+    <data name="Validation.LastNameRequired" xml:space="preserve">
+        <value>Last name is required.</value>
+    </data>
+    <data name="Validation.LastNameLength" xml:space="preserve">
+        <value>Last name must be between 2 and 64 characters.</value>
+    </data>
+    <data name="Validation.EmailRequired" xml:space="preserve">
+        <value>Email address is required.</value>
+    </data>
+    <data name="Validation.InvalidEmail" xml:space="preserve">
+        <value>The email address format is invalid.</value>
+    </data>
+    <data name="Validation.PhoneRequired" xml:space="preserve">
+        <value>Phone number is required.</value>
+    </data>
+    <data name="Validation.PasswordNumber" xml:space="preserve">
+        <value>Password must contain at least one number.</value>
+    </data>
+    <data name="Validation.PasswordRequired" xml:space="preserve">
+        <value>Password is required.</value>
+    </data>
+    <data name="Validation.PasswordMinLength" xml:space="preserve">
+        <value>Password must be at least 8 characters.</value>
+    </data>
+    <data name="Validation.PasswordUpper" xml:space="preserve">
+        <value>Password must contain at least one uppercase letter.</value>
+    </data>
+    <data name="Validation.PasswordLower" xml:space="preserve">
+        <value>Password must contain at least one lowercase letter.</value>
+    </data>
+    <data name="Validation.InvalidPhone" xml:space="preserve">
+        <value>Invalid phone number format. Please use international format (e.g., +905551234567).</value>
+    </data>
+    <data name="Validation.ConfirmPassword" xml:space="preserve">
+        <value>Passwords do not match.</value>
+    </data>
+    <data name="Validation.InvalidTC" xml:space="preserve">
+        <value>Invalid TC Identity Number.</value>
+    </data>
+    <data name="Validation.GenderRequired" xml:space="preserve">
+        <value>Please select a gender.</value>
+    </data>
+    <data name="Validation.InvalidGender" xml:space="preserve">
+        <value>The selected gender value is invalid.</value>
+    </data>
+    <data name="Validation.BirthDateRequired" xml:space="preserve">
+        <value>Birth date is required.</value>
+    </data>
+    <data name="Validation.BirthDateInPast" xml:space="preserve">
+        <value>Birth date must be in the past.</value>
+    </data>
+    <data name="Validation.BirthDateInvalid" xml:space="preserve">
+        <value>Birth date is too old to be valid.</value>
+    </data>
+    <data name="Validation.RefreshTokenRequired" xml:space="preserve">
+        <value>Refresh Token is required.</value>
+    </data>
+    <data name="Auth.ForgotPasswordSuccess" xml:space="preserve">
+        <value>If your email is registered in our system, a password reset token has been sent.</value>
+    </data>
+    <data name="Auth.ResetPasswordSuccess" xml:space="preserve">
+        <value>Your password has been successfully reset. You can now login.</value>
+    </data>
+    <data name="Exception.ValidationErrorTitle" xml:space="preserve">
+        <value>Validation Error</value>
+    </data>
+    <data name="Exception.ValidationErrorDetail" xml:space="preserve">
+        <value>One or more validation errors occurred.</value>
+    </data>
+    <data name="Exception.ResourceNotFoundTitle" xml:space="preserve">
+        <value>Resource Not Found</value>
+    </data>
+    <data name="Validation.InvalidResetLink" xml:space="preserve">
+        <value>The password reset link is invalid or has expired. Please request a new link.</value>
+    </data>
+    <data name="Email.ResetPasswordSubject" xml:space="preserve">
+        <value>Password Reset Request</value>
+    </data>
+    <data name="Email.PasswordChangedSubject" xml:space="preserve">
+        <value>Your Password Has Been Changed</value>
+    </data>
+    <data name="Email.Greeting" xml:space="preserve">
+        <value>Hello</value>
+    </data>
+    <data name="Email.ResetPasswordBody" xml:space="preserve">
+        <value>We received a request to reset your password for your account. You can set your new password by clicking the button below:</value>
+    </data>
+    <data name="Email.ResetPasswordButton" xml:space="preserve">
+        <value>Reset My Password</value>
+    </data>
+    <data name="Email.FallbackText" xml:space="preserve">
+        <value>If you are unable to click the button, you can copy and paste the following link into your browser:</value>
+    </data>
+    <data name="Email.SecurityNotice" xml:space="preserve">
+        <value>If you did not make this request, please ignore this email. Your password is safe.</value>
+    </data>
+    <data name="Email.RightsReserved" xml:space="preserve">
+        <value>All rights reserved.</value>
+    </data>
+    <data name="Email.PasswordChangedBody" xml:space="preserve">
+        <value>Your password has been successfully changed. If you performed this action, no further action is required.</value>
+    </data>
+    <data name="Email.PasswordChangedNotice" xml:space="preserve">
+        <value>If you did not perform this action, please contact your system administrator immediately.</value>
+    </data>
+    <data name="Exception.TooManyRequestsTitle" xml:space="preserve">
+        <value>Too Many Requests</value>
+    </data>
+    <data name="Exception.TooManyRequestsDetail" xml:space="preserve">
+        <value>You have made too many requests. Please wait a moment and try again later.</value>
+    </data>
+    <data name="Email.VerifyEmailSubject" xml:space="preserve">
+        <value>Verify Your Email Address</value>
+    </data>
+    <data name="Email.VerifyEmailBody" xml:space="preserve">
+        <value>Welcome to Emergency Platform HUB! To complete your registration and activate your account, please verify your email address by clicking the button below:</value>
+    </data>
+    <data name="Email.VerifyEmailButton" xml:space="preserve">
+        <value>Verify My Account</value>
+    </data>
+    <data name="Email.VerifyEmailNotice" xml:space="preserve">
+        <value>If you did not create an account on our platform, you can safely ignore this email.</value>
+    </data>
+    <data name="Validation.InvalidVerificationLink" xml:space="preserve">
+        <value>The email verification link is invalid or has expired. Please request a new verification email.</value>
+    </data>
+    <data name="Auth.EmailVerificationSuccess" xml:space="preserve">
+        <value>Your email address has been successfully verified. You can now log in to the system.</value>
+    </data>
+    <data name="Auth.ResendVerificationEmailSuccess" xml:space="preserve">
+        <value>If your email address is registered and not yet verified, a new verification link has been sent to your inbox.</value>
+    </data>
+    <data name="Auth.EmailNotVerified" xml:space="preserve">
+        <value>Please verify your email address before logging in. If you didn't receive the email, you can request a new one.</value>
+    </data>
+    <data name="Exception.CredentialsTitle" xml:space="preserve">
+        <value>Authentication Failed</value>
+    </data>
+    <data name="Exception.AccountTitle" xml:space="preserve">
+        <value>Account Issue</value>
+    </data>
+    <data name="Exception.VerificationTitle" xml:space="preserve">
+        <value>Verification Required</value>
+    </data>
+    <data name="Exception.PayloadTitle" xml:space="preserve">
+        <value>Invalid Payload</value>
+    </data>
+    <data name="Exception.BusinessErrorTitle" xml:space="preserve">
+        <value>Operation Failed</value>
+    </data>
+    <data name="Exception.NotFoundMessage" xml:space="preserve">
+        <value>The record for '{0}' with key '{1}' could not be found in the system.</value>
+    </data>
+    <data name="Exception.TokenTitle" xml:space="preserve">
+        <value>Token Error</value>
+    </data>
+    <data name="Exception.RegistrationTitle" xml:space="preserve">
+        <value>Registration Issue</value>
+    </data>
+    <data name="User.EntityName" xml:space="preserve">
+        <value>User</value>
+    </data>
+    <data name="Auth.AccountLocked" xml:space="preserve">
+        <value>Your account has been temporarily locked due to too many failed login attempts. Please try again later.</value>
+    </data>
+    <data name="Auth.TokenGenerationFailed" xml:space="preserve">
+        <value>An error occurred while generating the security token. Please try again.</value>
+    </data>
+    <data name="Email.InviteSubject" xml:space="preserve">
+        <value>You Are Invited to Emergency Platform HUB!</value>
+    </data>
+    <data name="Email.InviteBody" xml:space="preserve">
+        <value>You have been invited to join the Emergency Platform HUB as an authorized member. To complete your account setup and set your password, please click the button below:</value>
+    </data>
+    <data name="Email.InviteButton" xml:space="preserve">
+        <value>Accept Invitation &amp; Complete Profile</value>
+    </data>
+    <data name="Email.InviteNotice" xml:space="preserve">
+        <value>If you are not expecting this invitation, you can safely ignore this email. No account will be activated without your confirmation.</value>
+    </data>
+    <data name="User.InvitationFailed" xml:space="preserve">
+        <value>An error occurred while creating the account for the invited user.</value>
+    </data>
+    <data name="User.NotInvited" xml:space="preserve">
+        <value>This account is either already active or not in 'Invited' status. You cannot use the invitation completion process.</value>
+    </data>
+    <data name="User.PasswordSetFailed" xml:space="preserve">
+        <value>Failed to set the new password. The invitation link might be expired or invalid.</value>
+    </data>
+    <data name="User.UpdateFailed" xml:space="preserve">
+        <value>An error occurred while updating the user profile. Please try again.</value>
+    </data>
+    <data name="Organization.AlreadyExists" xml:space="preserve">
+        <value>An organization with this Tax Number or Registration Number already exists in the system.</value>
+    </data>
+    <data name="Exception.InvitationTitle" xml:space="preserve">
+        <value>User Invitation Failed</value>
+    </data>
+    <data name="Validation.InvalidInvitationLink" xml:space="preserve">
+        <value>The invitation link is invalid or has expired. Please request a new link.</value>
+    </data>
+    <data name="Validation.InviterIdRequired" xml:space="preserve">
+        <value>Inviter identity is required.</value>
+    </data>
+    <data name="Validation.TargetRoleRequired" xml:space="preserve">
+        <value>Target role must be specified.</value>
+    </data>
+    <data name="User.UnauthorizedRoleAssignment" xml:space="preserve">
+        <value>You do not have the required permission level to assign this role.</value>
+    </data>
+    <data name="Validation.InvalidRole" xml:space="preserve">
+        <value>The selected role value is invalid.</value>
+    </data>
+    <data name="User.InvitationSuccess" xml:space="preserve">
+        <value>The user has been successfully invited.</value>
+    </data>
+    <data name="User.ProfileCompletedSuccess" xml:space="preserve">
+        <value>Your profile has been successfully completed. You can now log in.</value>
+    </data>
+    <data name="Validation.IdentifierRequired" xml:space="preserve">
+        <value>Email address or TC Identity Number is required.</value>
+    </data>
+    <data name="Validation.InvalidUserIdentifier" xml:space="preserve">
+        <value>The entered value must be a valid email address or an 11-digit TC Identity Number.</value>
+    </data>
+    <data name="User.CannotInviteSelf" xml:space="preserve">
+        <value>You cannot invite yourself.</value>
+    </data>
+    <data name="User.TargetHasHigherOrEqualRole" xml:space="preserve">
+        <value>The target user already has this role or a higher permission.</value>
+    </data>
+    <data name="Exception.RoleAssignmentTitle" xml:space="preserve">
+        <value>Role Assignment Failed</value>
+    </data>
+    <data name="Exception.AddressTitle" xml:space="preserve">
+        <value>Address Operation Failed</value>
+    </data>
+    <data name="Exception.OrganizationTitle" xml:space="preserve">
+        <value>Organization Operation Failed</value>
+    </data>
+    <data name="Validation.OrganizationNameRequired" xml:space="preserve">
+        <value>Organization name is required.</value>
+    </data>
+    <data name="Validation.OrganizationNameLength" xml:space="preserve">
+        <value>Organization name must be between 2 and 255 characters.</value>
+    </data>
+    <data name="Validation.DescriptionRequired" xml:space="preserve">
+        <value>Description is required.</value>
+    </data>
+    <data name="Validation.DescriptionLength" xml:space="preserve">
+        <value>Description must be between 10 and 2000 characters.</value>
+    </data>
+    <data name="Validation.InvalidOrganizationType" xml:space="preserve">
+        <value>The selected organization type is invalid.</value>
+    </data>
+    <data name="Validation.RegistrationDateRequired" xml:space="preserve">
+        <value>Establishment date is required.</value>
+    </data>
+    <data name="Validation.RegistrationDateInPast" xml:space="preserve">
+        <value>Establishment date cannot be in the future.</value>
+    </data>
+    <data name="Validation.TaxNumberRequired" xml:space="preserve">
+        <value>Tax number is required.</value>
+    </data>
+    <data name="Validation.InvalidTaxNumber" xml:space="preserve">
+        <value>Tax number must be exactly 10 characters long.</value>
+    </data>
+    <data name="Validation.RegistrationNumberLength" xml:space="preserve">
+        <value>Registration number must be between 5 and 50 characters.</value>
+    </data>
+    <data name="Validation.CompanyEmailRequired" xml:space="preserve">
+        <value>Corporate email address is required.</value>
+    </data>
+    <data name="Validation.CompanyPhoneRequired" xml:space="preserve">
+        <value>Corporate phone number is required.</value>
+    </data>
+    <data name="Validation.AddressTitleRequired" xml:space="preserve">
+        <value>Address title is required.</value>
+    </data>
+    <data name="Validation.AddressTitleLength" xml:space="preserve">
+        <value>Address title must be between 2 and 100 characters.</value>
+    </data>
+    <data name="Validation.CityRequired" xml:space="preserve">
+        <value>City is required.</value>
+    </data>
+    <data name="Validation.CityLength" xml:space="preserve">
+        <value>City must be between 2 and 100 characters.</value>
+    </data>
+    <data name="Validation.DistrictRequired" xml:space="preserve">
+        <value>District is required.</value>
+    </data>
+    <data name="Validation.DistrictLength" xml:space="preserve">
+        <value>District must be between 2 and 100 characters.</value>
+    </data>
+    <data name="Validation.OpenAddressRequired" xml:space="preserve">
+        <value>Open address is required.</value>
+    </data>
+    <data name="Validation.OpenAddressLength" xml:space="preserve">
+        <value>Open address must be between 10 and 500 characters.</value>
+    </data>
+    <data name="Validation.InvalidCoordinates" xml:space="preserve">
+        <value>Invalid latitude or longitude value.</value>
+    </data>
+    <data name="Organization.EntityName" xml:space="preserve">
+        <value>Organization</value>
+    </data>
+    <data name="Validation.SearchTermLength" xml:space="preserve">
+        <value>Search term cannot exceed 128 characters.</value>
+    </data>
+    <data name="Validation.InvalidPageNumber" xml:space="preserve">
+        <value>Page number must be 1 or greater.</value>
+    </data>
+    <data name="Validation.InvalidPageSize" xml:space="preserve">
+        <value>Page size must be 1 or greater.</value>
+    </data>
+    <data name="Email.OrganizationAssignedSubject" xml:space="preserve">
+        <value>You Have Been Assigned to an Organization</value>
+    </data>
+    <data name="Email.OrganizationAssignedBody" xml:space="preserve">
+        <value>You have been successfully assigned as an authorized manager for {{OrganizationName}}. You can now log in to the platform to manage its operations.</value>
+    </data>
+    <data name="Email.OrganizationAssignedButton" xml:space="preserve">
+        <value>Go to Dashboard</value>
+    </data>
+    <data name="Email.OrganizationAssignedNotice" xml:space="preserve">
+        <value>If you believe this assignment was made in error, please contact the system administrator immediately.</value>
+    </data>
+    <data name="Organization.ManagerAlreadyExists" xml:space="preserve">
+        <value>This user is already a manager for the specified organization.</value>
+    </data>
+    <data name="Organization.AlreadyPrimaryManager" xml:space="preserve">
+        <value>This user is already the primary manager of the organization.</value>
+    </data>
+    <data name="Validation.DisplayNameRequired" xml:space="preserve">
+        <value>Display name is required.</value>
+    </data>
+    <data name="Validation.DisplayNameLength" xml:space="preserve">
+        <value>Display name must be between 2 and 255 characters.</value>
+    </data>
+    <data name="Validation.InvalidWebSiteUrl" xml:space="preserve">
+        <value>Please enter a valid website URL.</value>
+    </data>
+    <data name="Validation.FacilityNameRequired" xml:space="preserve">
+        <value>Facility name is required.</value>
+    </data>
+    <data name="Validation.FacilityNameLength" xml:space="preserve">
+        <value>Facility name must be between 2 and 255 characters.</value>
+    </data>
+    <data name="Validation.CapacityInvalid" xml:space="preserve">
+        <value>Capacity must be greater than zero.</value>
+    </data>
+    <data name="Validation.HumanCapacityInvalid" xml:space="preserve">
+        <value>Human capacity must be greater than zero.</value>
+    </data>
+    <data name="Validation.CriticalThresholdInvalid" xml:space="preserve">
+        <value>Critical threshold cannot be negative.</value>
+    </data>
+    <data name="Validation.InvalidFacilityType" xml:space="preserve">
+        <value>The selected facility type is invalid.</value>
+    </data>
+    <data name="Facility.EntityName" xml:space="preserve">
+        <value>Facility</value>
+    </data>
+    <data name="Facility.ManagerAlreadyExists" xml:space="preserve">
+        <value>This user is already a manager for the specified facility.</value>
+    </data>
+    <data name="Facility.AlreadyPrimaryManager" xml:space="preserve">
+        <value>This user is already the primary manager of the facility.</value>
+    </data>
+    <data name="Email.FacilityAssignedSubject" xml:space="preserve">
+        <value>You Have Been Assigned to a Facility</value>
+    </data>
+    <data name="Email.FacilityAssignedBody" xml:space="preserve">
+        <value>You have been successfully assigned as an authorized manager for {{FacilityName}}. You can now log in to the platform to manage its operations and inventory.</value>
+    </data>
+    <data name="Email.FacilityAssignedButton" xml:space="preserve">
+        <value>Go to Facility Dashboard</value>
+    </data>
+    <data name="Email.FacilityAssignedNotice" xml:space="preserve">
+        <value>If you believe this assignment was made in error, please contact your organization administrator immediately.</value>
+    </data>
+    <data name="Facility.UnauthorizedFacilityAccess" xml:space="preserve">
+        <value>You are not authorized to manage facilities that belong to other organizations.</value>
+    </data>
+    <data name="Organization.UnauthorizedOrganizationAccess" xml:space="preserve">
+        <value>You are not authorized to view the details of this organization.</value>
+    </data>
+    <data name="Exception.UnauthorizedAccess" xml:space="preserve">
+        <value>Insufficient Authority</value>
+    </data>
+    <data name="Category.OptionOnlyForSelectList" xml:space="preserve">
+        <value>Options can only be added to attributes of type 'Select List'.</value>
+    </data>
+    <data name="Exception.CategoryTitle" xml:space="preserve">
+        <value>Category Error</value>
+    </data>
+    <data name="Exception.InventoryTitle" xml:space="preserve">
+        <value>Inventory Error</value>
+    </data>
+    <data name="Category.AttributeCodeRequired" xml:space="preserve">
+        <value>A unique code is required for the dynamic attribute.</value>
+    </data>
+    <data name="Item.QuantityCannotBeNegative" xml:space="preserve">
+        <value>Item quantity cannot be negative.</value>
+    </data>
+    <data name="Category.AttributeCategoryRequired" xml:space="preserve">
+        <value>A category must be selected for the attribute.</value>
+    </data>
+    <data name="Category.AttributeNameRequired" xml:space="preserve">
+        <value>Attribute name cannot be empty.</value>
+    </data>
+    <data name="Category.AttributeRequired" xml:space="preserve">
+        <value>The attribute to be added cannot be null.</value>
+    </data>
+    <data name="Category.DuplicateAttributeCode" xml:space="preserve">
+        <value>This code is already in use within this category. Please enter a unique code.</value>
+    </data>
+    <data name="Category.OptionValueRequired" xml:space="preserve">
+        <value>Option value cannot be empty.</value>
+    </data>
+    <data name="Category.DuplicateOptionValue" xml:space="preserve">
+        <value>This option value already exists.</value>
+    </data>
+    <data name="Item.FacilityRequired" xml:space="preserve">
+        <value>A target facility must be specified for this item.</value>
+    </data>
+    <data name="Item.CategoryRequired" xml:space="preserve">
+        <value>A category must be specified for this item.</value>
+    </data>
+    <data name="Item.DynamicAttributeKeyRequired" xml:space="preserve">
+        <value>Dynamic attribute key cannot be empty.</value>
+    </data>
+    <data name="Item.DynamicAttributeValueRequired" xml:space="preserve">
+        <value>Dynamic attribute value cannot be empty.</value>
+    </data>
+    <data name="Exception.ProductTitle" xml:space="preserve">
+        <value>Product Error</value>
+    </data>
+    <data name="Item.ProductIdRequiredForStandardized" xml:space="preserve">
+        <value>A Product ID is required when adding a standardized item.</value>
+    </data>
+    <data name="Item.ProductIdMustBeNullForAdHoc" xml:space="preserve">
+        <value>A Product ID cannot be provided for ad-hoc (non-standard) items.</value>
+    </data>
+    <data name="Item.NameRequiredForAdHoc" xml:space="preserve">
+        <value>An item name is required for ad-hoc donations.</value>
+    </data>
+    <data name="Product.SkuRequired" xml:space="preserve">
+        <value>Product SKU is required.</value>
+    </data>
+    <data name="Product.NameRequired" xml:space="preserve">
+        <value>Product name cannot be empty.</value>
+    </data>
+    <data name="Product.CategoryRequired" xml:space="preserve">
+        <value>A category must be selected for the product.</value>
+    </data>
+    <data name="Product.AttributeKeyRequired" xml:space="preserve">
+        <value>Base attribute key cannot be empty.</value>
+    </data>
+    <data name="Product.AttributeValueRequired" xml:space="preserve">
+        <value>Base attribute value cannot be empty.</value>
+    </data>
+    <data name="Product.InactiveProductUpdateNotAllowed" xml:space="preserve">
+        <value>Cannot update the attributes of an inactive product.</value>
+    </data>
+    <data name="Category.NameMaxLength" xml:space="preserve">
+        <value>Category name cannot exceed 128 characters.</value>
+    </data>
+    <data name="Category.DescriptionMaxLength" xml:space="preserve">
+        <value>Category description cannot exceed 500 characters.</value>
+    </data>
+    <data name="Category.AttributeNameMaxLength" xml:space="preserve">
+        <value>Attribute name cannot exceed 128 characters.</value>
+    </data>
+    <data name="Category.AttributeCodeMaxLength" xml:space="preserve">
+        <value>Attribute code cannot exceed 128 characters.</value>
+    </data>
+    <data name="Category.AttributeCodeInvalidCharacters" xml:space="preserve">
+        <value>Attribute code contains invalid characters. Please use only letters, numbers, and spaces.</value>
+    </data>
+    <data name="Category.OptionValueMaxLength" xml:space="preserve">
+        <value>Option value cannot exceed 256 characters.</value>
+    </data>
+    <data name="Category.NameRequired" xml:space="preserve">
+        <value>Category name cannot be empty.</value>
+    </data>
+    <data name="Category.DuplicateAttributeCodeInRequest" xml:space="preserve">
+        <value>The request contains duplicate attribute codes. Attribute codes must be unique.</value>
+    </data>
+    <data name="Category.NameAlreadyExists" xml:space="preserve">
+        <value>A category with this name already exists.</value>
+    </data>
+    <data name="Category.EntityName" xml:space="preserve">
+        <value>Category</value>
+    </data>
+    <data name="Category.AlreadyActive" xml:space="preserve">
+        <value>This category is already active.</value>
+    </data>
+    <data name="Category.AlreadyInactive" xml:space="preserve">
+        <value>This category is already inactive.</value>
+    </data>
+    <data name="CategoryAttribute.EntityName" xml:space="preserve">
+        <value>Category Attribute</value>
+    </data>
+    <data name="CategoryAttributeOption.EntityName" xml:space="preserve">
+        <value>Category Attribute Option</value>
+    </data>
+    <data name="Category.AttributeMutationRequiresInactiveCategory" xml:space="preserve">
+        <value>The category must be inactive to mutate its attributes.</value>
+    </data>
+    <data name="Category.AttributeMutationBlockedByDependentData" xml:space="preserve">
+        <value>Mutation is blocked because there are products or items depending on this category or attribute.</value>
+    </data>
+    <data name="Validation.InvalidIdentifier" xml:space="preserve">
+        <value>You have selected an invalid identity, identifier or data type.</value>
+    </data>
+    <data name="Product.SkuMaxLength" xml:space="preserve">
+        <value>Product SKU cannot exceed 64 characters.</value>
+    </data>
+    <data name="Product.SkuInvalidFormat" xml:space="preserve">
+        <value>Product SKU can only contain uppercase alphanumeric characters and hyphens.</value>
+    </data>
+    <data name="Product.NameMaxLength" xml:space="preserve">
+        <value>Product name cannot exceed 128 characters.</value>
+    </data>
+    <data name="Product.SkuAlreadyExists" xml:space="preserve">
+        <value>A product with this SKU already exists.</value>
+    </data>
+    <data name="Product.InvalidAttributeKey" xml:space="preserve">
+        <value>One or more attribute keys are invalid or not defined as a product-level attribute for this category.</value>
+    </data>
+    <data name="Product.RequiredAttributeMissing" xml:space="preserve">
+        <value>A required product-level attribute for this category is missing.</value>
+    </data>
+    <data name="Category.MustBeActiveToCreateProduct" xml:space="preserve">
+        <value>The category must be active to create a product under it.</value>
+    </data>
+    <data name="Category.CannotDeleteLastOption" xml:space="preserve">
+        <value>Cannot delete the last option. A select list must have at least one option.</value>
+    </data>
+    <data name="Product.InvalidAttributeValue" xml:space="preserve">
+        <value>The selected value is not valid for this attribute. Please select a value from the predefined options.</value>
+    </data>
+    <data name="Item.EntityName" xml:space="preserve">
+        <value>Inventory Item</value>
+    </data>
+    <data name="Product.EntityName" xml:space="preserve">
+        <value>Product</value>
+    </data>
+    <data name="Product.AlreadyActive" xml:space="preserve">
+        <value>This product is already active.</value>
+    </data>
+    <data name="Product.AlreadyInactive" xml:space="preserve">
+        <value>This product is already inactive.</value>
+    </data>
+    <data name="Item.NameMaxLength" xml:space="preserve">
+        <value>Item name cannot exceed 128 characters.</value>
+    </data>
+    <data name="Facility.CannotStoreItems" xml:space="preserve">
+        <value>This type of facility cannot store items.</value>
+    </data>
+    <data name="Facility.MustBeApproved" xml:space="preserve">
+        <value>The facility must be approved before operations can be performed.</value>
+    </data>
+    <data name="Auth.UnauthorizedAccess" xml:space="preserve">
+        <value>You do not have permission to access this resource.</value>
+    </data>
+    <data name="Exception.SecurityTitle" xml:space="preserve">
+        <value>Security Error</value>
+    </data>
+    <data name="Item.RequiredAttributeMissing" xml:space="preserve">
+        <value>A required attribute is missing for this item.</value>
+    </data>
+    <data name="Item.InvalidAttributeKey" xml:space="preserve">
+        <value>The provided attribute key is invalid or not found in the schema.</value>
+    </data>
+    <data name="Item.InvalidAttributeValue" xml:space="preserve">
+        <value>The provided attribute value is invalid for the selected attribute.</value>
+    </data>
+    <data name="Validation.PageSizeExceeded" xml:space="preserve">
+        <value>The requested page size exceeds the maximum allowed limit of 100.</value>
+    </data>
+    <data name="Item.DuplicateDynamicAttributeKey" xml:space="preserve">
+        <value>Duplicate attribute key detected. Please ensure all dynamic attribute keys are unique.</value>
+    </data>
+    <data name="Product.ProductNotEligibleForInventory" xml:space="preserve">
+        <value>You cannot perform a stock entry or update on a product that has been set to inactive.</value>
+    </data>
+    <data name="Dispatch.DispatchRequired" xml:space="preserve">
+        <value>Dispatch information is required.</value>
+    </data>
+    <data name="Dispatch.ExclusiveTargetRequired" xml:space="preserve">
+        <value>A dispatch must have either a valid target facility or a target address, but not both or neither.</value>
+    </data>
+    <data name="Dispatch.ItemNameRequired" xml:space="preserve">
+        <value>Item name snapshot is required.</value>
+    </data>
+    <data name="Dispatch.QuantityMustBePositive" xml:space="preserve">
+        <value>Dispatch quantity must be greater than zero.</value>
+    </data>
+    <data name="Dispatch.SourceFacilityRequired" xml:space="preserve">
+        <value>Source facility is required.</value>
+    </data>
+    <data name="Dispatch.SourceItemRequired" xml:space="preserve">
+        <value>Source item is required.</value>
+    </data>
+    <data name="Dispatch.TargetAddressInvalid" xml:space="preserve">
+        <value>Invalid target address.</value>
+    </data>
+    <data name="Dispatch.TargetFacilityInvalid" xml:space="preserve">
+        <value>Invalid target facility.</value>
+    </data>
+    <data name="Exception.DispatchTitle" xml:space="preserve">
+        <value>Dispatch Operation Error</value>
+    </data>
+    <data name="Dispatch.InsufficientStock" xml:space="preserve">
+        <value>There is insufficient stock in the facility for this operation.</value>
+    </data>
+    <data name="Dispatch.ItemsRequired" xml:space="preserve">
+        <value>You must add at least one item to create a dispatch.</value>
+    </data>
+    <data name="Dispatch.ItemStatusInvalid" xml:space="preserve">
+        <value>The current status of the item is not valid for this dispatch operation.</value>
+    </data>
+    <data name="Dispatch.NotesMaxLength" xml:space="preserve">
+        <value>Notes cannot exceed 1024 characters.</value>
+    </data>
+    <data name="Dispatch.ReceiverNameMaxLength" xml:space="preserve">
+        <value>Receiver name cannot exceed 128 characters.</value>
+    </data>
+    <data name="Dispatch.ReceiverNameRequired" xml:space="preserve">
+        <value>Receiver name is required.</value>
+    </data>
+    <data name="Dispatch.ReceiverPhoneRequired" xml:space="preserve">
+        <value>Receiver contact phone is required.</value>
+    </data>
+    <data name="Dispatch.StatusNotPending" xml:space="preserve">
+        <value>Only pending dispatches can be shipped.</value>
+    </data>
+    <data name="Item.DecreaseAmountMustBePositive" xml:space="preserve">
+        <value>The amount to decrease must be greater than zero.</value>
+    </data>
+    <data name="Dispatch.DuplicateItemsNotAllowed" xml:space="preserve">
+        <value>An item cannot be added to the dispatch list more than once. Please update the quantity instead.</value>
+    </data>
+    <data name="Dispatch.EntityName" xml:space="preserve">
+        <value>Dispatch</value>
+    </data>
+    <data name="Dispatch.StatusNotInTransit" xml:space="preserve">
+        <value>This operation can only be performed for dispatches that are currently In Transit.</value>
+    </data>
+    <data name="Dispatch.TargetFacilityRequiredForReceipt" xml:space="preserve">
+        <value>A target facility is required to receive the dispatch. Deliveries to external addresses cannot be received via the system.</value>
+    </data>
+    <data name="Dispatch.ReceiptItemMissing" xml:space="preserve">
+        <value>Some items from the dispatch are missing in the receipt payload. Please specify the received or damaged quantities for all items.</value>
+    </data>
+    <data name="Dispatch.SourceItemNotInDispatch" xml:space="preserve">
+        <value>The item attempting to be received is not part of the original dispatch.</value>
+    </data>
+    <data name="Dispatch.ReceiptQuantityInvalid" xml:space="preserve">
+        <value>The received or damaged quantity is invalid. Total quantity must be greater than zero.</value>
+    </data>
+    <data name="Dispatch.ReceiptQuantityMismatch" xml:space="preserve">
+        <value>The total specified quantity (Received + Damaged) does not match the originally dispatched quantity.</value>
+    </data>
+    <data name="Dispatch.StandardizedItemCannotBeAdHoc" xml:space="preserve">
+        <value>An item dispatched as standardized cannot be received as ad-hoc at the target facility</value>
+    </data>
+    <data name="Dispatch.DeliveryNoteMaxLength" xml:space="preserve">
+        <value>Delivery note cannot exceed 1024 characters.</value>
+    </data>
+    <data name="Dispatch.TargetAddressRequiredForDelivery" xml:space="preserve">
+        <value>A target address is required to complete this delivery operation.</value>
+    </data>
+    <data name="Dispatch.TargetFacilityMustBeNullForDelivery" xml:space="preserve">
+        <value>Dispatches to facilities cannot be completed via address delivery. Please use the facility receipt operation.</value>
+    </data>
+    <data name="Address.EntityName" xml:space="preserve">
+        <value>Address</value>
+    </data>
+    <data name="Item.IncreaseAmountMustBePositive" xml:space="preserve">
+        <value>The amount to increase stock must be greater than zero.</value>
+    </data>
+    <data name="Validation.InvalidDateRange" xml:space="preserve">
+        <value>The Start Date cannot be later than the End Date.</value>
+    </data>
+    <data name="Item.Unknown" xml:space="preserve">
+        <value>Unknown Item</value>
+    </data>
+    <data name="Product.Unknown" xml:space="preserve">
+        <value>Unknown Product</value>
+    </data>
+    <data name="Facility.Unknown" xml:space="preserve">
+        <value>Unknown Facility</value>
+    </data>
+    <data name="User.UnknownUser" xml:space="preserve">
+        <value>Unknown User</value>
+    </data>
+    <data name="User.SystemUser" xml:space="preserve">
+        <value>Emergency HUB</value>
+    </data>
+</root>

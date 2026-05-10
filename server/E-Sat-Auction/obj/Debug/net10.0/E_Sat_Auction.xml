@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>E_Sat_Auction</name>
+        <name>e_Sat_Auction</name>
     </assembly>
     <members>
-        <member name="M:E_Sat_Auction.Controllers.AuthController.GetMe">
+        <member name="M:e_Sat_Auction.Controllers.AuthController.GetMe">
             <summary>
             Retrieves the profile information of the currently authenticated user.
             </summary>
@@ -13,7 +13,7 @@
             <response code="401">If the user is not authenticated.</response>
             <response code="404">If the user is authenticated but not found in the database.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.AuthController.RefreshToken(E_Sat_Auction.Features.Auth.RefreshToken.RefreshTokenCommand)">
+        <member name="M:e_Sat_Auction.Controllers.AuthController.RefreshToken(e_Sat_Auction.Features.Auth.RefreshToken.RefreshTokenCommand)">
             <summary>
             Generates a new Access Token using a valid Refresh Token.
             </summary>
@@ -22,7 +22,7 @@
             <response code="200">Returns the new token details.</response>
             <response code="400">If the refresh token is invalid or expired.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.AuthController.Register(E_Sat_Auction.Features.Auth.Register.RegisterCommand)">
+        <member name="M:e_Sat_Auction.Controllers.AuthController.Register(e_Sat_Auction.Features.Auth.Register.RegisterCommand)">
             <summary>
             Registers a new user to the system.
             </summary>
@@ -31,7 +31,7 @@
             <response code="201">User was successfully created.</response>
             <response code="400">If the submitted model is invalid, validation rules are not met, or the Email/TC is already registered.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.AuthController.Login(E_Sat_Auction.Features.Auth.Login.LoginCommand)">
+        <member name="M:e_Sat_Auction.Controllers.AuthController.Login(e_Sat_Auction.Features.Auth.Login.LoginCommand)">
             <summary>
             Authenticates a user and returns a JWT along with a Refresh Token.
             </summary>
@@ -40,7 +40,7 @@
             <response code="200">Returns the token details.</response>
             <response code="400">If the credentials are invalid or the account is resigned/suspended.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.AuthController.VerifyEmail(E_Sat_Auction.Features.Auth.VerifyEmail.VerifyEmailCommand)">
+        <member name="M:e_Sat_Auction.Controllers.AuthController.VerifyEmail(e_Sat_Auction.Features.Auth.VerifyEmail.VerifyEmailCommand)">
             <summary>
             Verifies the user's email address using the encrypted payload sent to their email.
             </summary>
@@ -48,7 +48,7 @@
             <response code="204">Email verified successfully.</response>
             <response code="400">If the payload is invalid or expired.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.AuthController.ResendVerificationEmail(E_Sat_Auction.Features.Auth.ResendVerificationEmail.ResendVerificationEmailCommand)">
+        <member name="M:e_Sat_Auction.Controllers.AuthController.ResendVerificationEmail(e_Sat_Auction.Features.Auth.ResendVerificationEmail.ResendVerificationEmailCommand)">
             <summary>
             Resends the email verification link if the user exists and is not yet verified.
             </summary>
@@ -56,7 +56,7 @@
             <response code="204">Returns a success message regardless of whether the email exists or is already verified (Security Best Practice).</response>
             <response code="400">If the submitted email format is invalid.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.AuthController.ForgotPassword(E_Sat_Auction.Features.Auth.ForgotPassword.ForgotPasswordCommand)">
+        <member name="M:e_Sat_Auction.Controllers.AuthController.ForgotPassword(e_Sat_Auction.Features.Auth.ForgotPassword.ForgotPasswordCommand)">
             <summary>
             Sends a password reset link to the user's email address if it exists in the system.
             </summary>
@@ -64,7 +64,7 @@
             <response code="204">Returns a success message regardless of whether the email exists or not (Security Best Practice).</response>
             <response code="400">If the submitted email format is invalid.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.AuthController.ResetPassword(E_Sat_Auction.Features.Auth.ResetPassword.ResetPasswordCommand)">
+        <member name="M:e_Sat_Auction.Controllers.AuthController.ResetPassword(e_Sat_Auction.Features.Auth.ResetPassword.ResetPasswordCommand)">
             <summary>
             Resets the user's password using the provided token and new password.
             </summary>
@@ -72,7 +72,7 @@
             <response code="204">Password has been successfully reset.</response>
             <response code="400">If the token is invalid, expired, or validation rules fail.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.CategoryController.GetAllCategories(E_Sat_Auction.Features.Category.GetAllCategories.GetAllCategoriesQuery)">
+        <member name="M:e_Sat_Auction.Controllers.CategoryController.GetAllCategories(e_Sat_Auction.Features.Category.GetAllCategories.GetAllCategoriesQuery)">
             <summary>
             Retrieves a paginated list of categories with optional search and status filtering.
             </summary>
@@ -80,7 +80,7 @@
             <returns>A paginated list of categories</returns>
             <response code="200">Returns the requested page of categories</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.CategoryController.GetCategoryById(System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.CategoryController.GetCategoryById(System.Guid)">
             <summary>
             Retrieves the details of a specific category by its unique ID.
             </summary>
@@ -89,7 +89,7 @@
             <response code="200">Category found and returned</response>
             <response code="404">Category with the specified ID does not exist</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.CategoryController.CreateCategory(E_Sat_Auction.Features.Category.AddCategory.AddCategoryCommand)">
+        <member name="M:e_Sat_Auction.Controllers.CategoryController.CreateCategory(e_Sat_Auction.Features.Category.AddCategory.AddCategoryCommand)">
             <summary>
             Add a new Category along with its dynamic attributes and options.
             Restricted to users with the GeneralAdmin role.
@@ -99,7 +99,7 @@
             <response code="201">Category successfully created.</response>
             <response code="400">Validation error or category name already exists.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.CategoryController.UpdateCategory(System.Guid,E_Sat_Auction.Dtos.Category.Requests.UpdateCategoryRequest)">
+        <member name="M:e_Sat_Auction.Controllers.CategoryController.UpdateCategory(System.Guid,e_Sat_Auction.Dtos.Category.Requests.UpdateCategoryRequest)">
             <summary>
             Updates an existing category's basic fields (Name, Description, etc.).
             </summary>
@@ -109,7 +109,7 @@
             <response code="400">Validation error or duplicate category name.</response>
             <response code="404">Category not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.CategoryController.ActivateCategory(System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.CategoryController.ActivateCategory(System.Guid)">
             <summary>
             Activates an existing category.
             </summary>
@@ -117,7 +117,7 @@
             <response code="204">Category successfully activated.</response>
             <response code="404">Category not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.CategoryController.DeactivateCategory(System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.CategoryController.DeactivateCategory(System.Guid)">
             <summary>
             Deactivates an existing category.
             </summary>
@@ -125,7 +125,7 @@
             <response code="204">Category successfully deactivated.</response>
             <response code="404">Category not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.CategoryController.AddCategoryAttribute(System.Guid,E_Sat_Auction.Dtos.Category.Requests.AddCategoryAttributeRequest)">
+        <member name="M:e_Sat_Auction.Controllers.CategoryController.AddCategoryAttribute(System.Guid,e_Sat_Auction.Dtos.Category.Requests.AddCategoryAttributeRequest)">
             <summary>
             Adds a new dynamic attribute to an existing category. 
             Note: The category must be inactive to perform this operation.
@@ -137,7 +137,7 @@
             <response code="400">Validation error, duplicate code, or category is active.</response>
             <response code="404">Parent category not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.CategoryController.UpdateCategoryAttribute(System.Guid,System.Guid,E_Sat_Auction.Dtos.Category.Requests.UpdateCategoryAttributeRequest)">
+        <member name="M:e_Sat_Auction.Controllers.CategoryController.UpdateCategoryAttribute(System.Guid,System.Guid,e_Sat_Auction.Dtos.Category.Requests.UpdateCategoryAttributeRequest)">
             <summary>
             Updates an existing attribute of a category.
             Note: The category must be inactive to perform this operation.
@@ -149,7 +149,7 @@
             <response code="400">Validation error or category is active.</response>
             <response code="404">Category or Attribute not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.CategoryController.DeleteCategoryAttribute(System.Guid,System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.CategoryController.DeleteCategoryAttribute(System.Guid,System.Guid)">
             <summary>
             Soft deletes a category attribute and all its associated options.
             Note: The category must be inactive to perform this operation.
@@ -159,7 +159,7 @@
             <response code="204">Attribute successfully deleted.</response>
             <response code="404">Category or Attribute not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.CategoryController.AddCategoryAttributeOption(System.Guid,System.Guid,E_Sat_Auction.Dtos.Category.Requests.AddCategoryAttributeOptionRequest)">
+        <member name="M:e_Sat_Auction.Controllers.CategoryController.AddCategoryAttributeOption(System.Guid,System.Guid,e_Sat_Auction.Dtos.Category.Requests.AddCategoryAttributeOptionRequest)">
             <summary>
             Adds a new dropdown option to an existing category attribute.
             Only applicable if the attribute's DataType is SelectList.
@@ -172,7 +172,7 @@
             <response code="400">Validation error, duplicate option, or attribute is not a SelectList.</response>
             <response code="404">Category or Attribute not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.CategoryController.UpdateCategoryAttributeOption(System.Guid,System.Guid,System.Guid,E_Sat_Auction.Dtos.Category.Requests.UpdateCategoryAttributeOptionRequest)">
+        <member name="M:e_Sat_Auction.Controllers.CategoryController.UpdateCategoryAttributeOption(System.Guid,System.Guid,System.Guid,e_Sat_Auction.Dtos.Category.Requests.UpdateCategoryAttributeOptionRequest)">
             <summary>
             Updates an existing option of a category attribute.
             </summary>
@@ -184,7 +184,7 @@
             <response code="400">Validation error or duplicate option value.</response>
             <response code="404">Category, Attribute, or Option not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.CategoryController.DeleteCategoryAttributeOption(System.Guid,System.Guid,System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.CategoryController.DeleteCategoryAttributeOption(System.Guid,System.Guid,System.Guid)">
             <summary>
             Soft deletes a specific option from a category attribute.
             </summary>
@@ -194,7 +194,7 @@
             <response code="204">Option successfully deleted.</response>
             <response code="404">Category, Attribute, or Option not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.DispatchController.GetAllDispatches(E_Sat_Auction.Features.Dispatch.GetAllDispatches.GetAllDispatchesQuery)">
+        <member name="M:e_Sat_Auction.Controllers.DispatchController.GetAllDispatches(e_Sat_Auction.Features.Dispatch.GetAllDispatches.GetAllDispatchesQuery)">
             <summary>
             Gets a paginated list of dispatches visible to the current user.
             </summary>
@@ -202,7 +202,7 @@
             <returns>A paginated list of dispatches.</returns>
             <response code="200">Returns the paginated and authorized list of dispatches.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.DispatchController.GetDispatchById(System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.DispatchController.GetDispatchById(System.Guid)">
             <summary>
             Retrieves details of a specific dispatch including line items and target details.
             </summary>
@@ -212,7 +212,7 @@
             <response code="403">User is not authorized to view the dispatch.</response>
             <response code="404">Dispatch not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.DispatchController.CreateDispatch(System.Guid,E_Sat_Auction.Dtos.Dispatch.Requests.CreateDispatchRequest)">
+        <member name="M:e_Sat_Auction.Controllers.DispatchController.CreateDispatch(System.Guid,e_Sat_Auction.Dtos.Dispatch.Requests.CreateDispatchRequest)">
             <summary>
             Creates a new dispatch (shipment) from a specific source facility to a target facility or address.
             Deducts inventory from the source facility and creates a reserved dispatch order.
@@ -226,7 +226,7 @@
             <response code="403">User is not authorized to dispatch items from the specified source facility.</response>
             <response code="404">An item specified in the payload was not found in the source facility.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.DispatchController.ShipDispatch(System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.DispatchController.ShipDispatch(System.Guid)">
             <summary>
             Ships a pending dispatch. Changes the status of the dispatch and its associated items to InTransit.
             Requires authorization over the source facility.
@@ -237,7 +237,7 @@
             <response code="403">User is not authorized to ship from the source facility.</response>
             <response code="404">Dispatch or associated items not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.DispatchController.ReceiveDispatch(System.Guid,E_Sat_Auction.Dtos.Dispatch.Requests.ReceiveDispatchRequest)">
+        <member name="M:e_Sat_Auction.Controllers.DispatchController.ReceiveDispatch(System.Guid,e_Sat_Auction.Dtos.Dispatch.Requests.ReceiveDispatchRequest)">
             <summary>
             Completes an in-transit dispatch at the target facility, updating its status Completed.
             Requires authorization over the target facility.
@@ -249,7 +249,7 @@
             <response code="403">User is not authorized to receive dispatches at the target facility.</response>
             <response code="404">Dispatch not found or already completed.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.DispatchController.CompleteAddressDelivery(System.Guid,E_Sat_Auction.Dtos.Dispatch.Requests.CompleteAddressDispatchRequest)">
+        <member name="M:e_Sat_Auction.Controllers.DispatchController.CompleteAddressDelivery(System.Guid,e_Sat_Auction.Dtos.Dispatch.Requests.CompleteAddressDispatchRequest)">
             <summary>
             Completes a dispatch delivery to a specific address, updating its status and recording delivery details.
             Requires authorization over the source facility.
@@ -261,7 +261,7 @@
             <response code="403">User is not authorized to complete delivery for this dispatch.</response>
             <response code="404">Dispatch not found or already completed.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.DispatchController.CancelDispatch(System.Guid,E_Sat_Auction.Dtos.Dispatch.Requests.CancelDispatchRequest)">
+        <member name="M:e_Sat_Auction.Controllers.DispatchController.CancelDispatch(System.Guid,e_Sat_Auction.Dtos.Dispatch.Requests.CancelDispatchRequest)">
             <summary>
             Cancels a pending dispatch and restores reserved items to available stock.
             Requires authorization over the source facility.
@@ -273,7 +273,7 @@
             <response code="403">User is not authorized to cancel dispatches from the source facility.</response>
             <response code="404">Dispatch or associated items not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.FacilityController.GetAllFacilities(E_Sat_Auction.Features.Facility.GetAllFacilities.GetAllFacilitiesQuery)">
+        <member name="M:e_Sat_Auction.Controllers.FacilityController.GetAllFacilities(e_Sat_Auction.Features.Facility.GetAllFacilities.GetAllFacilitiesQuery)">
             <summary>
             Retrieves a paginated list of facilities (Logistics Depots, Gathering Areas, etc.) with optional filtering.
             </summary>
@@ -281,7 +281,7 @@
             <returns>A paginated list of facilities</returns>
             <response code="200">Returns the requested page of facilities</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.FacilityController.GetFacilityById(System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.FacilityController.GetFacilityById(System.Guid)">
             <summary>
             Retrieves the details of a specific facility by its unique ID.
             </summary>
@@ -290,7 +290,7 @@
             <response code="200">Facility found and returned</response>
             <response code="404">Facility with the specified ID does not exist</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.FacilityController.GetMyFacilities(System.Int32,System.Int32)">
+        <member name="M:e_Sat_Auction.Controllers.FacilityController.GetMyFacilities(System.Int32,System.Int32)">
             <summary>
             Retrieves a paginated list of facilities managed by the currently authenticated user.
             </summary>
@@ -299,9 +299,9 @@
             <returns>A paginated list of user's facilities</returns>
             <response code="200">Returns the requested page of user's facilities</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.FacilityController.AddFacility(E_Sat_Auction.Features.Facility.AddFacility.AddFacilityCommand)">
+        <member name="M:e_Sat_Auction.Controllers.FacilityController.AddFacility(e_Sat_Auction.Features.Facility.AddFacility.AddFacilityCommand)">
             <summary>
-            Add a new Logistics Depot for a specific organization.
+            Add a new Facility.
             Restricted to users with the GeneralAdmin role.
             </summary>
             <param name="command">Details of the logistics depot, including capacity and address information</param>
@@ -310,7 +310,7 @@
             <response code="400">Validation error.</response>
             <response code="404">Associated organization not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.FacilityController.DeleteFacility(System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.FacilityController.DeleteFacility(System.Guid)">
             <summary>
             Soft deletes a specific facility by its ID.
             </summary>
@@ -318,7 +318,7 @@
             <response code="204">Facility successfully deleted.</response>
             <response code="404">Facility not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.FacilityController.AssignManager(System.Guid,E_Sat_Auction.Dtos.Manager.Requests.AssignManagerRequest)">
+        <member name="M:e_Sat_Auction.Controllers.FacilityController.AssignManager(System.Guid,e_Sat_Auction.Dtos.Manager.Requests.AssignManagerRequest)">
             <summary>
             Assigns a new manager to an existing facility. Sends an invitation if the user does not exist.
             </summary>
@@ -328,7 +328,7 @@
             <response code="400">Validation error or manager already exists in this facility.</response>
             <response code="404">Facility not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.FacilityController.SetPrimaryManager(System.Guid,System.String)">
+        <member name="M:e_Sat_Auction.Controllers.FacilityController.SetPrimaryManager(System.Guid,System.String)">
             <summary>
             Sets an existing manager as the primary manager of the facility. 
             Demotes the previous primary manager if one exists.
@@ -338,7 +338,7 @@
             <response code="204">Manager successfully set as primary.</response>
             <response code="404">Facility or manager association not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.FacilityController.UnassignManager(System.Guid,System.String)">
+        <member name="M:e_Sat_Auction.Controllers.FacilityController.UnassignManager(System.Guid,System.String)">
             <summary>
             Removes a manager from a facility (Soft delete the association).
             </summary>
@@ -347,7 +347,7 @@
             <response code="204">Manager successfully removed.</response>
             <response code="404">Facility or manager association not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.InventoryTransactionController.GetAllInventoryTransactions(E_Sat_Auction.Features.InventoryTransaction.GetAllInventoryTransactions.GetAllInventoryTransactionsQuery)">
+        <member name="M:e_Sat_Auction.Controllers.InventoryTransactionController.GetAllInventoryTransactions(e_Sat_Auction.Features.InventoryTransaction.GetAllInventoryTransactions.GetAllInventoryTransactionsQuery)">
             <summary>
             Gets a paginated list of inventory transactions (stock logs) visible to the current user.
             </summary>
@@ -356,7 +356,7 @@
             <response code="200">Returns the paginated and authorized list of transactions.</response>
             <response code="403">User is not authorized to access the specified facility.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.ItemController.GetAllItems(E_Sat_Auction.Features.Item.GetAllItems.GetAllItemsQuery)">
+        <member name="M:e_Sat_Auction.Controllers.ItemController.GetAllItems(e_Sat_Auction.Features.Item.GetAllItems.GetAllItemsQuery)">
             <summary>
             Gets a paginated list of inventory items. 
             Results are strictly scoped to facilities the user is authorized to access.
@@ -365,7 +365,7 @@
             <returns>A paginated list of inventory items.</returns>
             <response code="200">Returns the paginated and authorized list of items.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.ItemController.GetItemById(System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.ItemController.GetItemById(System.Guid)">
             <summary>
             Retrieves details of a specific inventory item (Standardized or AdHoc).
             Requires authorization over the facility where the item is located.
@@ -376,7 +376,7 @@
             <response code="403">User is not authorized to view the facility's inventory.</response>
             <response code="404">Item not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.ItemController.AddStandardizedItem(E_Sat_Auction.Features.Item.AddStandardizedItem.AddStandardizedItemCommand)">
+        <member name="M:e_Sat_Auction.Controllers.ItemController.AddStandardizedItem(e_Sat_Auction.Features.Item.AddStandardizedItem.AddStandardizedItemCommand)">
             <summary>
             Add a Standardized Item linked to a Master Product Catalog.
             Used when adding inventory that exists in the predefined product catalog.
@@ -389,7 +389,7 @@
             <response code="403">User is not authorized to add items to the specified facility.</response>
             <response code="404">Specified Product, Category, or Facility was not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.ItemController.AddAdHocItem(E_Sat_Auction.Features.Item.AddAdHocItem.AddAdHocItemCommand)">
+        <member name="M:e_Sat_Auction.Controllers.ItemController.AddAdHocItem(e_Sat_Auction.Features.Item.AddAdHocItem.AddAdHocItemCommand)">
             <summary>
             Add an AdHoc Item that is independent of the Master Product Catalog.
             Typically used for rapid entry of donated goods or emergency supplies that do not have a predefined product SKU.
@@ -402,7 +402,7 @@
             <response code="403">User is not authorized to add items to the specified facility.</response>
             <response code="404">Specified Category or Facility was not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.ProductController.GetAllProducts(E_Sat_Auction.Features.Product.GetAllProducts.GetAllProductsQuery)">
+        <member name="M:e_Sat_Auction.Controllers.ProductController.GetAllProducts(e_Sat_Auction.Features.Product.GetAllProducts.GetAllProductsQuery)">
             <summary>
             Gets a paginated list of the Master Product Catalog.
             Returns global product definitions, independent of physical facility stock.
@@ -411,7 +411,7 @@
             <returns>A paginated list of products.</returns>
             <response code="200">Returns the requested page of products.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.ProductController.GetProductById(System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.ProductController.GetProductById(System.Guid)">
             <summary>
             Retrieves details of a specific Master Product.
             Includes an aggregated real-time stock summary across all active facilities.
@@ -421,7 +421,7 @@
             <response code="200">Product found and returned.</response>
             <response code="404">Product with the specified ID does not exist.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.ProductController.AddProduct(E_Sat_Auction.Features.Product.AddProduct.AddProductCommand)">
+        <member name="M:e_Sat_Auction.Controllers.ProductController.AddProduct(e_Sat_Auction.Features.Product.AddProduct.AddProductCommand)">
             <summary>
             Add a new Product (Master Catalog Item) with standardized base attributes.
             Restricted to users with GeneralAdmin roles.
@@ -432,7 +432,7 @@
             <response code="400">Validation error, missing required attributes, invalid attribute keys, or duplicate SKU.</response>
             <response code="404">The specified Category was not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.ProductController.ActivateProduct(System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.ProductController.ActivateProduct(System.Guid)">
             <summary>
             Activates an existing product in the catalog.
             </summary>
@@ -440,7 +440,7 @@
             <response code="204">Product successfully activated.</response>
             <response code="404">Product not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.ProductController.DeactivateProduct(System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.ProductController.DeactivateProduct(System.Guid)">
             <summary>
             Deactivates an existing product in the catalog.
             </summary>
@@ -448,7 +448,7 @@
             <response code="204">Product successfully deactivated.</response>
             <response code="404">Product not found.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.UserController.GetUserById(System.Guid)">
+        <member name="M:e_Sat_Auction.Controllers.UserController.GetUserById(System.Guid)">
             <summary>
             Retrieves a user by unique identifier.
             </summary>
@@ -457,7 +457,7 @@
             <response code="200">User found and returned.</response>
             <response code="404">User with the specified ID does not exist.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.UserController.InviteUser(E_Sat_Auction.Features.User.InviteUser.InviteUserCommand)">
+        <member name="M:e_Sat_Auction.Controllers.UserController.InviteUser(e_Sat_Auction.Features.User.InviteUser.InviteUserCommand)">
             <summary>
             Invites a new user to the system and add a shadow account (Invited status).
             </summary>
@@ -466,7 +466,7 @@
             <response code="201">Invitation was successfully sent.</response>
             <response code="400">If validation fails or the inviter lacks sufficient role permissions.</response>
         </member>
-        <member name="M:E_Sat_Auction.Controllers.UserController.CompleteInvitation(E_Sat_Auction.Features.User.CompleteInvitation.CompleteInvitationCommand)">
+        <member name="M:e_Sat_Auction.Controllers.UserController.CompleteInvitation(e_Sat_Auction.Features.User.CompleteInvitation.CompleteInvitationCommand)">
             <summary>
             Completes the profile of an invited user and activates their account.
             </summary>

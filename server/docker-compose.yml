@@ -1,0 +1,64 @@
+﻿name: emergency-hub
+services:
+  postgres:
+    image: postgres
+    container_name: emergency.hub.postgres
+    command: postgres -c 'max_connections=500'
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=Admin123.
+      - POSTGRES_DB=EmergencyHubDb
+      - TZ=Asia/Istanbul
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresdb:/var/lib/postgresql
+    networks:
+      - emergency_hub_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: emergency.hub.pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@emergencyhub.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-Admin123.}
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - "postgres"
+    networks:
+      - emergency_hub_network
+        
+  redis:
+    image: redis:latest
+    container_name: emergency.hub.redis
+    command: redis-server --requirepass Redis123.
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - emergency_hub_network
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: emergency.hub.redis.ui
+    environment:
+      - REDIS_HOSTS=local:redis:6379:0:Redis123.
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - emergency_hub_network
+  
+networks:
+  emergency_hub_network:
+    name: emergency_hub_network
+    
+volumes:
+  postgresdb:
+  pgadmin:
+  redisdata:

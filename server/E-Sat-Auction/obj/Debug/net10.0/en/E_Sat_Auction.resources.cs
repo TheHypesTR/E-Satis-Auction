@@ -10,12 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("E_Sat_Auction")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("e_Sat_Auction")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute(" ")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("E_Sat_Auction")]
-[assembly: System.Reflection.AssemblyTitleAttribute("E_Sat_Auction")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+29a7426c4b09cc0a69a50eee8f7027312e6f4049")]
+[assembly: System.Reflection.AssemblyProductAttribute("e_Sat_Auction")]
+[assembly: System.Reflection.AssemblyTitleAttribute("e_Sat_Auction")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyCultureAttribute("en")]
 

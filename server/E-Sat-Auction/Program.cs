@@ -1,0 +1,78 @@
+using e_Sat_Auction.Extensions;
+using e_Sat_Auction.Common.Behaviors;
+using e_Sat_Auction.Common.Exceptions;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using Scalar.AspNetCore;
+
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddLocalization();
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    string[] supportedCultures = ["en", "tr"];
+    options.SetDefaultCulture(supportedCultures[0])
+        .AddSupportedCultures(supportedCultures)
+        .AddSupportedUICultures(supportedCultures);
+});
+builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
+
+builder.Services.AddControllers().AddDataAnnotationsLocalization();
+builder.Services.AddScalarOpenApi();
+
+builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddRedisCaching(builder.Configuration);
+
+builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddCustomRateLimiting();
+
+builder.Services.AddProxyAndCorsServices(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddMediatR(configuration =>
+{
+    configuration.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    configuration.AddOpenBehavior(typeof(CachingBehavior<,>));
+    configuration.AddOpenBehavior(typeof(AuditBehavior<,>));
+});
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+builder.Services.ConfigureCustomOptions(builder.Configuration);
+
+builder.Services.AddLogger();
+
+WebApplication app = builder.Build();
+
+app.UseForwardedHeaders();
+
+app.UseRequestLocalization();
+
+app.UseExceptionHandler();
+
+await app.SeedDatabaseAsync();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+
+app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseCors(SecurityServiceExtensions.CorsPolicyName);
+
+app.UseRateLimiter();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
