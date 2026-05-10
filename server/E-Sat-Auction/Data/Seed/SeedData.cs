@@ -8,15 +8,13 @@ namespace e_Sat_Auction.Data.Seed;
 
 public static class SeedData
 {
-    private const string DefaultAdminEmail = "admin@emergencyhub.com";
+    private const string DefaultAdminEmail = "admin@esatisauction.com";
     private const string DefaultAdminPassword = "Admin123.";
 
     private static readonly string[] Roles =
     {
         AppRoles.GeneralAdmin,
-        AppRoles.NGOAdmin,
         AppRoles.WarehouseManager,
-        AppRoles.Volunteer,
         AppRoles.User
     };
 
@@ -40,7 +38,7 @@ public static class SeedData
         {
             AppUser adminUser = AppUser.Add(
                 "Admin",
-                "EmergencyHUB",
+                "e-Satis",
                 DefaultAdminEmail,
                 "+905441230000",
                 null,
