@@ -21,7 +21,7 @@ public class ItemController : AuthorizedBaseController
     /// <returns>A paginated list of inventory items.</returns>
     /// <response code="200">Returns the paginated and authorized list of items.</response>
     [ProducesResponseType(typeof(PaginatedList<ItemSummaryDto>), StatusCodes.Status200OK)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpGet]
     public async Task<IActionResult> GetAllItems([FromQuery] GetAllItemsQuery query)
     {
@@ -42,7 +42,7 @@ public class ItemController : AuthorizedBaseController
     [ProducesResponseType(typeof(ItemDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetItemById(Guid id)
     {
@@ -66,7 +66,7 @@ public class ItemController : AuthorizedBaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpPost("standardized")]
     public async Task<IActionResult> AddStandardizedItem([FromBody] AddStandardizedItemCommand command)
     {
@@ -90,7 +90,7 @@ public class ItemController : AuthorizedBaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpPost("adhoc")]
     public async Task<IActionResult> AddAdHocItem([FromBody] AddAdHocItemCommand command)
     {

@@ -58,8 +58,6 @@ public class CurrentUserService : ICurrentUserService
 
     public bool IsGeneralAdmin => IsInRole(AppRoles.GeneralAdmin);
     
-    public bool IsNGOAdmin => IsInRole(AppRoles.NGOAdmin);
-
     public bool IsInRole(string roleName)
     {
         return _httpContextAccessor.HttpContext?.User.IsInRole(roleName) ?? false;

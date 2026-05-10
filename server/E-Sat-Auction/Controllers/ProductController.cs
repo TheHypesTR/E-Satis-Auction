@@ -22,7 +22,7 @@ public class ProductController : AuthorizedBaseController
     /// <returns>A paginated list of products.</returns>
     /// <response code="200">Returns the requested page of products.</response>
     [ProducesResponseType(typeof(PaginatedList<ProductSummaryDto>), StatusCodes.Status200OK)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpGet]
     public async Task<IActionResult> GetAllProducts([FromQuery] GetAllProductsQuery query)
     {
@@ -41,7 +41,7 @@ public class ProductController : AuthorizedBaseController
     /// <response code="404">Product with the specified ID does not exist.</response>
     [ProducesResponseType(typeof(ProductDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetProductById(Guid id)
     {

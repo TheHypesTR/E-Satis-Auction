@@ -6,6 +6,5 @@ public interface ICurrentUserService
     Task<bool> HasFacilityAccess(Guid facilityId, CancellationToken cancellationToken = default);
     string UserId { get; }
     bool IsGeneralAdmin { get; }
-    bool IsNGOAdmin { get; }
     bool IsInRole(string roleName);
 }

@@ -24,7 +24,7 @@ public class DispatchController : AuthorizedBaseController
     /// <returns>A paginated list of dispatches.</returns>
     /// <response code="200">Returns the paginated and authorized list of dispatches.</response>
     [ProducesResponseType(typeof(PaginatedList<DispatchSummaryDto>), StatusCodes.Status200OK)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpGet]
     public async Task<IActionResult> GetAllDispatches([FromQuery] GetAllDispatchesQuery query)
     {
@@ -44,7 +44,7 @@ public class DispatchController : AuthorizedBaseController
     [ProducesResponseType(typeof(DispatchDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetDispatchById(Guid id)
     {
@@ -69,7 +69,7 @@ public class DispatchController : AuthorizedBaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpPost("facility/{sourceFacilityId:guid}")]
     public async Task<IActionResult> CreateDispatch(Guid sourceFacilityId, [FromBody] CreateDispatchRequest request)
     {
@@ -91,7 +91,7 @@ public class DispatchController : AuthorizedBaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpPut("{id:guid}/ship")]
     public async Task<IActionResult> ShipDispatch(Guid id)
     {
@@ -114,7 +114,7 @@ public class DispatchController : AuthorizedBaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpPut("{id:guid}/receive")]
     public async Task<IActionResult> ReceiveDispatch(Guid id, [FromBody] ReceiveDispatchRequest request)
     {
@@ -137,7 +137,7 @@ public class DispatchController : AuthorizedBaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpPut("{id:guid}/complete-address-delivery")]
     public async Task<IActionResult> CompleteAddressDelivery(Guid id, [FromBody] CompleteAddressDispatchRequest request)
     {
@@ -160,7 +160,7 @@ public class DispatchController : AuthorizedBaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpPut("{id:guid}/cancel")]
     public async Task<IActionResult> CancelDispatch(Guid id, [FromBody] CancelDispatchRequest request)
     {

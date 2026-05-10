@@ -21,7 +21,7 @@ public class UserController : AuthorizedBaseController
     /// <response code="404">User with the specified ID does not exist.</response>
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetUserById(Guid id)
     {
@@ -40,7 +40,7 @@ public class UserController : AuthorizedBaseController
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpPost("invite")]
     public async Task<IActionResult> InviteUser([FromBody] InviteUserCommand request)
     {

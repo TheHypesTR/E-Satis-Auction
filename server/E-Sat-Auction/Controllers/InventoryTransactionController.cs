@@ -19,7 +19,7 @@ public class InventoryTransactionController : AuthorizedBaseController
     /// <response code="403">User is not authorized to access the specified facility.</response>
     [ProducesResponseType(typeof(PaginatedList<InventoryTransactionDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpGet]
     public async Task<IActionResult> GetAllInventoryTransactions([FromQuery] GetAllInventoryTransactionsQuery query)
     {

@@ -5,10 +5,8 @@ public static class RoleHierarchyHelper
     private static readonly Dictionary<string, int> RoleLevels = new()
     {
         { AppRoles.GeneralAdmin, 1 },
-        { AppRoles.NGOAdmin, 2 },
-        { AppRoles.WarehouseManager, 3 },
-        { AppRoles.Volunteer, 4 },
-        { AppRoles.User, 5 }
+        { AppRoles.WarehouseManager, 2 },
+        { AppRoles.User, 3 }
     };
 
     public static bool CanAssignRole(IList<string> inviterRoles, string targetRole)

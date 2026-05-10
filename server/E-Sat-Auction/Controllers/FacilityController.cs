@@ -27,7 +27,7 @@ public class FacilityController : AuthorizedBaseController
     /// <returns>A paginated list of facilities</returns>
     /// <response code="200">Returns the requested page of facilities</response>
     [ProducesResponseType(typeof(PaginatedList<FacilityDto>), StatusCodes.Status200OK)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin)]
+    [RequireRoles(AppRoles.GeneralAdmin)]
     [HttpGet]
     public async Task<IActionResult> GetAllFacilities([FromQuery] GetAllFacilitiesQuery query)
     {
@@ -48,7 +48,7 @@ public class FacilityController : AuthorizedBaseController
     [ProducesResponseType(typeof(FacilityDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetFacilityById(Guid id)
     {
@@ -66,7 +66,7 @@ public class FacilityController : AuthorizedBaseController
     /// <returns>A paginated list of user's facilities</returns>
     /// <response code="200">Returns the requested page of user's facilities</response>
     [ProducesResponseType(typeof(PaginatedList<FacilityDto>), StatusCodes.Status200OK)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin, AppRoles.WarehouseManager)]
+    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
     [HttpGet("my")]
     public async Task<IActionResult> GetMyFacilities([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
@@ -106,7 +106,7 @@ public class FacilityController : AuthorizedBaseController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin)]
+    [RequireRoles(AppRoles.GeneralAdmin)]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteFacility(Guid id)
     {
@@ -127,7 +127,7 @@ public class FacilityController : AuthorizedBaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin)]
+    [RequireRoles(AppRoles.GeneralAdmin)]
     [HttpPost("{id:guid}/managers")]
     public async Task<IActionResult> AssignManager(Guid id, [FromBody] AssignManagerRequest request)
     {
@@ -148,7 +148,7 @@ public class FacilityController : AuthorizedBaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin)]
+    [RequireRoles(AppRoles.GeneralAdmin)]
     [HttpPut("{id:guid}/managers/{userId}/primary")]
     public async Task<IActionResult> SetPrimaryManager(Guid id, string userId)
     {
@@ -167,7 +167,7 @@ public class FacilityController : AuthorizedBaseController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.NGOAdmin)]
+    [RequireRoles(AppRoles.GeneralAdmin)]
     [HttpDelete("{id:guid}/managers/{userId}")]
     public async Task<IActionResult> UnassignManager(Guid id, string userId)
     {
