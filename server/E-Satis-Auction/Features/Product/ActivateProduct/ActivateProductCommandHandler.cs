@@ -1,0 +1,39 @@
+﻿using E_Satis_Auction.Common.Constants;
+using E_Satis_Auction.Common.Exceptions;
+using E_Satis_Auction.Common.Interfaces;
+using E_Satis_Auction.Common.Interfaces.Messaging;
+using E_Satis_Auction.Interfaces;
+using E_Satis_Auction.Interfaces.Repositories;
+
+namespace E_Satis_Auction.Features.Product.ActivateProduct;
+
+using Models.Products;
+
+public class ActivateProductCommandHandler : ICommandHandler<ActivateProductCommand>
+{
+    private readonly IProductRepository _productRepository;
+    private readonly ICacheService _cacheService;
+    private readonly IUnitOfWork _unitOfWork;
+
+    public ActivateProductCommandHandler(
+        IProductRepository productRepository,
+        ICacheService cacheService,
+        IUnitOfWork unitOfWork)
+    {
+        _productRepository = productRepository;
+        _cacheService = cacheService;
+        _unitOfWork = unitOfWork;
+    }
+
+    public async Task Handle(ActivateProductCommand command, CancellationToken cancellationToken)
+    {
+        Product? product = await _productRepository.GetByIdAsync(command.Id, enableTracking: true, cancellationToken);
+        NotFoundException.ThrowIfNull(product, ErrorMessages.Product.EntityName, command.Id);
+
+        product!.Activate();
+        _productRepository.Update(product);
+        
+        await _unitOfWork.CompleteAsync(cancellationToken);
+        await _cacheService.RemoveAsync(CacheKeys.GetProductById(command.Id), cancellationToken);
+    }
+}

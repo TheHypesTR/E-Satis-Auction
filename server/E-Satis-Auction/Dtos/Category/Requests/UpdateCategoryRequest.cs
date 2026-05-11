@@ -1,0 +1,5 @@
+﻿namespace E_Satis_Auction.Dtos.Category.Requests;
+
+public sealed record UpdateCategoryRequest(
+    string Name,
+    string? Description);

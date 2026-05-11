@@ -1,26 +1,26 @@
-﻿name: emergency-hub
+﻿name: e-satis-auction
 services:
   postgres:
     image: postgres
-    container_name: emergency.hub.postgres
+    container_name: esatis.auction.postgres
     command: postgres -c 'max_connections=500'
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=Admin123.
-      - POSTGRES_DB=EmergencyHubDb
+      - POSTGRES_DB=eSatisAuctionDb
       - TZ=Asia/Istanbul
     ports:
       - "5432:5432"
     volumes:
       - postgresdb:/var/lib/postgresql
     networks:
-      - emergency_hub_network
+      - e_satis_auction_network
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: emergency.hub.pgadmin
+    container_name: esatis.auction.pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@emergencyhub.com}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@esatisauction.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-Admin123.}
     ports:
       - "${PGADMIN_PORT:-5050}:80"
@@ -29,22 +29,22 @@ services:
     depends_on:
       - "postgres"
     networks:
-      - emergency_hub_network
+      - e_satis_auction_network
         
   redis:
     image: redis:latest
-    container_name: emergency.hub.redis
+    container_name: esatis.auction.redis
     command: redis-server --requirepass Redis123.
     ports:
       - "6379:6379"
     volumes:
       - redisdata:/data
     networks:
-      - emergency_hub_network
+      - e_satis_auction_network
 
   redis-commander:
     image: rediscommander/redis-commander:latest
-    container_name: emergency.hub.redis.ui
+    container_name: esatis.auction.redis.ui
     environment:
       - REDIS_HOSTS=local:redis:6379:0:Redis123.
     ports:
@@ -52,11 +52,11 @@ services:
     depends_on:
       - redis
     networks:
-      - emergency_hub_network
+      - e_satis_auction_network
   
 networks:
-  emergency_hub_network:
-    name: emergency_hub_network
+  e_satis_auction_network:
+    name: e_satis_auction_network
     
 volumes:
   postgresdb:
