@@ -87,7 +87,7 @@ public class EmailTemplateService : IEmailTemplateService
         string mailBody = await File.ReadAllTextAsync(templatePath);
 
         return mailBody
-            .Replace("{{PlatformName}}", "Emergency Platform HUB")
+            .Replace("{{PlatformName}}", "e-Satış Auction")
             .Replace("{{Greeting}}", _localizer[EmailMessages.Greeting].Value)
             .Replace("{{FirstName}}", firstName)
             .Replace("{{AllRightsReserved}}", _localizer[EmailMessages.RightsReserved].Value);

@@ -26,8 +26,6 @@ public class GetAllInventoryTransactionsQueryHandler : IQueryHandler<GetAllInven
     private readonly UserManager<AppUser> _userManager;
     private readonly ICurrentUserService _currentUserService;
     
-    private const string SYSTEM_USER = "EMERGENCY HUB";
-
     public GetAllInventoryTransactionsQueryHandler(
         IInventoryTransactionRepository inventoryTransactionRepository,
         IFacilityRepository facilityRepository,

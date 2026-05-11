@@ -157,7 +157,7 @@
         <value>Verify Your Email Address</value>
     </data>
     <data name="Email.VerifyEmailBody" xml:space="preserve">
-        <value>Welcome to Emergency Platform HUB! To complete your registration and activate your account, please verify your email address by clicking the button below:</value>
+        <value>Welcome to e-Satış Auction! To complete your registration and activate your account, please verify your email address by clicking the button below:</value>
     </data>
     <data name="Email.VerifyEmailButton" xml:space="preserve">
         <value>Verify My Account</value>
@@ -211,10 +211,10 @@
         <value>An error occurred while generating the security token. Please try again.</value>
     </data>
     <data name="Email.InviteSubject" xml:space="preserve">
-        <value>You Are Invited to Emergency Platform HUB!</value>
+        <value>You Are Invited to e-Satış Auction!</value>
     </data>
     <data name="Email.InviteBody" xml:space="preserve">
-        <value>You have been invited to join the Emergency Platform HUB as an authorized member. To complete your account setup and set your password, please click the button below:</value>
+        <value>You have been invited to join the e-Satış Auction as an authorized member. To complete your account setup and set your password, please click the button below:</value>
     </data>
     <data name="Email.InviteButton" xml:space="preserve">
         <value>Accept Invitation &amp; Complete Profile</value>
@@ -664,6 +664,6 @@
         <value>Unknown User</value>
     </data>
     <data name="User.SystemUser" xml:space="preserve">
-        <value>Emergency HUB</value>
+        <value>e-Satis Auction</value>
     </data>
 </root>

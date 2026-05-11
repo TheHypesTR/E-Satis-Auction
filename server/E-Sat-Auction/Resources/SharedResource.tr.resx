@@ -157,7 +157,7 @@
         <value>E-Posta Adresinizi Doğrulayın</value>
     </data>
     <data name="Email.VerifyEmailBody" xml:space="preserve">
-        <value>Emergency Platform HUB'a hoş geldiniz! Kayıt işleminizi tamamlamak ve hesabınızı aktifleştirmek için lütfen aşağıdaki butona tıklayarak e-posta adresinizi doğrulayın:</value>
+        <value>e-Satış Auction'a hoş geldiniz! Kayıt işleminizi tamamlamak ve hesabınızı aktifleştirmek için lütfen aşağıdaki butona tıklayarak e-posta adresinizi doğrulayın:</value>
     </data>
     <data name="Email.VerifyEmailButton" xml:space="preserve">
         <value>Hesabımı Doğrula</value>
@@ -211,10 +211,10 @@
         <value>Güvenlik anahtarı oluşturulurken bir hata meydana geldi. Lütfen tekrar deneyiniz.</value>
     </data>
     <data name="Email.InviteSubject" xml:space="preserve">
-        <value>Emergency Platform HUB'a Davet Edildiniz!</value>
+        <value>e-Satış Auction'a Davet Edildiniz!</value>
     </data>
     <data name="Email.InviteBody" xml:space="preserve">
-        <value>Emergency Platform HUB'a yetkili üye olarak katılmaya davet edildiniz. Hesap kurulumunuzu tamamlamak ve şifrenizi belirlemek için lütfen aşağıdaki butona tıklayın:</value>
+        <value>e-Satış Auction'a yetkili üye olarak katılmaya davet edildiniz. Hesap kurulumunuzu tamamlamak ve şifrenizi belirlemek için lütfen aşağıdaki butona tıklayın:</value>
     </data>
     <data name="Email.InviteButton" xml:space="preserve">
         <value>Daveti Kabul Et ve Profili Tamamla</value>

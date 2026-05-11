@@ -77,7 +77,7 @@ public class ItemController : AuthorizedBaseController
 
     /// <summary>
     /// Add an AdHoc Item that is independent of the Master Product Catalog.
-    /// Typically used for rapid entry of donated goods or emergency supplies that do not have a predefined product SKU.
+    /// Typically used for rapid entry of donated goods or supplies that do not have a predefined product SKU.
     /// Requires the user to have authorization over the specified Facility.
     /// </summary>
     /// <param name="command">Inventory details including CategoryId, FacilityId, custom Name, and dynamic attributes.</param>

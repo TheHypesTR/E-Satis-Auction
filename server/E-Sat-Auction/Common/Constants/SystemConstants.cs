@@ -3,5 +3,5 @@
 public static class SystemConstants
 {
     public const string SystemUser = "SYSTEM";
-    public const string SystemUserMail = "system@emergencyhub.com";
+    public const string SystemUserMail = "system@esatisauction.com";
 }
