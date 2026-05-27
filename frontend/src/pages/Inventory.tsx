@@ -27,15 +27,7 @@ interface InventoryTransaction {
 
 const UoM: Record<number, string> = { 0: 'Adet', 1: 'kg', 2: 'lt', 3: 'm', 4: 'm²', 5: 'm³' };
 
-const mockTx: InventoryTransaction[] = [
-  { id: '1', itemName: 'Çadır XL 6 Kişilik', unitOfMeasure: 0, facilityName: 'Ankara Depo A1', transactionType: 0, quantityChange: 150, previousQuantity: 0,   newQuantity: 150, createdByUserName: 'admin',   createdAt: '2025-05-27T08:15:00Z', referenceTrackingNumber: 'TRK-001' },
-  { id: '2', itemName: 'Jeneratör 5kW',       unitOfMeasure: 0, facilityName: 'İstanbul B',    transactionType: 1, quantityChange: 10,  previousQuantity: 45,  newQuantity: 35,  createdByUserName: 'manager1', createdAt: '2025-05-27T07:30:00Z', referenceTrackingNumber: 'TRK-002' },
-  { id: '3', itemName: 'Su Arıtma Sistemi',   unitOfMeasure: 0, facilityName: 'İzmir Merkez',  transactionType: 2, quantityChange: 5,   previousQuantity: 20,  newQuantity: 15,  createdByUserName: 'operator', createdAt: '2025-05-26T18:00:00Z' },
-  { id: '4', itemName: 'İlk Yardım Seti Pro', unitOfMeasure: 0, facilityName: 'Ankara Depo A1', transactionType: 0, quantityChange: 200, previousQuantity: 50,  newQuantity: 250, createdByUserName: 'admin',   createdAt: '2025-05-26T14:20:00Z', referenceTrackingNumber: 'TRK-003' },
-  { id: '5', itemName: 'Fiber Uydu Kiti',     unitOfMeasure: 0, facilityName: 'Bursa Depo',    transactionType: 3, quantityChange: 3,   previousQuantity: 10,  newQuantity: 13,  createdByUserName: 'manager2', createdAt: '2025-05-26T11:00:00Z' },
-  { id: '6', itemName: 'Güneş Paneli 200W',   unitOfMeasure: 0, facilityName: 'İzmir Merkez',  transactionType: 1, quantityChange: 8,   previousQuantity: 30,  newQuantity: 22,  createdByUserName: 'operator', createdAt: '2025-05-25T16:45:00Z', referenceTrackingNumber: 'TRK-004' },
-  { id: '7', itemName: 'Battaniye Seti',       unitOfMeasure: 0, facilityName: 'Konya Üssü',   transactionType: 0, quantityChange: 500, previousQuantity: 100, newQuantity: 600, createdByUserName: 'admin',   createdAt: '2025-05-25T09:00:00Z' },
-];
+
 
 const summaryStats = [
   { label: 'Toplam Giriş',  value: '+860', color: '#6ee7b7', glow: '#10b981' },
@@ -50,20 +42,20 @@ export default function Inventory() {
   const [search, setSearch]             = useState('');
   const [filterType, setFilterType]     = useState<number | null>(null);
 
-  useEffect(() => { fetchTransactions(); }, []);
-
   const fetchTransactions = async () => {
     setLoading(true);
     try {
       const res  = await api.get('/InventoryTransaction');
       const data = res.data?.items || res.data?.data || [];
-      setTransactions(data.length ? data : mockTx);
+      setTransactions(data);
     } catch {
-      setTransactions(mockTx);
+      setTransactions([]);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => { fetchTransactions(); }, []);
 
   const filtered = transactions.filter(t => {
     const matchSearch = t.itemName.toLowerCase().includes(search.toLowerCase()) ||

@@ -9,14 +9,7 @@ interface Facility {
   city: string;
 }
 
-const mockFacilities: Facility[] = [
-  { id: '1', name: 'Ankara Lojistik Depo A1', status: 'Active', city: 'Ankara' },
-  { id: '2', name: 'İstanbul Toplanma Alanı B', status: 'Active', city: 'İstanbul' },
-  { id: '3', name: 'İzmir Yardım Merkezi', status: 'Active', city: 'İzmir' },
-  { id: '4', name: 'Bursa Dağıtım Noktası', status: 'Passive', city: 'Bursa' },
-  { id: '5', name: 'Konya Lojistik Üssü', status: 'Active', city: 'Konya' },
-  { id: '6', name: 'Adana Sahil Deposu', status: 'Maintenance', city: 'Adana' },
-];
+
 
 const statusConfig: Record<string, { label: string; badge: string; dot: string }> = {
   Active:      { label: 'Aktif',       badge: 'badge-green',  dot: '#6ee7b7' },
@@ -33,20 +26,20 @@ export default function Facilities() {
   const [search, setSearch]         = useState('');
   const [view, setView]             = useState<'grid' | 'table'>('grid');
 
-  useEffect(() => { fetchFacilities(); }, []);
-
   const fetchFacilities = async () => {
     setLoading(true);
     try {
       const res  = await api.get('/Facility');
       const data = res.data?.items || res.data?.data || [];
-      setFacilities(data.length ? data : mockFacilities);
+      setFacilities(data);
     } catch {
-      setFacilities(mockFacilities);
+      setFacilities([]);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => { fetchFacilities(); }, []);
 
   const filtered = facilities.filter(f =>
     f.name.toLowerCase().includes(search.toLowerCase()) ||

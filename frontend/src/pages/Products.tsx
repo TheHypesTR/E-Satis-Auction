@@ -10,14 +10,7 @@ interface Product {
   barcode?: string;
 }
 
-const mockProducts: Product[] = [
-  { id: '1', name: 'Çadır XL 6 Kişilik', sku: 'CAD-001', categoryName: 'Barınma', barcode: '8681234567890' },
-  { id: '2', name: 'Jeneratör 5kW Dizel', sku: 'ENR-002', categoryName: 'Enerji', barcode: '8689876543210' },
-  { id: '3', name: 'İlk Yardım Seti Pro', sku: 'MED-003', categoryName: 'Medikal', barcode: '8681122334455' },
-  { id: '4', name: 'Su Arıtma Sistemi', sku: 'SU-004', categoryName: 'Su & Gıda', barcode: '8685544332211' },
-  { id: '5', name: 'Fiber Uydu Kiti', sku: 'İLT-005', categoryName: 'İletişim', barcode: '8686677889900' },
-  { id: '6', name: 'Taşınabilir Güneş Paneli', sku: 'ENR-006', categoryName: 'Enerji', barcode: '8680011223344' },
-];
+
 
 const categoryColors: Record<string, string> = {
   Barınma: 'purple',
@@ -32,22 +25,22 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
   const fetchProducts = async () => {
     setLoading(true);
     try {
       const res = await api.get('/Product');
       const data = res.data?.items || res.data?.data || [];
-      setProducts(data.length ? data : mockProducts);
+      setProducts(data);
     } catch {
-      setProducts(mockProducts);
+      setProducts([]);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   const filtered = products.filter(p =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

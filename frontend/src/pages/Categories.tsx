@@ -32,49 +32,7 @@ const targetLabel: Record<number, { text: string; badge: string }> = {
   2: { text: 'Kalem Düzeyi', badge: 'badge-blue' },
 };
 
-const mockCategories: Category[] = [
-  {
-    id: '1', name: 'Barınma', description: 'Çadır, battaniye ve geçici konut ekipmanları', isActive: true,
-    createdAt: '2025-01-15T10:00:00Z', updatedAt: '2025-04-20T14:30:00Z',
-    attributes: [
-      { name: 'Kapasite (Kişi)', dataType: 1, target: 2, isRequired: true },
-      { name: 'Malzeme', dataType: 3, target: 1, isRequired: false },
-    ],
-  },
-  {
-    id: '2', name: 'Enerji', description: 'Jeneratör, güneş paneli ve güç kaynakları', isActive: true,
-    createdAt: '2025-01-15T10:00:00Z', updatedAt: '2025-05-01T09:00:00Z',
-    attributes: [
-      { name: 'Güç (kW)', dataType: 1, target: 1, isRequired: true },
-      { name: 'Yakıt Tipi', dataType: 3, target: 1, isRequired: true },
-      { name: 'Seri No', dataType: 0, target: 2, isRequired: false },
-    ],
-  },
-  {
-    id: '3', name: 'Medikal', description: 'İlaç, tıbbi cihaz ve sarf malzemeleri', isActive: false,
-    createdAt: '2025-02-10T08:00:00Z', updatedAt: '2025-05-10T11:00:00Z',
-    attributes: [
-      { name: 'Son Kullanma Tarihi', dataType: 2, target: 2, isRequired: true },
-      { name: 'İlaç Sınıfı', dataType: 3, target: 1, isRequired: false },
-    ],
-  },
-  {
-    id: '4', name: 'Su & Gıda', description: 'İçme suyu, gıda paketleri ve arıtma ekipmanları', isActive: true,
-    createdAt: '2025-02-20T12:00:00Z', updatedAt: '2025-04-15T08:00:00Z',
-    attributes: [
-      { name: 'Hacim (L)', dataType: 1, target: 2, isRequired: true },
-      { name: 'Üretim Tarihi', dataType: 2, target: 2, isRequired: false },
-    ],
-  },
-  {
-    id: '5', name: 'İletişim', description: 'Telsiz, uydu ve iletişim cihazları', isActive: false,
-    createdAt: '2025-03-05T09:00:00Z', updatedAt: '2025-05-20T16:00:00Z',
-    attributes: [
-      { name: 'Frekans (MHz)', dataType: 1, target: 1, isRequired: false },
-      { name: 'Şifreli mi?', dataType: 4, target: 1, isRequired: true },
-    ],
-  },
-];
+
 
 export default function Categories() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -83,20 +41,20 @@ export default function Categories() {
   const [expanded, setExpanded]     = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState<boolean | null>(null);
 
-  useEffect(() => { fetchCategories(); }, []);
-
   const fetchCategories = async () => {
     setLoading(true);
     try {
       const res  = await api.get('/Category');
       const data = res.data?.items || res.data?.data || [];
-      setCategories(data.length ? data : mockCategories);
+      setCategories(data);
     } catch {
-      setCategories(mockCategories);
+      setCategories([]);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => { fetchCategories(); }, []);
 
   const filtered = categories.filter(c => {
     const matchSearch = c.name.toLowerCase().includes(search.toLowerCase());
