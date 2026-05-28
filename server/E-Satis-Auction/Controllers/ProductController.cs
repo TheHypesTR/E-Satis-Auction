@@ -1,4 +1,4 @@
-﻿using E_Satis_Auction.Common;
+using E_Satis_Auction.Common;
 using E_Satis_Auction.Common.Attributes;
 using E_Satis_Auction.Common.Controllers;
 using E_Satis_Auction.Common.Models;
@@ -9,6 +9,7 @@ using E_Satis_Auction.Features.Product.DeactivateProduct;
 using E_Satis_Auction.Features.Product.GetAllProducts;
 using E_Satis_Auction.Features.Product.GetProductById;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace E_Satis_Auction.Controllers;
 
@@ -22,7 +23,7 @@ public class ProductController : AuthorizedBaseController
     /// <returns>A paginated list of products.</returns>
     /// <response code="200">Returns the requested page of products.</response>
     [ProducesResponseType(typeof(PaginatedList<ProductSummaryDto>), StatusCodes.Status200OK)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAllProducts([FromQuery] GetAllProductsQuery query)
     {
@@ -41,7 +42,7 @@ public class ProductController : AuthorizedBaseController
     /// <response code="404">Product with the specified ID does not exist.</response>
     [ProducesResponseType(typeof(ProductDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
+    [AllowAnonymous]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetProductById(Guid id)
     {

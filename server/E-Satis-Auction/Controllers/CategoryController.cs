@@ -1,4 +1,4 @@
-﻿using E_Satis_Auction.Common;
+using E_Satis_Auction.Common;
 using E_Satis_Auction.Common.Attributes;
 using E_Satis_Auction.Common.Controllers;
 using E_Satis_Auction.Common.Models;
@@ -17,6 +17,7 @@ using E_Satis_Auction.Features.Category.UpdateCategory;
 using E_Satis_Auction.Features.Category.UpdateCategoryAttribute;
 using E_Satis_Auction.Features.Category.UpdateCategoryAttributeOption;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace E_Satis_Auction.Controllers;
 
@@ -29,7 +30,7 @@ public class CategoryController : AuthorizedBaseController
     /// <returns>A paginated list of categories</returns>
     /// <response code="200">Returns the requested page of categories</response>
     [ProducesResponseType(typeof(PaginatedList<CategoryDto>), StatusCodes.Status200OK)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAllCategories([FromQuery] GetAllCategoriesQuery query)
     {
@@ -47,7 +48,7 @@ public class CategoryController : AuthorizedBaseController
     /// <response code="404">Category with the specified ID does not exist</response>
     [ProducesResponseType(typeof(CategoryDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [RequireRoles(AppRoles.GeneralAdmin, AppRoles.WarehouseManager)]
+    [AllowAnonymous]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetCategoryById(Guid id)
     {
