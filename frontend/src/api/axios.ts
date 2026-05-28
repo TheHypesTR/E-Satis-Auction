@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://localhost:7080/api', // LaunchSettings.json'a göre belirlenmiş URL
+  baseURL: 'https://e-satis.thehypes.tr/api', // LaunchSettings.json'a göre belirlenmiş URL
   headers: {
     'Content-Type': 'application/json',
   },
