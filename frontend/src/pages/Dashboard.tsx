@@ -1,4 +1,5 @@
 import { Package, Building2, Users, Zap, TrendingUp, ArrowUpRight, Activity } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const stats = [
   {
@@ -206,6 +207,59 @@ export default function Dashboard() {
           </div>
         </div>
 
+      </div>
+
+      {/* Test Links */}
+      <div className="data-table-wrapper animate-fade-up animate-fade-up-5" style={{ marginTop: '20px' }}>
+        <div className="data-table-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Activity size={18} style={{ color: '#f87171' }} />
+            <span style={{ fontWeight: 600 }}>Tüm Sayfalar (Test İçin Hızlı Erişim)</span>
+          </div>
+        </div>
+        <div style={{ padding: '20px', display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+          {[
+            { label: 'Admin - Dashboard', path: '/dashboard', color: '#a78bfa' },
+            { label: 'Admin - Products', path: '/products', color: '#a78bfa' },
+            { label: 'Admin - Facilities', path: '/facilities', color: '#a78bfa' },
+            { label: 'Admin - Categories', path: '/categories', color: '#a78bfa' },
+            { label: 'Admin - Inventory', path: '/inventory', color: '#a78bfa' },
+            { label: 'User - Home', path: '/user', color: '#6ee7b7' },
+            { label: 'User - Catalog', path: '/user/catalog', color: '#6ee7b7' },
+            { label: 'User - Product Detail (Test ID)', path: '/user/catalog/test-id', color: '#6ee7b7' },
+            { label: 'User - Cart', path: '/user/cart', color: '#6ee7b7' },
+            { label: 'User - Checkout', path: '/user/checkout', color: '#6ee7b7' },
+            { label: 'User - Order Success', path: '/user/order-success', color: '#6ee7b7' },
+            { label: 'User - Profile', path: '/user/profile', color: '#6ee7b7' },
+            { label: 'Login', path: '/login', color: '#fcd34d' },
+          ].map((item, i) => (
+            <Link key={i} to={item.path} style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '10px 16px',
+              background: `rgba(255,255,255,0.05)`,
+              border: `1px solid ${item.color}40`,
+              borderRadius: '8px',
+              textDecoration: 'none',
+              color: 'var(--text-primary)',
+              fontSize: '0.85rem',
+              transition: 'all 0.2s',
+            }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLAnchorElement).style.background = `rgba(255,255,255,0.1)`;
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = item.color;
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLAnchorElement).style.background = `rgba(255,255,255,0.05)`;
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = `${item.color}40`;
+              }}
+            >
+              {item.label}
+              <ArrowUpRight size={14} style={{ color: item.color }} />
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

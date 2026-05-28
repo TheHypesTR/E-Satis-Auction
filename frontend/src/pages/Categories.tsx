@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Tag, Plus, Search, ChevronDown, ChevronRight, CheckCircle2, XCircle, Layers } from 'lucide-react';
+import { Tag, Plus, Search, ChevronRight, CheckCircle2, XCircle, Layers } from 'lucide-react';
 import api from '../api/axios';
 
 interface AttributeSummary {
@@ -41,20 +41,12 @@ export default function Categories() {
   const [expanded, setExpanded]     = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState<boolean | null>(null);
 
-  const fetchCategories = async () => {
-    setLoading(true);
-    try {
-      const res  = await api.get('/Category');
+  useEffect(() => {
+    void api.get('/Category').then(res => {
       const data = res.data?.items || res.data?.data || [];
-      setCategories(data);
-    } catch {
-      setCategories([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => { fetchCategories(); }, []);
+      setCategories(data); setLoading(false);
+    }).catch(() => { setCategories([]); setLoading(false); });
+  }, []);
 
   const filtered = categories.filter(c => {
     const matchSearch = c.name.toLowerCase().includes(search.toLowerCase());

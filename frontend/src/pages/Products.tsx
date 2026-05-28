@@ -25,21 +25,12 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get('/Product');
+  useEffect(() => {
+    void api.get('/Product').then(res => {
       const data = res.data?.items || res.data?.data || [];
       setProducts(data);
-    } catch {
-      setProducts([]);
-    } finally {
       setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
+    }).catch(() => { setProducts([]); setLoading(false); });
   }, []);
 
   const filtered = products.filter(p =>

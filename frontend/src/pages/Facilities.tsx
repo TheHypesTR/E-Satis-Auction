@@ -26,20 +26,12 @@ export default function Facilities() {
   const [search, setSearch]         = useState('');
   const [view, setView]             = useState<'grid' | 'table'>('grid');
 
-  const fetchFacilities = async () => {
-    setLoading(true);
-    try {
-      const res  = await api.get('/Facility');
+  useEffect(() => {
+    void api.get('/Facility').then(res => {
       const data = res.data?.items || res.data?.data || [];
-      setFacilities(data);
-    } catch {
-      setFacilities([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => { fetchFacilities(); }, []);
+      setFacilities(data); setLoading(false);
+    }).catch(() => { setFacilities([]); setLoading(false); });
+  }, []);
 
   const filtered = facilities.filter(f =>
     f.name.toLowerCase().includes(search.toLowerCase()) ||

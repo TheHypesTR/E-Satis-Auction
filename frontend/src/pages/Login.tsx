@@ -24,7 +24,7 @@ export default function Login() {
         localStorage.setItem('token', 'dev-token');
       }
       navigate('/dashboard');
-    } catch (err: any) {
+    } catch {
       // Dev bypass — backend olmasa da çalışsın
       localStorage.setItem('token', 'dev-token');
       navigate('/dashboard');

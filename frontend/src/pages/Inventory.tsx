@@ -42,20 +42,12 @@ export default function Inventory() {
   const [search, setSearch]             = useState('');
   const [filterType, setFilterType]     = useState<number | null>(null);
 
-  const fetchTransactions = async () => {
-    setLoading(true);
-    try {
-      const res  = await api.get('/InventoryTransaction');
+  useEffect(() => {
+    void api.get('/InventoryTransaction').then(res => {
       const data = res.data?.items || res.data?.data || [];
-      setTransactions(data);
-    } catch {
-      setTransactions([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => { fetchTransactions(); }, []);
+      setTransactions(data); setLoading(false);
+    }).catch(() => { setTransactions([]); setLoading(false); });
+  }, []);
 
   const filtered = transactions.filter(t => {
     const matchSearch = t.itemName.toLowerCase().includes(search.toLowerCase()) ||
