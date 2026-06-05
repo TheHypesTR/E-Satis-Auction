@@ -666,4 +666,259 @@
     <data name="User.SystemUser" xml:space="preserve">
         <value>Acil Durum Merkezi</value>
     </data>
+    <data name="Exception.CommerceTitle" xml:space="preserve">
+        <value>Ticaret İşlemi Hatası</value>
+    </data>
+    <data name="Commerce.EntityName" xml:space="preserve">
+        <value>Ticaret</value>
+    </data>
+    <data name="ProductListing.EntityName" xml:space="preserve">
+        <value>Ürün Satış İlanı</value>
+    </data>
+    <data name="ProductListing.ProductRequired" xml:space="preserve">
+        <value>Satış ilanı için ürün gereklidir.</value>
+    </data>
+    <data name="ProductListing.SourceFacilityRequired" xml:space="preserve">
+        <value>Satış ilanı için kaynak tesis gereklidir.</value>
+    </data>
+    <data name="ProductListing.PriceMustBePositive" xml:space="preserve">
+        <value>Satış fiyatı sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="ProductListing.CurrencyRequired" xml:space="preserve">
+        <value>Satış ilanı için para birimi gereklidir.</value>
+    </data>
+    <data name="ProductListing.InvalidActiveDateRange" xml:space="preserve">
+        <value>Satış ilanı aktif tarih aralığı geçersizdir.</value>
+    </data>
+    <data name="ProductListing.AlreadyActive" xml:space="preserve">
+        <value>Bu ürün satış ilanı zaten aktiftir.</value>
+    </data>
+    <data name="ProductListing.AlreadyInactive" xml:space="preserve">
+        <value>Bu ürün satış ilanı zaten pasiftir.</value>
+    </data>
+    <data name="ProductListing.AlreadySuspended" xml:space="preserve">
+        <value>Bu ürün satış ilanı zaten askıya alınmıştır.</value>
+    </data>
+    <data name="ProductListing.AlreadyArchived" xml:space="preserve">
+        <value>Bu ürün satış ilanı zaten arşivlenmiştir.</value>
+    </data>
+    <data name="ProductListing.DuplicateActiveListing" xml:space="preserve">
+        <value>Bu ürün ve kaynak tesis için zaten aktif bir satış ilanı vardır.</value>
+    </data>
+    <data name="ProductListing.InvalidCurrency" xml:space="preserve">
+        <value>Para birimi geçerli 3 harfli bir para birimi kodu olmalıdır.</value>
+    </data>
+    <data name="ProductListing.CannotDeleteWithOrders" xml:space="preserve">
+        <value>Ürün satış ilanı satın alma siparişlerinde kullanıldığı için silinemez.</value>
+    </data>
+    <data name="ProductListing.NoAvailableStock" xml:space="preserve">
+        <value>Kullanılabilir stok olmadığı için ürün satış ilanı aktifleştirilemez.</value>
+    </data>
+    <data name="Campaign.EntityName" xml:space="preserve">
+        <value>Kampanya</value>
+    </data>
+    <data name="Campaign.NameRequired" xml:space="preserve">
+        <value>Kampanya adı gereklidir.</value>
+    </data>
+    <data name="Campaign.InvalidDateRange" xml:space="preserve">
+        <value>Kampanya başlangıç tarihi bitiş tarihinden önce olmalıdır.</value>
+    </data>
+    <data name="Campaign.DiscountValueMustBePositive" xml:space="preserve">
+        <value>Kampanya indirim değeri sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="Campaign.PercentageDiscountInvalid" xml:space="preserve">
+        <value>Yüzde indirim 100 değerini aşamaz.</value>
+    </data>
+    <data name="Campaign.CurrencyRequiredForFixedDiscount" xml:space="preserve">
+        <value>Sabit tutarlı indirimler için para birimi gereklidir.</value>
+    </data>
+    <data name="Campaign.ProductRequired" xml:space="preserve">
+        <value>Kampanya kapsamı için ürün gereklidir.</value>
+    </data>
+    <data name="Campaign.ProductAlreadyAssigned" xml:space="preserve">
+        <value>Bu ürün kampanyaya zaten atanmıştır.</value>
+    </data>
+    <data name="Campaign.ProductNotAssigned" xml:space="preserve">
+        <value>Bu ürün kampanyaya atanmamıştır.</value>
+    </data>
+    <data name="Campaign.AlreadyActive" xml:space="preserve">
+        <value>Bu kampanya zaten aktiftir.</value>
+    </data>
+    <data name="Campaign.AlreadySuspended" xml:space="preserve">
+        <value>Bu kampanya zaten askıya alınmıştır.</value>
+    </data>
+    <data name="Campaign.CurrencyMismatch" xml:space="preserve">
+        <value>Kampanya para birimi satış ilanı para birimiyle eşleşmiyor.</value>
+    </data>
+    <data name="PurchaseOrder.EntityName" xml:space="preserve">
+        <value>Satın Alma Siparişi</value>
+    </data>
+    <data name="PurchaseOrder.UserRequired" xml:space="preserve">
+        <value>Satın alma siparişi için kullanıcı gereklidir.</value>
+    </data>
+    <data name="PurchaseOrder.CurrencyRequired" xml:space="preserve">
+        <value>Satın alma siparişi için para birimi gereklidir.</value>
+    </data>
+    <data name="PurchaseOrder.CurrencyMismatch" xml:space="preserve">
+        <value>Tüm satın alma siparişi satırları sipariş para birimini kullanmalıdır.</value>
+    </data>
+    <data name="PurchaseOrder.CannotMutateSubmittedOrder" xml:space="preserve">
+        <value>Gönderilmiş satın alma siparişleri değiştirilemez.</value>
+    </data>
+    <data name="PurchaseOrder.StatusMustBePendingApproval" xml:space="preserve">
+        <value>Bu işlem onay bekleyen bir satın alma siparişi gerektirir.</value>
+    </data>
+    <data name="PurchaseOrder.StatusMustBeApproved" xml:space="preserve">
+        <value>Bu işlem onaylanmış bir satın alma siparişi gerektirir.</value>
+    </data>
+    <data name="PurchaseOrder.LinesRequired" xml:space="preserve">
+        <value>Satın alma siparişinde en az bir satır bulunmalıdır.</value>
+    </data>
+    <data name="PurchaseOrder.RejectionReasonRequired" xml:space="preserve">
+        <value>Reddetme nedeni gereklidir.</value>
+    </data>
+    <data name="PurchaseOrder.AlreadyShipped" xml:space="preserve">
+        <value>Bu satın alma siparişi zaten kargoya verilmiştir.</value>
+    </data>
+    <data name="PurchaseOrder.CarrierNameRequired" xml:space="preserve">
+        <value>Kargo firması adı gereklidir.</value>
+    </data>
+    <data name="PurchaseOrder.TrackingNumberRequired" xml:space="preserve">
+        <value>Kargo takip numarası gereklidir.</value>
+    </data>
+    <data name="PurchaseOrder.ProductRequired" xml:space="preserve">
+        <value>Satın alma siparişi satırı için ürün gereklidir.</value>
+    </data>
+    <data name="PurchaseOrder.ProductListingRequired" xml:space="preserve">
+        <value>Satın alma siparişi satırı için ürün satış ilanı gereklidir.</value>
+    </data>
+    <data name="PurchaseOrder.ProductNameSnapshotRequired" xml:space="preserve">
+        <value>Ürün adı anlık görüntüsü gereklidir.</value>
+    </data>
+    <data name="PurchaseOrder.SkuSnapshotRequired" xml:space="preserve">
+        <value>SKU anlık görüntüsü gereklidir.</value>
+    </data>
+    <data name="PurchaseOrder.UnitPriceMustBePositive" xml:space="preserve">
+        <value>Birim fiyat sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="PurchaseOrder.DiscountedPriceInvalid" xml:space="preserve">
+        <value>İndirimli birim fiyat geçersizdir.</value>
+    </data>
+    <data name="PurchaseOrder.QuantityMustBePositive" xml:space="preserve">
+        <value>Miktar sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="PurchaseOrder.LineRequired" xml:space="preserve">
+        <value>Satın alma siparişi satırı gereklidir.</value>
+    </data>
+    <data name="PurchaseOrder.OriginalItemRequired" xml:space="preserve">
+        <value>Orijinal envanter kalemi gereklidir.</value>
+    </data>
+    <data name="PurchaseOrder.ReservedItemRequired" xml:space="preserve">
+        <value>Rezerve edilmiş envanter kalemi gereklidir.</value>
+    </data>
+    <data name="ReturnRequest.EntityName" xml:space="preserve">
+        <value>İade Talebi</value>
+    </data>
+    <data name="ReturnRequest.PurchaseOrderRequired" xml:space="preserve">
+        <value>İade talebi için satın alma siparişi gereklidir.</value>
+    </data>
+    <data name="ReturnRequest.UserRequired" xml:space="preserve">
+        <value>İade talebi için kullanıcı gereklidir.</value>
+    </data>
+    <data name="ReturnRequest.ReasonRequired" xml:space="preserve">
+        <value>İade nedeni gereklidir.</value>
+    </data>
+    <data name="ReturnRequest.CannotMutateSubmittedRequest" xml:space="preserve">
+        <value>Gönderilmiş iade talepleri değiştirilemez.</value>
+    </data>
+    <data name="ReturnRequest.StatusMustBePending" xml:space="preserve">
+        <value>Bu işlem bekleyen bir iade talebi gerektirir.</value>
+    </data>
+    <data name="ReturnRequest.LinesRequired" xml:space="preserve">
+        <value>İade talebinde en az bir satır bulunmalıdır.</value>
+    </data>
+    <data name="ReturnRequest.ResolutionNoteRequired" xml:space="preserve">
+        <value>Çözüm notu gereklidir.</value>
+    </data>
+    <data name="ReturnRequest.PurchaseOrderLineRequired" xml:space="preserve">
+        <value>İade satırı için satın alma siparişi satırı gereklidir.</value>
+    </data>
+    <data name="ReturnRequest.QuantityMustBePositive" xml:space="preserve">
+        <value>İade miktarı sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="ProductListing.NotSellable" xml:space="preserve">
+        <value>Bu ürün satış ilanı şu anda satın almaya uygun değildir.</value>
+    </data>
+    <data name="Product.ProductNotAvailable" xml:space="preserve">
+        <value>Bu ürün satın almaya uygun değildir.</value>
+    </data>
+    <data name="Campaign.NotApplicable" xml:space="preserve">
+        <value>Seçilen kampanya aktif değildir veya bu ürüne uygulanamaz.</value>
+    </data>
+    <data name="PurchaseOrder.AccessDenied" xml:space="preserve">
+        <value>Bu satın alma siparişine erişim yetkiniz yok.</value>
+    </data>
+    <data name="PurchaseOrder.InsufficientStock" xml:space="preserve">
+        <value>Bu satın alma için yeterli kullanılabilir stok yok.</value>
+    </data>
+    <data name="PurchaseOrder.InvalidReservedInventoryState" xml:space="preserve">
+        <value>Bu sipariş işlemi için rezerve envanter durumu geçersizdir.</value>
+    </data>
+    <data name="PurchaseOrder.NoteMaxLength" xml:space="preserve">
+        <value>Sipariş notu 1024 karakteri aşamaz.</value>
+    </data>
+    <data name="PurchaseOrder.ShippingInfoRequired" xml:space="preserve">
+        <value>Kargo bilgisi gereklidir.</value>
+    </data>
+    <data name="PurchaseOrder.CarrierNameMaxLength" xml:space="preserve">
+        <value>Kargo firması adı 128 karakteri aşamaz.</value>
+    </data>
+    <data name="PurchaseOrder.TrackingNumberMaxLength" xml:space="preserve">
+        <value>Kargo takip numarası 128 karakteri aşamaz.</value>
+    </data>
+    <data name="PurchaseOrder.TrackingUrlMaxLength" xml:space="preserve">
+        <value>Kargo takip bağlantısı 512 karakteri aşamaz.</value>
+    </data>
+    <data name="ReturnRequest.AccessDenied" xml:space="preserve">
+        <value>Bu iade talebine erişim yetkiniz yok.</value>
+    </data>
+    <data name="ReturnRequest.DuplicateLinesNotAllowed" xml:space="preserve">
+        <value>Bir satın alma siparişi satırı iade talebinde birden fazla kez yer alamaz.</value>
+    </data>
+    <data name="ReturnRequest.InvalidQuantity" xml:space="preserve">
+        <value>Talep edilen iade miktarı kalan iade edilebilir miktarı aşıyor.</value>
+    </data>
+    <data name="ReturnRequest.NotEligible" xml:space="preserve">
+        <value>Bu satın alma siparişi iade talebi için uygun değildir.</value>
+    </data>
+    <data name="ReturnRequest.ReasonMaxLength" xml:space="preserve">
+        <value>İade nedeni 1024 karakteri aşamaz.</value>
+    </data>
+    <data name="ReturnRequest.ResolutionNoteMaxLength" xml:space="preserve">
+        <value>Çözüm notu 1024 karakteri aşamaz.</value>
+    </data>
+    <data name="ReturnRequest.NotApproved" xml:space="preserve">
+        <value>Yalnızca onaylanmış iade talepleri teslim alınabilir.</value>
+    </data>
+    <data name="ReturnRequest.AlreadyReceived" xml:space="preserve">
+        <value>Bu iade talebi zaten teslim alınmış.</value>
+    </data>
+    <data name="ReturnRequest.InvalidReceiveQuantity" xml:space="preserve">
+        <value>Teslim alınan miktar sıfırdan büyük olmalı ve onaylanan iade miktarını aşmamalıdır.</value>
+    </data>
+    <data name="ReturnRequest.InvalidRestockQuantity" xml:space="preserve">
+        <value>Stoklara eklenecek miktar negatif olamaz veya teslim alınan miktarı aşamaz.</value>
+    </data>
+    <data name="ReturnRequest.CannotReceiveRejected" xml:space="preserve">
+        <value>Reddedilmiş iade talepleri teslim alınamaz.</value>
+    </data>
+    <data name="ReturnRequest.CannotReceivePending" xml:space="preserve">
+        <value>Bekleyen iade talepleri onaylanmadan teslim alınamaz.</value>
+    </data>
+    <data name="ReturnRequest.ReceiveNotAllowed" xml:space="preserve">
+        <value>Bu iade talebi mevcut durumunda teslim alınamaz.</value>
+    </data>
+    <data name="ReturnRequestLine.NotFound" xml:space="preserve">
+        <value>İade talebi satırı bulunamadı.</value>
+    </data>
 </root>

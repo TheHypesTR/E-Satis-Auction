@@ -1,4 +1,5 @@
-﻿using E_Satis_Auction.Interfaces.Repositories;
+using E_Satis_Auction.Dtos.Commerce;
+using E_Satis_Auction.Interfaces.Repositories;
 using E_Satis_Auction.Models.Products;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,5 +36,36 @@ public class ProductRepository : GenericRepository<Product>, IProductRepository
                 (p.Barcode != null && p.Barcode.ToLower().Contains(searchTerm)))
             .Select(p => p.Id)
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<List<Guid>> GetProductIdsByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Where(product => product.CategoryId == categoryId)
+            .Select(product => product.Id)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<Dictionary<Guid, ProductListingProductEnrichmentDto>> GetProductListingEnrichmentsByIdsAsync(
+        IEnumerable<Guid> productIds,
+        CancellationToken cancellationToken = default)
+    {
+        List<Guid> ids = productIds.Distinct().ToList();
+        if (ids.Count is 0)
+        {
+            return [];
+        }
+
+        return await _dbSet
+            .AsNoTracking()
+            .Where(product => ids.Contains(product.Id))
+            .Select(product => new ProductListingProductEnrichmentDto(
+                product.Id,
+                product.Name,
+                product.Sku,
+                product.CategoryId,
+                product.IsActive))
+            .ToDictionaryAsync(product => product.Id, cancellationToken);
     }
 }
