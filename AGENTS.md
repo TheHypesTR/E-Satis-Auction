@@ -43,6 +43,12 @@
 - Shipping must not directly write inventory ledgers; move reserved stock out of availability through domain behavior/events.
 - Return approval does not automatically restock inventory unless a separate return-receipt/restock flow exists.
 - Return approval only accepts the request; inventory is restocked only through the admin return receive/restock flow, which must be transactionally safe and use Item domain behavior/events instead of direct inventory ledger writes.
+- Cart is a temporary purchase-intent workspace and must not own frozen/final price; frozen price belongs on `PurchaseOrderLine` and `PurchaseOrder`.
+- Payment/reservation expiration must release reserved inventory through `Item` domain behavior/events, never by writing inventory ledgers directly.
+- Idempotency keys are mandatory for payment/checkout commands and required for safe duplicate handling on high-risk purchase operations.
+- Campaign pricing must apply line-level discounts before cart/order coupons, then recalculate free-shipping eligibility after discounts.
+- User acquisition/reseller flows must not bypass `Product`/`Item` invariants; unsafe automatic intake should remain a reviewed intake workflow.
+- Part-sale operations must preserve `SourceItemId` on created part items and use explicit transactions.
 - Future commerce list endpoints must return `PaginatedList<T>` and must not be cacheable when user-specific, searched, filtered, or paginated.
 - ProductListing lifecycle is managed through admin endpoints; public ProductListing endpoints expose only active/sellable listings.
 - Buy Now must consume `ProductListingId`, not `ProductId`.

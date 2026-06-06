@@ -14,5 +14,7 @@ public enum InventoryTransactionType
     PurchaseReserved = 10,
     PurchaseReleased = 11,
     PurchaseShipped = 12,
-    PurchaseReturned = 13
+    PurchaseReturned = 13,
+    PartSaleConsumed = 14,
+    PartSaleCreated = 15
 }

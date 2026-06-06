@@ -16,7 +16,11 @@ public sealed class PurchaseOrder : BaseEntity
     public string Currency { get; private set; }
     public decimal SubtotalAmount { get; private set; }
     public decimal DiscountAmount { get; private set; }
+    public decimal ShippingAmount { get; private set; }
     public decimal TotalAmount { get; private set; }
+    public Guid? AppliedCouponCampaignId { get; private set; }
+    public Guid? AppliedFreeShippingCampaignId { get; private set; }
+    public string? IdempotencyKey { get; private set; }
     public string? ApprovalNote { get; private set; }
     public string? RejectionReason { get; private set; }
     public OrderShippingInfo? ShippingInfo { get; private set; }
@@ -36,6 +40,21 @@ public sealed class PurchaseOrder : BaseEntity
 
     public static PurchaseOrder Create(string userId, OrderSource orderSource, string currency)
     {
+        return CreateCore(userId, orderSource, currency, PurchaseOrderStatus.PendingApproval, null);
+    }
+
+    public static PurchaseOrder CreateForPayment(string userId, OrderSource orderSource, string currency, string idempotencyKey)
+    {
+        BusinessException.ThrowIfNullOrWhiteSpace(
+            idempotencyKey,
+            ErrorMessages.Payment.IdempotencyKeyRequired,
+            ErrorMessages.Exception.CommerceTitle);
+
+        return CreateCore(userId, orderSource, currency, PurchaseOrderStatus.PaymentPending, idempotencyKey);
+    }
+
+    private static PurchaseOrder CreateCore(string userId, OrderSource orderSource, string currency, PurchaseOrderStatus status, string? idempotencyKey)
+    {
         BusinessException.ThrowIfNullOrWhiteSpace(
             userId,
             ErrorMessages.PurchaseOrder.UserRequired,
@@ -51,9 +70,10 @@ public sealed class PurchaseOrder : BaseEntity
             OrderNumber = GenerateOrderNumber(),
             UserId = userId,
             OrderSource = orderSource,
-            Status = PurchaseOrderStatus.PendingApproval,
+            Status = status,
             ShipmentStatus = ShipmentStatus.NotShipped,
-            Currency = currency.Trim().ToUpperInvariant()
+            Currency = currency.Trim().ToUpperInvariant(),
+            IdempotencyKey = string.IsNullOrWhiteSpace(idempotencyKey) ? null : idempotencyKey.Trim()
         };
 
         order.AddDomainEvent(new PurchaseOrderCreatedDomainEvent(order.Id, order.UserId));
@@ -69,10 +89,13 @@ public sealed class PurchaseOrder : BaseEntity
         decimal unitPrice,
         decimal discountedUnitPrice,
         int quantity,
-        string currency)
+        string currency,
+        decimal lineDiscountAmount = 0,
+        Guid? appliedCouponCampaignId = null,
+        decimal couponDiscountAmount = 0)
     {
         BusinessException.ThrowIfTrue(
-            Status is not PurchaseOrderStatus.PendingApproval,
+            Status is not (PurchaseOrderStatus.PendingApproval or PurchaseOrderStatus.PaymentPending),
             ErrorMessages.PurchaseOrder.CannotMutateSubmittedOrder,
             ErrorMessages.Exception.CommerceTitle);
 
@@ -91,12 +114,71 @@ public sealed class PurchaseOrder : BaseEntity
             unitPrice,
             discountedUnitPrice,
             quantity,
-            Currency);
+            Currency,
+            lineDiscountAmount,
+            appliedCouponCampaignId,
+            couponDiscountAmount);
 
         _lines.Add(line);
         RecalculateTotals();
 
         return line;
+    }
+
+    public void SetIdempotencyKey(string? idempotencyKey)
+    {
+        IdempotencyKey = string.IsNullOrWhiteSpace(idempotencyKey) ? null : idempotencyKey.Trim();
+    }
+
+    public void ApplyOrderPricing(
+        decimal subtotalAmount,
+        decimal discountAmount,
+        decimal shippingAmount,
+        decimal totalAmount,
+        Guid? appliedCouponCampaignId,
+        Guid? appliedFreeShippingCampaignId)
+    {
+        BusinessException.ThrowIfTrue(
+            Status is not (PurchaseOrderStatus.PendingApproval or PurchaseOrderStatus.PaymentPending),
+            ErrorMessages.PurchaseOrder.CannotMutateSubmittedOrder,
+            ErrorMessages.Exception.CommerceTitle);
+
+        BusinessException.ThrowIfTrue(
+            subtotalAmount < 0 || discountAmount < 0 || shippingAmount < 0 || totalAmount < 0,
+            ErrorMessages.PurchaseOrder.AmountInvalid,
+            ErrorMessages.Exception.CommerceTitle);
+
+        SubtotalAmount = subtotalAmount;
+        DiscountAmount = discountAmount;
+        ShippingAmount = shippingAmount;
+        TotalAmount = totalAmount;
+        AppliedCouponCampaignId = appliedCouponCampaignId;
+        AppliedFreeShippingCampaignId = appliedFreeShippingCampaignId;
+    }
+
+    public void MarkPaymentSucceeded()
+    {
+        BusinessException.ThrowIfTrue(
+            Status is not PurchaseOrderStatus.PaymentPending,
+            ErrorMessages.PurchaseOrder.StatusMustBePaymentPending,
+            ErrorMessages.Exception.CommerceTitle);
+
+        BusinessException.ThrowIfTrue(
+            _lines.Count is 0,
+            ErrorMessages.PurchaseOrder.LinesRequired,
+            ErrorMessages.Exception.CommerceTitle);
+
+        Status = PurchaseOrderStatus.PendingApproval;
+    }
+
+    public void CancelPaymentPending()
+    {
+        BusinessException.ThrowIfTrue(
+            Status is not PurchaseOrderStatus.PaymentPending,
+            ErrorMessages.PurchaseOrder.StatusMustBePaymentPending,
+            ErrorMessages.Exception.CommerceTitle);
+
+        Status = PurchaseOrderStatus.Cancelled;
     }
 
     public void Approve(string approvedByUserId, string? note = null)
@@ -154,7 +236,7 @@ public sealed class PurchaseOrder : BaseEntity
     private void RecalculateTotals()
     {
         SubtotalAmount = _lines.Sum(line => line.UnitPrice * line.Quantity);
-        TotalAmount = _lines.Sum(line => line.DiscountedUnitPrice * line.Quantity);
+        TotalAmount = _lines.Sum(line => line.DiscountedUnitPrice * line.Quantity) + ShippingAmount;
         DiscountAmount = SubtotalAmount - TotalAmount;
     }
 

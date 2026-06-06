@@ -139,7 +139,10 @@ public static class CommerceDtoMapper
             order.OrderSource,
             order.SubtotalAmount,
             order.DiscountAmount,
+            order.ShippingAmount,
             order.TotalAmount,
+            order.AppliedCouponCampaignId,
+            order.AppliedFreeShippingCampaignId,
             order.Currency,
             order.ApprovalNote,
             order.RejectionReason,
@@ -166,7 +169,10 @@ public static class CommerceDtoMapper
             order.OrderSource,
             order.SubtotalAmount,
             order.DiscountAmount,
+            order.ShippingAmount,
             order.TotalAmount,
+            order.AppliedCouponCampaignId,
+            order.AppliedFreeShippingCampaignId,
             order.Currency,
             order.ApprovalNote,
             order.RejectionReason,
@@ -222,6 +228,92 @@ public static class CommerceDtoMapper
             returnRequest.Lines.Select(ToReturnRequestLineDto).ToList(),
             returnRequest.CreatedAt,
             returnRequest.UpdatedAt);
+    }
+
+    public static CartDto ToCartDto(ShoppingCart cart, CartPricePreviewDto? preview = null)
+    {
+        return new CartDto(
+            cart.Id,
+            cart.ProductListingId,
+            cart.Quantity,
+            preview?.AppliedCouponCampaignId ?? cart.AppliedCouponCampaignId,
+            preview?.AppliedFreeShippingCampaignId,
+            preview?.SubtotalAmount ?? cart.PreviewSubtotalAmount,
+            preview?.DiscountAmount ?? cart.PreviewDiscountAmount,
+            preview?.ShippingAmount ?? cart.PreviewShippingAmount,
+            preview?.TotalAmount ?? cart.PreviewTotalAmount,
+            preview?.Currency ?? cart.Currency,
+            cart.Status,
+            cart.Version);
+    }
+
+    public static PaymentAttemptDto ToPaymentAttemptDto(PaymentAttempt payment)
+    {
+        return new PaymentAttemptDto(
+            payment.Id,
+            payment.PurchaseOrderId,
+            payment.Amount,
+            payment.Currency,
+            payment.Status,
+            payment.ExpiresAt,
+            payment.FailureReason,
+            payment.CreatedAt,
+            payment.UpdatedAt,
+            payment.Version);
+    }
+
+    public static CampaignDto ToCampaignDto(Campaign campaign)
+    {
+        return new CampaignDto(
+            campaign.Id,
+            campaign.Name,
+            campaign.Description,
+            campaign.CouponCode,
+            campaign.Scope,
+            campaign.DiscountType,
+            campaign.DiscountValue,
+            campaign.MinimumOrderAmount,
+            campaign.ProductListingId,
+            campaign.CategoryId,
+            campaign.Currency,
+            campaign.Status,
+            campaign.StartsAt,
+            campaign.EndsAt,
+            campaign.Version);
+    }
+
+    public static UserSaleRequestDto ToUserSaleRequestDto(UserSaleRequest request)
+    {
+        return new UserSaleRequestDto(
+            request.Id,
+            request.UserId,
+            request.Title,
+            request.Description,
+            request.CategoryId,
+            request.UserEstimatedValue,
+            request.AcquisitionPrice,
+            request.TargetResalePrice,
+            request.ExpectedProfit,
+            request.Status,
+            request.AdminNote,
+            request.CreatedAt,
+            request.UpdatedAt,
+            request.Version);
+    }
+
+    public static PartSaleOperationDto ToPartSaleOperationDto(PartSaleOperation operation)
+    {
+        return new PartSaleOperationDto(
+            operation.Id,
+            operation.SourceItemId,
+            operation.CreatedPartItemId,
+            operation.ProductId,
+            operation.FacilityId,
+            operation.Quantity,
+            operation.UnitOfMeasure,
+            operation.Notes,
+            operation.Status,
+            operation.CreatedAt);
     }
 
     private static OrderLineDto ToOrderLineDto(PurchaseOrderLine line)

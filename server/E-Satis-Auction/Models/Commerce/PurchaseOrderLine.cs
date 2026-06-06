@@ -13,7 +13,12 @@ public sealed class PurchaseOrderLine : BaseEntity
     public string ProductNameSnapshot { get; private set; }
     public string SkuSnapshot { get; private set; }
     public decimal UnitPrice { get; private set; }
+    public decimal DiscountAmount { get; private set; }
     public decimal DiscountedUnitPrice { get; private set; }
+    public decimal FinalUnitPrice { get; private set; }
+    public decimal SubtotalAmount { get; private set; }
+    public Guid? AppliedCouponCampaignId { get; private set; }
+    public decimal CouponDiscountAmount { get; private set; }
     public int Quantity { get; private set; }
     public string Currency { get; private set; }
 
@@ -37,7 +42,10 @@ public sealed class PurchaseOrderLine : BaseEntity
         decimal unitPrice,
         decimal discountedUnitPrice,
         int quantity,
-        string currency)
+        string currency,
+        decimal lineDiscountAmount = 0,
+        Guid? appliedCouponCampaignId = null,
+        decimal couponDiscountAmount = 0)
     {
         Validate(
             purchaseOrderId,
@@ -50,6 +58,10 @@ public sealed class PurchaseOrderLine : BaseEntity
             quantity,
             currency);
 
+        decimal finalUnitPrice = quantity == 0
+            ? discountedUnitPrice
+            : decimal.Round(((discountedUnitPrice * quantity) - couponDiscountAmount) / quantity, 2);
+
         return new PurchaseOrderLine
         {
             PurchaseOrderId = purchaseOrderId,
@@ -59,7 +71,12 @@ public sealed class PurchaseOrderLine : BaseEntity
             ProductNameSnapshot = productNameSnapshot.Trim(),
             SkuSnapshot = skuSnapshot.Trim(),
             UnitPrice = unitPrice,
+            DiscountAmount = lineDiscountAmount + couponDiscountAmount,
             DiscountedUnitPrice = discountedUnitPrice,
+            FinalUnitPrice = finalUnitPrice < 0 ? 0 : finalUnitPrice,
+            SubtotalAmount = unitPrice * quantity,
+            AppliedCouponCampaignId = appliedCouponCampaignId,
+            CouponDiscountAmount = couponDiscountAmount,
             Quantity = quantity,
             Currency = currency.Trim().ToUpperInvariant()
         };

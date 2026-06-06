@@ -165,6 +165,13 @@ namespace E_Satis_Auction.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CouponCode")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -192,10 +199,21 @@ namespace E_Satis_Auction.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<decimal?>("MinimumOrderAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
+
+                    b.Property<Guid?>("ProductListingId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Scope")
+                        .HasDefaultValue(1)
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("StartsAt")
                         .HasColumnType("timestamp with time zone");
@@ -213,6 +231,14 @@ namespace E_Satis_Auction.Data.Migrations
                         .HasColumnName("xmin");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("CouponCode")
+                        .IsUnique()
+                        .HasFilter("\"CouponCode\" IS NOT NULL AND \"IsDeleted\" = false");
+
+                    b.HasIndex("ProductListingId");
 
                     b.HasIndex("Status");
 
@@ -258,6 +284,135 @@ namespace E_Satis_Auction.Data.Migrations
                         .HasFilter("\"IsDeleted\" = false");
 
                     b.ToTable("CampaignProducts", (string)null);
+                });
+
+            modelBuilder.Entity("E_Satis_Auction.Models.Commerce.PartSaleOperation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedPartItemId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("FacilityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("SourceItemId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UnitOfMeasure")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("CreatedPartItemId");
+
+                    b.HasIndex("FacilityId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SourceItemId");
+
+                    b.ToTable("PartSaleOperations", (string)null);
+                });
+
+            modelBuilder.Entity("E_Satis_Auction.Models.Commerce.PaymentAttempt", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FailureReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<string>("IdempotencyKey")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("PurchaseOrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdempotencyKey")
+                        .IsUnique()
+                        .HasFilter("\"IsDeleted\" = false");
+
+                    b.HasIndex("PurchaseOrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("Status", "ExpiresAt");
+
+                    b.ToTable("PaymentAttempts", (string)null);
                 });
 
             modelBuilder.Entity("E_Satis_Auction.Models.Commerce.ProductListing", b =>
@@ -327,6 +482,12 @@ namespace E_Satis_Auction.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("AppliedCouponCampaignId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("AppliedFreeShippingCampaignId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("ApprovalNote")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
@@ -346,6 +507,10 @@ namespace E_Satis_Auction.Data.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
+                    b.Property<string>("IdempotencyKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -363,6 +528,10 @@ namespace E_Satis_Auction.Data.Migrations
 
                     b.Property<int>("ShipmentStatus")
                         .HasColumnType("integer");
+
+                    b.Property<decimal>("ShippingAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -393,6 +562,10 @@ namespace E_Satis_Auction.Data.Migrations
 
                     b.HasIndex("CreatedAt");
 
+                    b.HasIndex("IdempotencyKey")
+                        .IsUnique()
+                        .HasFilter("\"IdempotencyKey\" IS NOT NULL AND \"IsDeleted\" = false");
+
                     b.HasIndex("OrderNumber")
                         .IsUnique();
 
@@ -411,8 +584,15 @@ namespace E_Satis_Auction.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("AppliedCouponCampaignId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("CampaignId")
                         .HasColumnType("uuid");
+
+                    b.Property<decimal>("CouponDiscountAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -425,7 +605,15 @@ namespace E_Satis_Auction.Data.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<decimal>("DiscountAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<decimal>("DiscountedUnitPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("FinalUnitPrice")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
@@ -453,6 +641,10 @@ namespace E_Satis_Auction.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
+
+                    b.Property<decimal>("SubtotalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
 
                     b.Property<decimal>("UnitPrice")
                         .HasPrecision(18, 2)
@@ -627,6 +819,159 @@ namespace E_Satis_Auction.Data.Migrations
                     b.HasIndex("ReturnRequestId");
 
                     b.ToTable("ReturnRequestLines", (string)null);
+                });
+
+            modelBuilder.Entity("E_Satis_Auction.Models.Commerce.ShoppingCart", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("AppliedCouponCampaignId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("PreviewDiscountAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("PreviewShippingAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("PreviewSubtotalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("PreviewTotalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<Guid>("ProductListingId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppliedCouponCampaignId");
+
+                    b.HasIndex("ProductListingId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("\"Status\" = 1 AND \"IsDeleted\" = false");
+
+                    b.ToTable("ShoppingCarts", (string)null);
+                });
+
+            modelBuilder.Entity("E_Satis_Auction.Models.Commerce.UserSaleRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal?>("AcquisitionPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<string>("AdminNote")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<decimal?>("ExpectedProfit")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal?>("TargetResalePrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("character varying(160)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("UserEstimatedValue")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserSaleRequests", (string)null);
                 });
 
             modelBuilder.Entity("E_Satis_Auction.Models.Common.Address", b =>
@@ -1034,6 +1379,8 @@ namespace E_Satis_Auction.Data.Migrations
 
                     b.HasIndex("ProductId");
 
+                    b.HasIndex("SourceItemId");
+
                     b.HasIndex("_dynamicAttributes");
 
                     NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("_dynamicAttributes"), "gin");
@@ -1391,6 +1738,48 @@ namespace E_Satis_Auction.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("E_Satis_Auction.Models.Commerce.PartSaleOperation", b =>
+                {
+                    b.HasOne("E_Satis_Auction.Models.Items.Item", null)
+                        .WithMany()
+                        .HasForeignKey("CreatedPartItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("E_Satis_Auction.Models.Facilities.Facility", null)
+                        .WithMany()
+                        .HasForeignKey("FacilityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("E_Satis_Auction.Models.Products.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("E_Satis_Auction.Models.Items.Item", null)
+                        .WithMany()
+                        .HasForeignKey("SourceItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("E_Satis_Auction.Models.Commerce.PaymentAttempt", b =>
+                {
+                    b.HasOne("E_Satis_Auction.Models.Commerce.PurchaseOrder", null)
+                        .WithMany()
+                        .HasForeignKey("PurchaseOrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("E_Satis_Auction.Models.Users.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("E_Satis_Auction.Models.Commerce.ProductListing", b =>
                 {
                     b.HasOne("E_Satis_Auction.Models.Products.Product", null)
@@ -1538,6 +1927,41 @@ namespace E_Satis_Auction.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("E_Satis_Auction.Models.Commerce.ShoppingCart", b =>
+                {
+                    b.HasOne("E_Satis_Auction.Models.Commerce.Campaign", null)
+                        .WithMany()
+                        .HasForeignKey("AppliedCouponCampaignId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("E_Satis_Auction.Models.Commerce.ProductListing", null)
+                        .WithMany()
+                        .HasForeignKey("ProductListingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("E_Satis_Auction.Models.Users.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("E_Satis_Auction.Models.Commerce.UserSaleRequest", b =>
+                {
+                    b.HasOne("E_Satis_Auction.Models.Categories.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("E_Satis_Auction.Models.Users.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("E_Satis_Auction.Models.Dispatches.Dispatch", b =>
                 {
                     b.HasOne("E_Satis_Auction.Models.Facilities.Facility", null)
@@ -1632,6 +2056,11 @@ namespace E_Satis_Auction.Data.Migrations
                     b.HasOne("E_Satis_Auction.Models.Products.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("E_Satis_Auction.Models.Items.Item", null)
+                        .WithMany()
+                        .HasForeignKey("SourceItemId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

@@ -47,9 +47,16 @@ public sealed class PurchaseOrderConfiguration : IEntityTypeConfiguration<Purcha
             .HasPrecision(18, 2)
             .IsRequired();
 
+        builder.Property(order => order.ShippingAmount)
+            .HasPrecision(18, 2)
+            .IsRequired();
+
         builder.Property(order => order.TotalAmount)
             .HasPrecision(18, 2)
             .IsRequired();
+
+        builder.Property(order => order.IdempotencyKey)
+            .HasMaxLength(128);
 
         builder.Property(order => order.ApprovalNote)
             .HasMaxLength(1024);
@@ -99,5 +106,8 @@ public sealed class PurchaseOrderConfiguration : IEntityTypeConfiguration<Purcha
         builder.HasIndex(order => order.Status);
         builder.HasIndex(order => order.CreatedAt);
         builder.HasIndex(order => order.OrderSource);
+        builder.HasIndex(order => order.IdempotencyKey)
+            .IsUnique()
+            .HasFilter("\"IdempotencyKey\" IS NOT NULL AND \"IsDeleted\" = false");
     }
 }

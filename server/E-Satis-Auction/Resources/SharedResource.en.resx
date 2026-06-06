@@ -921,4 +921,88 @@
     <data name="ReturnRequestLine.NotFound" xml:space="preserve">
         <value>Return request line was not found.</value>
     </data>
+    <data name="Cart.EntityName" xml:space="preserve">
+        <value>Cart</value>
+    </data>
+    <data name="Cart.NotActive" xml:space="preserve">
+        <value>This cart is not active.</value>
+    </data>
+    <data name="Cart.PricePreviewInvalid" xml:space="preserve">
+        <value>The cart price preview is invalid.</value>
+    </data>
+    <data name="Payment.EntityName" xml:space="preserve">
+        <value>Payment</value>
+    </data>
+    <data name="Payment.AmountInvalid" xml:space="preserve">
+        <value>Payment amount is invalid.</value>
+    </data>
+    <data name="Payment.Expired" xml:space="preserve">
+        <value>This payment reservation has expired.</value>
+    </data>
+    <data name="Payment.FailureReasonMaxLength" xml:space="preserve">
+        <value>Payment failure reason cannot exceed 1024 characters.</value>
+    </data>
+    <data name="Payment.FailureReasonRequired" xml:space="preserve">
+        <value>A payment failure reason is required.</value>
+    </data>
+    <data name="Payment.IdempotencyConflict" xml:space="preserve">
+        <value>The idempotency key does not match this operation.</value>
+    </data>
+    <data name="Payment.IdempotencyKeyMaxLength" xml:space="preserve">
+        <value>Idempotency key cannot exceed 128 characters.</value>
+    </data>
+    <data name="Payment.IdempotencyKeyRequired" xml:space="preserve">
+        <value>Idempotency key is required for this payment operation.</value>
+    </data>
+    <data name="Payment.InvalidStateTransition" xml:space="preserve">
+        <value>The requested payment state transition is not allowed.</value>
+    </data>
+    <data name="Payment.NotExpired" xml:space="preserve">
+        <value>This payment reservation has not expired yet.</value>
+    </data>
+    <data name="Campaign.CouponCodeMaxLength" xml:space="preserve">
+        <value>Coupon code cannot exceed 64 characters.</value>
+    </data>
+    <data name="Campaign.CouponCodeRequired" xml:space="preserve">
+        <value>Coupon code is required.</value>
+    </data>
+    <data name="Campaign.FreeShippingDiscountMustBeZero" xml:space="preserve">
+        <value>Free shipping campaigns must use a zero discount value.</value>
+    </data>
+    <data name="Campaign.MinimumOrderAmountInvalid" xml:space="preserve">
+        <value>Minimum order amount cannot be negative.</value>
+    </data>
+    <data name="PurchaseOrder.AmountInvalid" xml:space="preserve">
+        <value>Purchase order amount is invalid.</value>
+    </data>
+    <data name="PurchaseOrder.StatusMustBePaymentPending" xml:space="preserve">
+        <value>This operation requires a purchase order pending payment.</value>
+    </data>
+    <data name="UserSaleRequest.EntityName" xml:space="preserve">
+        <value>User sale request</value>
+    </data>
+    <data name="UserSaleRequest.AccessDenied" xml:space="preserve">
+        <value>You are not authorized to access this sale request.</value>
+    </data>
+    <data name="UserSaleRequest.AmountInvalid" xml:space="preserve">
+        <value>The sale request amount is invalid.</value>
+    </data>
+    <data name="UserSaleRequest.DescriptionRequired" xml:space="preserve">
+        <value>Sale request description is required.</value>
+    </data>
+    <data name="UserSaleRequest.RejectionReasonRequired" xml:space="preserve">
+        <value>A rejection reason is required.</value>
+    </data>
+    <data name="UserSaleRequest.StatusMustBeApproved" xml:space="preserve">
+        <value>This operation requires an approved sale request.</value>
+    </data>
+    <data name="UserSaleRequest.StatusMustBePending" xml:space="preserve">
+        <value>This operation requires a pending sale request.</value>
+    </data>
+    <data name="UserSaleRequest.TitleRequired" xml:space="preserve">
+        <value>Sale request title is required.</value>
+    </data>
+    <data name="PartSaleOperation.EntityName" xml:space="preserve">
+        <value>Part sale operation</value>
+    </data>
 </root>

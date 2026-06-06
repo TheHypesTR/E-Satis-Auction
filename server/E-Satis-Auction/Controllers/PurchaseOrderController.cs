@@ -17,7 +17,7 @@ public sealed class PurchaseOrderController : AuthorizedBaseController
     [HttpPost("buy-now")]
     public async Task<IActionResult> BuyNow([FromBody] BuyNowRequest request)
     {
-        OrderDetailDto result = await Mediator.Send(new BuyNowCommand(request.ProductListingId, request.Quantity, request.CampaignId));
+        OrderDetailDto result = await Mediator.Send(new BuyNowCommand(request.ProductListingId, request.Quantity, request.CampaignId, request.IdempotencyKey));
 
         return CreatedAtAction(nameof(GetMyOrderById), new { id = result.Id }, result);
     }

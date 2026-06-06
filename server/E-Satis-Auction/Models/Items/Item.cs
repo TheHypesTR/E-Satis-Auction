@@ -40,7 +40,8 @@ public sealed class Item : BaseEntity
         ItemStatus status,
         Dictionary<string, string>? batchAttributes = null,
         InventoryTransactionType transactionType = InventoryTransactionType.StandardizedCreated,
-        Guid? referenceId = null)
+        Guid? referenceId = null,
+        Guid? sourceItemId = null)
     {
         BusinessException.ThrowIfTrue(
             productId == Guid.Empty,
@@ -55,7 +56,8 @@ public sealed class Item : BaseEntity
             string.Empty,
             quantity,
             unitOfMeasure,
-            status);
+            status,
+            sourceItemId);
 
         item.UpdateDynamicAttributes(batchAttributes ?? []);
         item.AddQuantityChangedEvent(transactionType, 0, quantity, referenceId);
@@ -101,7 +103,8 @@ public sealed class Item : BaseEntity
         string name,
         int quantity,
         UnitOfMeasure unitOfMeasure,
-        ItemStatus status)
+        ItemStatus status,
+        Guid? sourceItemId = null)
     {
         BusinessException.ThrowIfTrue(
             facilityId == Guid.Empty,
@@ -129,7 +132,8 @@ public sealed class Item : BaseEntity
             Name = name.Trim(),
             Quantity = quantity,
             UnitOfMeasure = unitOfMeasure,
-            Status = status
+            Status = status,
+            SourceItemId = sourceItemId
         };
     }
 

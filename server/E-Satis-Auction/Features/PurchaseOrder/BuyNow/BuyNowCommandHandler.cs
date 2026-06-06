@@ -51,6 +51,20 @@ public sealed class BuyNowCommandHandler : ICommandHandler<BuyNowCommand, OrderD
             ErrorMessages.Auth.UnauthorizedAccess,
             ErrorMessages.Exception.UnauthorizedAccess);
 
+        if (!string.IsNullOrWhiteSpace(command.IdempotencyKey))
+        {
+            PurchaseOrderEntity? existingOrder = await _purchaseOrderRepository.GetByIdempotencyKeyWithDetailsAsync(command.IdempotencyKey, cancellationToken: cancellationToken);
+            if (existingOrder is not null)
+            {
+                ForbiddenAccessException.ThrowIfTrue(
+                    existingOrder.UserId != userId,
+                    ErrorMessages.PurchaseOrder.AccessDenied,
+                    ErrorMessages.Exception.UnauthorizedAccess);
+
+                return CommerceDtoMapper.ToOrderDetailDto(existingOrder);
+            }
+        }
+
         DateTimeOffset now = DateTimeOffset.UtcNow;
         ProductListingEntity? listing = await _productListingRepository.GetByIdAsync(command.ProductListingId, cancellationToken: cancellationToken);
         NotFoundException.ThrowIfNull(listing, ErrorMessages.ProductListing.EntityName, command.ProductListingId);
@@ -86,6 +100,7 @@ public sealed class BuyNowCommandHandler : ICommandHandler<BuyNowCommand, OrderD
             ErrorMessages.Exception.CommerceTitle);
 
         PurchaseOrderEntity order = PurchaseOrderEntity.Create(userId, OrderSource.DirectPurchase, listing.Currency);
+        order.SetIdempotencyKey(command.IdempotencyKey);
         Models.Commerce.PurchaseOrderLine line = order.AddLine(
             product.Id,
             listing.Id,

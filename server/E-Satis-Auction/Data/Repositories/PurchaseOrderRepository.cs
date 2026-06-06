@@ -24,6 +24,20 @@ public sealed class PurchaseOrderRepository : GenericRepository<PurchaseOrder>, 
         return await query.FirstOrDefaultAsync(order => order.Id == id, cancellationToken);
     }
 
+    public async Task<PurchaseOrder?> GetByIdempotencyKeyWithDetailsAsync(string idempotencyKey, bool enableTracking = false, CancellationToken cancellationToken = default)
+    {
+        IQueryable<PurchaseOrder> query = _dbSet
+            .Include(order => order.Lines)
+            .ThenInclude(line => line.Allocations);
+
+        if (!enableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        return await query.FirstOrDefaultAsync(order => order.IdempotencyKey == idempotencyKey, cancellationToken);
+    }
+
     public async Task<bool> HasLineForProductListingAsync(Guid productListingId, CancellationToken cancellationToken = default)
     {
         return await _context.PurchaseOrderLines

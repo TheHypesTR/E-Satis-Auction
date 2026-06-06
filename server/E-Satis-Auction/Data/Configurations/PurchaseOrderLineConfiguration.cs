@@ -23,7 +23,23 @@ public sealed class PurchaseOrderLineConfiguration : IEntityTypeConfiguration<Pu
             .HasPrecision(18, 2)
             .IsRequired();
 
+        builder.Property(line => line.DiscountAmount)
+            .HasPrecision(18, 2)
+            .IsRequired();
+
         builder.Property(line => line.DiscountedUnitPrice)
+            .HasPrecision(18, 2)
+            .IsRequired();
+
+        builder.Property(line => line.FinalUnitPrice)
+            .HasPrecision(18, 2)
+            .IsRequired();
+
+        builder.Property(line => line.SubtotalAmount)
+            .HasPrecision(18, 2)
+            .IsRequired();
+
+        builder.Property(line => line.CouponDiscountAmount)
             .HasPrecision(18, 2)
             .IsRequired();
 

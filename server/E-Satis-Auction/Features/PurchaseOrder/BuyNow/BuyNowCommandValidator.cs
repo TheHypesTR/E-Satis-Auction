@@ -12,5 +12,9 @@ public sealed class BuyNowCommandValidator : AbstractValidator<BuyNowCommand>
 
         RuleFor(command => command.Quantity)
             .GreaterThan(0).WithMessage(ErrorMessages.PurchaseOrder.QuantityMustBePositive);
+
+        RuleFor(command => command.IdempotencyKey)
+            .MaximumLength(128).WithMessage(ErrorMessages.Payment.IdempotencyKeyMaxLength)
+            .When(command => !string.IsNullOrWhiteSpace(command.IdempotencyKey));
     }
 }

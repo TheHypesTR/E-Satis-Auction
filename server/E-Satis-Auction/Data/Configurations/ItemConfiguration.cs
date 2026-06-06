@@ -42,6 +42,7 @@ public sealed class ItemConfiguration : IEntityTypeConfiguration<Item>
         builder.HasIndex(item => item.ProductId);
         builder.HasIndex(item => item.CategoryId);
         builder.HasIndex(item => item.FacilityId);
+        builder.HasIndex(item => item.SourceItemId);
 
         builder.HasOne<Product>()
             .WithMany()
@@ -56,6 +57,11 @@ public sealed class ItemConfiguration : IEntityTypeConfiguration<Item>
         builder.HasOne<Facility>()
             .WithMany()
             .HasForeignKey(item => item.FacilityId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne<Item>()
+            .WithMany()
+            .HasForeignKey(item => item.SourceItemId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Property<Dictionary<string, string>>("_dynamicAttributes")

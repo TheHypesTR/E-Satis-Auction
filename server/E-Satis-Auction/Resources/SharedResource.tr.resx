@@ -921,4 +921,88 @@
     <data name="ReturnRequestLine.NotFound" xml:space="preserve">
         <value>İade talebi satırı bulunamadı.</value>
     </data>
+    <data name="Cart.EntityName" xml:space="preserve">
+        <value>Sepet</value>
+    </data>
+    <data name="Cart.NotActive" xml:space="preserve">
+        <value>Bu sepet aktif değil.</value>
+    </data>
+    <data name="Cart.PricePreviewInvalid" xml:space="preserve">
+        <value>Sepet fiyat önizlemesi geçersiz.</value>
+    </data>
+    <data name="Payment.EntityName" xml:space="preserve">
+        <value>Ödeme</value>
+    </data>
+    <data name="Payment.AmountInvalid" xml:space="preserve">
+        <value>Ödeme tutarı geçersiz.</value>
+    </data>
+    <data name="Payment.Expired" xml:space="preserve">
+        <value>Bu ödeme rezervasyonunun süresi dolmuş.</value>
+    </data>
+    <data name="Payment.FailureReasonMaxLength" xml:space="preserve">
+        <value>Ödeme hata nedeni 1024 karakteri aşamaz.</value>
+    </data>
+    <data name="Payment.FailureReasonRequired" xml:space="preserve">
+        <value>Ödeme hata nedeni gereklidir.</value>
+    </data>
+    <data name="Payment.IdempotencyConflict" xml:space="preserve">
+        <value>Idempotency anahtarı bu işlemle eşleşmiyor.</value>
+    </data>
+    <data name="Payment.IdempotencyKeyMaxLength" xml:space="preserve">
+        <value>Idempotency anahtarı 128 karakteri aşamaz.</value>
+    </data>
+    <data name="Payment.IdempotencyKeyRequired" xml:space="preserve">
+        <value>Bu ödeme işlemi için idempotency anahtarı gereklidir.</value>
+    </data>
+    <data name="Payment.InvalidStateTransition" xml:space="preserve">
+        <value>İstenen ödeme durum geçişine izin verilmiyor.</value>
+    </data>
+    <data name="Payment.NotExpired" xml:space="preserve">
+        <value>Bu ödeme rezervasyonunun süresi henüz dolmadı.</value>
+    </data>
+    <data name="Campaign.CouponCodeMaxLength" xml:space="preserve">
+        <value>Kupon kodu 64 karakteri aşamaz.</value>
+    </data>
+    <data name="Campaign.CouponCodeRequired" xml:space="preserve">
+        <value>Kupon kodu gereklidir.</value>
+    </data>
+    <data name="Campaign.FreeShippingDiscountMustBeZero" xml:space="preserve">
+        <value>Ücretsiz kargo kampanyalarında indirim değeri sıfır olmalıdır.</value>
+    </data>
+    <data name="Campaign.MinimumOrderAmountInvalid" xml:space="preserve">
+        <value>Minimum sipariş tutarı negatif olamaz.</value>
+    </data>
+    <data name="PurchaseOrder.AmountInvalid" xml:space="preserve">
+        <value>Satın alma siparişi tutarı geçersiz.</value>
+    </data>
+    <data name="PurchaseOrder.StatusMustBePaymentPending" xml:space="preserve">
+        <value>Bu işlem ödeme bekleyen bir satın alma siparişi gerektirir.</value>
+    </data>
+    <data name="UserSaleRequest.EntityName" xml:space="preserve">
+        <value>Kullanıcı satış talebi</value>
+    </data>
+    <data name="UserSaleRequest.AccessDenied" xml:space="preserve">
+        <value>Bu satış talebine erişim yetkiniz yok.</value>
+    </data>
+    <data name="UserSaleRequest.AmountInvalid" xml:space="preserve">
+        <value>Satış talebi tutarı geçersiz.</value>
+    </data>
+    <data name="UserSaleRequest.DescriptionRequired" xml:space="preserve">
+        <value>Satış talebi açıklaması gereklidir.</value>
+    </data>
+    <data name="UserSaleRequest.RejectionReasonRequired" xml:space="preserve">
+        <value>Reddetme nedeni gereklidir.</value>
+    </data>
+    <data name="UserSaleRequest.StatusMustBeApproved" xml:space="preserve">
+        <value>Bu işlem onaylanmış bir satış talebi gerektirir.</value>
+    </data>
+    <data name="UserSaleRequest.StatusMustBePending" xml:space="preserve">
+        <value>Bu işlem bekleyen bir satış talebi gerektirir.</value>
+    </data>
+    <data name="UserSaleRequest.TitleRequired" xml:space="preserve">
+        <value>Satış talebi başlığı gereklidir.</value>
+    </data>
+    <data name="PartSaleOperation.EntityName" xml:space="preserve">
+        <value>Parça satış işlemi</value>
+    </data>
 </root>

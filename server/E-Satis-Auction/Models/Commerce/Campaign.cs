@@ -9,8 +9,13 @@ public sealed class Campaign : BaseEntity
 {
     public string Name { get; private set; }
     public string? Description { get; private set; }
+    public string? CouponCode { get; private set; }
+    public CampaignScope Scope { get; private set; }
     public DiscountType DiscountType { get; private set; }
     public decimal DiscountValue { get; private set; }
+    public decimal? MinimumOrderAmount { get; private set; }
+    public Guid? ProductListingId { get; private set; }
+    public Guid? CategoryId { get; private set; }
     public string? Currency { get; private set; }
     public CampaignStatus Status { get; private set; }
     public DateTimeOffset StartsAt { get; private set; }
@@ -24,6 +29,41 @@ public sealed class Campaign : BaseEntity
     {
         Name = string.Empty;
         Status = CampaignStatus.Draft;
+        Scope = CampaignScope.ProductListing;
+    }
+
+    public static Campaign Create(
+        string name,
+        string? description,
+        string? couponCode,
+        CampaignScope scope,
+        DiscountType discountType,
+        decimal discountValue,
+        decimal? minimumOrderAmount,
+        Guid? productListingId,
+        Guid? categoryId,
+        string? currency,
+        DateTimeOffset startsAt,
+        DateTimeOffset endsAt)
+    {
+        Validate(name, scope, discountType, discountValue, minimumOrderAmount, productListingId, categoryId, currency, startsAt, endsAt);
+
+        return new Campaign
+        {
+            Name = name.Trim(),
+            Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
+            CouponCode = string.IsNullOrWhiteSpace(couponCode) ? null : couponCode.Trim().ToUpperInvariant(),
+            Scope = scope,
+            DiscountType = discountType,
+            DiscountValue = discountValue,
+            MinimumOrderAmount = minimumOrderAmount,
+            ProductListingId = productListingId,
+            CategoryId = categoryId,
+            Currency = string.IsNullOrWhiteSpace(currency) ? null : currency.Trim().ToUpperInvariant(),
+            Status = CampaignStatus.Draft,
+            StartsAt = startsAt,
+            EndsAt = endsAt
+        };
     }
 
     public static Campaign Create(
@@ -35,19 +75,49 @@ public sealed class Campaign : BaseEntity
         DateTimeOffset startsAt,
         DateTimeOffset endsAt)
     {
-        Validate(name, discountType, discountValue, currency, startsAt, endsAt);
+        return Create(
+            name,
+            description,
+            null,
+            CampaignScope.ProductListing,
+            discountType,
+            discountValue,
+            null,
+            null,
+            null,
+            currency,
+            startsAt,
+            endsAt);
+    }
 
-        return new Campaign
-        {
-            Name = name.Trim(),
-            Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
-            DiscountType = discountType,
-            DiscountValue = discountValue,
-            Currency = string.IsNullOrWhiteSpace(currency) ? null : currency.Trim().ToUpperInvariant(),
-            Status = CampaignStatus.Draft,
-            StartsAt = startsAt,
-            EndsAt = endsAt
-        };
+    public void Update(
+        string name,
+        string? description,
+        string? couponCode,
+        CampaignScope scope,
+        DiscountType discountType,
+        decimal discountValue,
+        decimal? minimumOrderAmount,
+        Guid? productListingId,
+        Guid? categoryId,
+        string? currency,
+        DateTimeOffset startsAt,
+        DateTimeOffset endsAt)
+    {
+        Validate(name, scope, discountType, discountValue, minimumOrderAmount, productListingId, categoryId, currency, startsAt, endsAt);
+
+        Name = name.Trim();
+        Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim();
+        CouponCode = string.IsNullOrWhiteSpace(couponCode) ? null : couponCode.Trim().ToUpperInvariant();
+        Scope = scope;
+        DiscountType = discountType;
+        DiscountValue = discountValue;
+        MinimumOrderAmount = minimumOrderAmount;
+        ProductListingId = productListingId;
+        CategoryId = categoryId;
+        Currency = string.IsNullOrWhiteSpace(currency) ? null : currency.Trim().ToUpperInvariant();
+        StartsAt = startsAt;
+        EndsAt = endsAt;
     }
 
     public void AddProduct(Guid productId)
@@ -113,7 +183,45 @@ public sealed class Campaign : BaseEntity
         return Status is CampaignStatus.Active &&
                StartsAt <= now &&
                EndsAt >= now &&
+               (Scope is CampaignScope.ProductListing || Scope is 0) &&
                _products.Any(product => product.ProductId == productId);
+    }
+
+    public bool IsLineApplicableTo(Guid productId, Guid productListingId, Guid categoryId, DateTimeOffset now)
+    {
+        if (Status is not CampaignStatus.Active || StartsAt > now || EndsAt < now)
+        {
+            return false;
+        }
+
+        return Scope switch
+        {
+            CampaignScope.ProductListing => ProductListingId == productListingId ||
+                                            _products.Any(product => product.ProductId == productId),
+            CampaignScope.Category => CategoryId == categoryId,
+            _ => false
+        };
+    }
+
+    public bool IsCouponApplicable(string couponCode, decimal discountedSubtotal, string currency, DateTimeOffset now)
+    {
+        return Scope is CampaignScope.CartOrder &&
+               Status is CampaignStatus.Active &&
+               StartsAt <= now &&
+               EndsAt >= now &&
+               string.Equals(CouponCode, couponCode.Trim(), StringComparison.OrdinalIgnoreCase) &&
+               MeetsMinimum(discountedSubtotal) &&
+               CurrencyMatchesForFixedDiscount(currency);
+    }
+
+    public bool IsFreeShippingApplicable(decimal discountedSubtotal, string currency, DateTimeOffset now)
+    {
+        return Scope is CampaignScope.FreeShipping &&
+               Status is CampaignStatus.Active &&
+               StartsAt <= now &&
+               EndsAt >= now &&
+               MeetsMinimum(discountedSubtotal) &&
+               CurrencyMatchesForFixedDiscount(currency);
     }
 
     private decimal ApplyFixedDiscount(decimal price, string listingCurrency)
@@ -127,10 +235,34 @@ public sealed class Campaign : BaseEntity
         return discountedPrice < 0 ? 0 : discountedPrice;
     }
 
+    public decimal CalculateDiscountAmount(decimal amount, string currency)
+    {
+        decimal discounted = DiscountType is DiscountType.Percentage
+            ? decimal.Round(amount * (1 - DiscountValue / 100), 2)
+            : ApplyFixedDiscount(amount, currency);
+
+        return amount - discounted;
+    }
+
+    private bool MeetsMinimum(decimal subtotal)
+    {
+        return !MinimumOrderAmount.HasValue || subtotal >= MinimumOrderAmount.Value;
+    }
+
+    private bool CurrencyMatchesForFixedDiscount(string currency)
+    {
+        return DiscountType is not DiscountType.FixedAmount ||
+               string.Equals(Currency, currency, StringComparison.OrdinalIgnoreCase);
+    }
+
     private static void Validate(
         string name,
+        CampaignScope scope,
         DiscountType discountType,
         decimal discountValue,
+        decimal? minimumOrderAmount,
+        Guid? productListingId,
+        Guid? categoryId,
         string? currency,
         DateTimeOffset startsAt,
         DateTimeOffset endsAt)
@@ -146,7 +278,7 @@ public sealed class Campaign : BaseEntity
             ErrorMessages.Exception.CommerceTitle);
 
         BusinessException.ThrowIfTrue(
-            discountValue <= 0,
+            scope is not CampaignScope.FreeShipping && discountValue <= 0,
             ErrorMessages.Campaign.DiscountValueMustBePositive,
             ErrorMessages.Exception.CommerceTitle);
 
@@ -158,6 +290,26 @@ public sealed class Campaign : BaseEntity
         BusinessException.ThrowIfTrue(
             discountType is DiscountType.FixedAmount && string.IsNullOrWhiteSpace(currency),
             ErrorMessages.Campaign.CurrencyRequiredForFixedDiscount,
+            ErrorMessages.Exception.CommerceTitle);
+
+        BusinessException.ThrowIfTrue(
+            scope is CampaignScope.FreeShipping && discountValue != 0,
+            ErrorMessages.Campaign.FreeShippingDiscountMustBeZero,
+            ErrorMessages.Exception.CommerceTitle);
+
+        BusinessException.ThrowIfTrue(
+            minimumOrderAmount.HasValue && minimumOrderAmount.Value < 0,
+            ErrorMessages.Campaign.MinimumOrderAmountInvalid,
+            ErrorMessages.Exception.CommerceTitle);
+
+        BusinessException.ThrowIfTrue(
+            productListingId.HasValue && productListingId.Value == Guid.Empty,
+            ErrorMessages.PurchaseOrder.ProductListingRequired,
+            ErrorMessages.Exception.CommerceTitle);
+
+        BusinessException.ThrowIfTrue(
+            categoryId.HasValue && categoryId.Value == Guid.Empty,
+            ErrorMessages.Category.EntityName,
             ErrorMessages.Exception.CommerceTitle);
     }
 }

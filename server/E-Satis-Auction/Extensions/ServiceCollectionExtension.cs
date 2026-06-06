@@ -4,6 +4,7 @@ using E_Satis_Auction.Data;
 using E_Satis_Auction.Data.Repositories;
 using E_Satis_Auction.Interfaces;
 using E_Satis_Auction.Interfaces.Repositories;
+using E_Satis_Auction.Interfaces.Services;
 using E_Satis_Auction.Services;
 
 namespace E_Satis_Auction.Extensions;
@@ -28,17 +29,23 @@ public static class ServiceCollectionExtension
         services.AddScoped<IDispatchRepository, DispatchRepository>();
         services.AddScoped<IProductListingRepository, ProductListingRepository>();
         services.AddScoped<ICampaignRepository, CampaignRepository>();
+        services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
+        services.AddScoped<IPaymentAttemptRepository, PaymentAttemptRepository>();
         services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
         services.AddScoped<IReturnRequestRepository, ReturnRequestRepository>();
+        services.AddScoped<IUserSaleRequestRepository, UserSaleRequestRepository>();
+        services.AddScoped<IPartSaleOperationRepository, PartSaleOperationRepository>();
         
         services.AddScoped<IInventoryTransactionRepository, InventoryTransactionRepository>();
         
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<ICommerceWorkflowService, CommerceWorkflowService>();
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IEmailTemplateService, EmailTemplateService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserInvitationService, UserInvitationService>();
+        services.AddHostedService<PaymentReservationExpirationService>();
 
         return services;
     }

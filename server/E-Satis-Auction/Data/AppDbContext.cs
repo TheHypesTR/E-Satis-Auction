@@ -37,11 +37,15 @@ public class AppDbContext : IdentityDbContext<AppUser>
     public DbSet<ProductListing> ProductListings { get; set; }
     public DbSet<Campaign> Campaigns { get; set; }
     public DbSet<CampaignProduct> CampaignProducts { get; set; }
+    public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+    public DbSet<PaymentAttempt> PaymentAttempts { get; set; }
     public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
     public DbSet<PurchaseOrderLine> PurchaseOrderLines { get; set; }
     public DbSet<PurchaseOrderLineAllocation> PurchaseOrderLineAllocations { get; set; }
     public DbSet<ReturnRequest> ReturnRequests { get; set; }
     public DbSet<ReturnRequestLine> ReturnRequestLines { get; set; }
+    public DbSet<UserSaleRequest> UserSaleRequests { get; set; }
+    public DbSet<PartSaleOperation> PartSaleOperations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
