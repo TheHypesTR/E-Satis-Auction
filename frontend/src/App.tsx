@@ -5,6 +5,8 @@ import Products   from './pages/Products';
 import Facilities from './pages/Facilities';
 import Categories from './pages/Categories';
 import Inventory  from './pages/Inventory';
+import Orders     from './pages/Orders';
+import Returns    from './pages/Returns';
 import Layout     from './components/Layout';
 
 // User Panel
@@ -37,6 +39,8 @@ function App() {
           <Route path="facilities"      element={<Facilities />} />
           <Route path="categories"      element={<Categories />} />
           <Route path="inventory"       element={<Inventory />} />
+          <Route path="orders"          element={<Orders />} />
+          <Route path="returns"         element={<Returns />} />
         </Route>
 
         {/* User Panel (Public — no auth required) */}

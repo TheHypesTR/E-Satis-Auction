@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ShoppingBag, ArrowLeft, ShoppingCart, Check, Package, Truck, Shield, Star } from 'lucide-react';
+import { ShoppingBag, ArrowLeft, ShoppingCart, Check, Package, Truck, Shield, Star, Handshake, X } from 'lucide-react';
 import api from '../../api/axios';
 import { useCart } from '../../context/CartContext';
 
@@ -42,6 +42,9 @@ export default function UserProductDetail() {
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const [showOfferModal, setShowOfferModal] = useState(false);
+  const [offerAmount, setOfferAmount] = useState('');
+  const [offerSent, setOfferSent] = useState(false);
   const { addItem } = useCart();
 
   useEffect(() => {
@@ -62,6 +65,16 @@ export default function UserProductDetail() {
     }, qty);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
+  };
+
+  const handleMakeOffer = () => {
+    if (!offerAmount) return;
+    setOfferSent(true);
+    setTimeout(() => {
+      setOfferSent(false);
+      setShowOfferModal(false);
+      setOfferAmount('');
+    }, 1500);
   };
 
   if (loading) {
@@ -162,7 +175,14 @@ export default function UserProductDetail() {
             </button>
             <button
               className="btn btn-ghost"
-              style={{ padding: '15px 20px' }}
+              style={{ flex: 1, padding: '15px' }}
+              onClick={() => setShowOfferModal(true)}
+            >
+              <Handshake size={18} /> Teklif Yap
+            </button>
+            <button
+              className="btn btn-ghost"
+              style={{ padding: '15px 20px', background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)' }}
               onClick={() => { handleAddToCart(); navigate('/user/checkout'); }}
             >
               Hemen Al
@@ -177,6 +197,45 @@ export default function UserProductDetail() {
           )}
         </div>
       </div>
+
+      {/* Offer Modal */}
+      {showOfferModal && (
+        <div className="modal-overlay" onClick={() => setShowOfferModal(false)}>
+          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 400, width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Handshake size={20} color="#a78bfa" /> Teklif Yap
+              </h2>
+              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowOfferModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            
+            <div style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>{product.name}</strong> ürünü için teklifinizi belirleyin. Satıcı değerlendirip size dönüş yapacaktır.
+              </p>
+              <div className="form-group">
+                <label className="form-label">Teklifiniz (₺)</label>
+                <input 
+                  type="number" 
+                  className="form-input" 
+                  placeholder="Örn: 500" 
+                  value={offerAmount}
+                  onChange={e => setOfferAmount(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+              <button className="btn btn-ghost" onClick={() => setShowOfferModal(false)}>İptal</button>
+              <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleMakeOffer}>
+                {offerSent ? <><Check size={16}/> Gönderildi</> : 'Teklifi Gönder'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

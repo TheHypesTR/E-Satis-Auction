@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Package, MapPin, Bell, Shield, ChevronRight,
-  Edit3, LogOut, ShoppingBag, Clock,
+  Edit3, LogOut, ShoppingBag, Clock, CreditCard, Plus, X
 } from 'lucide-react';
 
 const MOCK_ORDERS = [
@@ -16,9 +16,15 @@ const MOCK_ADDRESSES = [
   { label: 'İş', full: 'Maslak Plaza Kat:7 Sarıyer / İstanbul 34398' },
 ];
 
+const MOCK_CARDS = [
+  { id: '1', bank: 'Garanti BBVA', last4: '4532', brand: 'Mastercard' },
+  { id: '2', bank: 'İş Bankası', last4: '9812', brand: 'Visa' },
+];
+
 const tabs = [
   { key: 'orders',    label: 'Siparişlerim',    icon: Package },
   { key: 'addresses', label: 'Adreslerim',      icon: MapPin },
+  { key: 'cards',     label: 'Kayıtlı Kartlarım',icon: CreditCard },
   { key: 'security',  label: 'Güvenlik',        icon: Shield },
   { key: 'notifs',    label: 'Bildirimler',     icon: Bell },
 ];
@@ -35,6 +41,10 @@ export default function UserProfile() {
   const [editing, setEditing] = useState(false);
   const [userName, setUserName] = useState('Kullanıcı');
   const [userEmail, setUserEmail] = useState('kullanici@esatis.com');
+
+  // Modals
+  const [showAddAddress, setShowAddAddress] = useState(false);
+  const [showAddCard, setShowAddCard] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -170,7 +180,7 @@ export default function UserProfile() {
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                 <h2 style={{ fontSize: '1.15rem', fontWeight: 700 }}>Kayıtlı Adreslerim</h2>
-                <button className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.85rem', gap: 6 }}>
+                <button className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.85rem', gap: 6 }} onClick={() => setShowAddAddress(true)}>
                   <MapPin size={13} /> Adres Ekle
                 </button>
               </div>
@@ -186,6 +196,36 @@ export default function UserProfile() {
                     </div>
                     <button className="btn btn-ghost" style={{ padding: '6px 12px', fontSize: '0.8rem', alignSelf: 'flex-start' }}>
                       <Edit3 size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Cards tab */}
+          {activeTab === 'cards' && (
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                <h2 style={{ fontSize: '1.15rem', fontWeight: 700 }}>Kayıtlı Kartlarım</h2>
+                <button className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.85rem', gap: 6 }} onClick={() => setShowAddCard(true)}>
+                  <CreditCard size={13} /> Kart Ekle
+                </button>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {MOCK_CARDS.map((c) => (
+                  <div key={c.id} className="glass-card" style={{ display: 'flex', gap: 16, padding: '20px 24px', alignItems: 'center' }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <CreditCard size={20} color="#6ee7b7" />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 700, marginBottom: 4 }}>{c.bank}</div>
+                      <div style={{ fontSize: '0.87rem', color: 'var(--text-secondary)' }}>
+                        {c.brand} •••• {c.last4}
+                      </div>
+                    </div>
+                    <button className="btn btn-ghost" style={{ padding: '6px 12px', fontSize: '0.8rem', color: '#f87171' }}>
+                      Sil
                     </button>
                   </div>
                 ))}
@@ -243,6 +283,83 @@ export default function UserProfile() {
           )}
         </div>
       </div>
+
+      {/* Add Address Modal */}
+      {showAddAddress && (
+        <div className="modal-overlay" onClick={() => setShowAddAddress(false)}>
+          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <MapPin size={20} color="#93c5fd" /> Yeni Adres Ekle
+              </h2>
+              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowAddAddress(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
+              <div className="form-group">
+                <label className="form-label">Adres Başlığı</label>
+                <input type="text" className="form-input" placeholder="Örn: Ev, İş" />
+              </div>
+              <div className="form-group">
+                <label className="form-label">İl / İlçe</label>
+                <div style={{ display: 'flex', gap: 12 }}>
+                  <input type="text" className="form-input" placeholder="İl" style={{ flex: 1 }} />
+                  <input type="text" className="form-input" placeholder="İlçe" style={{ flex: 1 }} />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Açık Adres</label>
+                <textarea className="form-input" placeholder="Mahalle, sokak, bina no..." rows={3} style={{ resize: 'none' }}></textarea>
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+              <button className="btn btn-ghost" onClick={() => setShowAddAddress(false)}>İptal</button>
+              <button className="btn btn-primary" onClick={() => setShowAddAddress(false)}>Kaydet</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Card Modal */}
+      {showAddCard && (
+        <div className="modal-overlay" onClick={() => setShowAddCard(false)}>
+          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 400, width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <CreditCard size={20} color="#6ee7b7" /> Yeni Kart Ekle
+              </h2>
+              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowAddCard(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
+              <div className="form-group">
+                <label className="form-label">Kart Üzerindeki İsim</label>
+                <input type="text" className="form-input" placeholder="Ad Soyad" />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Kart Numarası</label>
+                <input type="text" className="form-input" placeholder="0000 0000 0000 0000" maxLength={19} />
+              </div>
+              <div style={{ display: 'flex', gap: 12 }}>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Son Kullanma (AA/YY)</label>
+                  <input type="text" className="form-input" placeholder="MM/YY" maxLength={5} />
+                </div>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">CVV</label>
+                  <input type="text" className="form-input" placeholder="123" maxLength={3} />
+                </div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+              <button className="btn btn-ghost" onClick={() => setShowAddCard(false)}>İptal</button>
+              <button className="btn btn-primary" onClick={() => setShowAddCard(false)}>Kaydet</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
