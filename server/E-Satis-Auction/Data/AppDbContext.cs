@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using E_Satis_Auction.Common.Entities.Interfaces;
 using E_Satis_Auction.Models.Categories;
+using E_Satis_Auction.Models.Commerce;
 using E_Satis_Auction.Models.Common;
 using E_Satis_Auction.Models.Dispatches;
 using E_Satis_Auction.Models.Facilities;
@@ -33,6 +34,18 @@ public class AppDbContext : IdentityDbContext<AppUser>
     public DbSet<Dispatch> Dispatches { get; set; }
     public DbSet<DispatchLineItem> DispatchLineItems { get; set; }
     public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
+    public DbSet<ProductListing> ProductListings { get; set; }
+    public DbSet<Campaign> Campaigns { get; set; }
+    public DbSet<CampaignProduct> CampaignProducts { get; set; }
+    public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+    public DbSet<PaymentAttempt> PaymentAttempts { get; set; }
+    public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+    public DbSet<PurchaseOrderLine> PurchaseOrderLines { get; set; }
+    public DbSet<PurchaseOrderLineAllocation> PurchaseOrderLineAllocations { get; set; }
+    public DbSet<ReturnRequest> ReturnRequests { get; set; }
+    public DbSet<ReturnRequestLine> ReturnRequestLines { get; set; }
+    public DbSet<UserSaleRequest> UserSaleRequests { get; set; }
+    public DbSet<PartSaleOperation> PartSaleOperations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

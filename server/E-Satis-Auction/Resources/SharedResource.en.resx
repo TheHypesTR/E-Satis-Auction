@@ -666,4 +666,343 @@
     <data name="User.SystemUser" xml:space="preserve">
         <value>e-Satis Auction</value>
     </data>
+    <data name="Exception.CommerceTitle" xml:space="preserve">
+        <value>Commerce Operation Error</value>
+    </data>
+    <data name="Commerce.EntityName" xml:space="preserve">
+        <value>Commerce</value>
+    </data>
+    <data name="ProductListing.EntityName" xml:space="preserve">
+        <value>Product Listing</value>
+    </data>
+    <data name="ProductListing.ProductRequired" xml:space="preserve">
+        <value>A product is required for the listing.</value>
+    </data>
+    <data name="ProductListing.SourceFacilityRequired" xml:space="preserve">
+        <value>A source facility is required for the listing.</value>
+    </data>
+    <data name="ProductListing.PriceMustBePositive" xml:space="preserve">
+        <value>The listing price must be greater than zero.</value>
+    </data>
+    <data name="ProductListing.CurrencyRequired" xml:space="preserve">
+        <value>A currency code is required for the listing.</value>
+    </data>
+    <data name="ProductListing.InvalidActiveDateRange" xml:space="preserve">
+        <value>The listing active date range is invalid.</value>
+    </data>
+    <data name="ProductListing.AlreadyActive" xml:space="preserve">
+        <value>This product listing is already active.</value>
+    </data>
+    <data name="ProductListing.AlreadyInactive" xml:space="preserve">
+        <value>This product listing is already inactive.</value>
+    </data>
+    <data name="ProductListing.AlreadySuspended" xml:space="preserve">
+        <value>This product listing is already suspended.</value>
+    </data>
+    <data name="ProductListing.AlreadyArchived" xml:space="preserve">
+        <value>This product listing is already archived.</value>
+    </data>
+    <data name="ProductListing.DuplicateActiveListing" xml:space="preserve">
+        <value>An active listing already exists for this product and source facility.</value>
+    </data>
+    <data name="ProductListing.InvalidCurrency" xml:space="preserve">
+        <value>Currency must be a valid 3-letter currency code.</value>
+    </data>
+    <data name="ProductListing.CannotDeleteWithOrders" xml:space="preserve">
+        <value>Product listing cannot be deleted because it is referenced by purchase orders.</value>
+    </data>
+    <data name="ProductListing.NoAvailableStock" xml:space="preserve">
+        <value>Product listing cannot be activated because there is no available stock.</value>
+    </data>
+    <data name="Campaign.EntityName" xml:space="preserve">
+        <value>Campaign</value>
+    </data>
+    <data name="Campaign.NameRequired" xml:space="preserve">
+        <value>Campaign name is required.</value>
+    </data>
+    <data name="Campaign.InvalidDateRange" xml:space="preserve">
+        <value>Campaign start date must be earlier than the end date.</value>
+    </data>
+    <data name="Campaign.DiscountValueMustBePositive" xml:space="preserve">
+        <value>Campaign discount value must be greater than zero.</value>
+    </data>
+    <data name="Campaign.PercentageDiscountInvalid" xml:space="preserve">
+        <value>Percentage discount cannot exceed 100.</value>
+    </data>
+    <data name="Campaign.CurrencyRequiredForFixedDiscount" xml:space="preserve">
+        <value>A currency code is required for fixed amount discounts.</value>
+    </data>
+    <data name="Campaign.ProductRequired" xml:space="preserve">
+        <value>A product is required for campaign applicability.</value>
+    </data>
+    <data name="Campaign.ProductAlreadyAssigned" xml:space="preserve">
+        <value>This product is already assigned to the campaign.</value>
+    </data>
+    <data name="Campaign.ProductNotAssigned" xml:space="preserve">
+        <value>This product is not assigned to the campaign.</value>
+    </data>
+    <data name="Campaign.AlreadyActive" xml:space="preserve">
+        <value>This campaign is already active.</value>
+    </data>
+    <data name="Campaign.AlreadySuspended" xml:space="preserve">
+        <value>This campaign is already suspended.</value>
+    </data>
+    <data name="Campaign.CurrencyMismatch" xml:space="preserve">
+        <value>The campaign currency does not match the listing currency.</value>
+    </data>
+    <data name="PurchaseOrder.EntityName" xml:space="preserve">
+        <value>Purchase Order</value>
+    </data>
+    <data name="PurchaseOrder.UserRequired" xml:space="preserve">
+        <value>A user is required for the purchase order.</value>
+    </data>
+    <data name="PurchaseOrder.CurrencyRequired" xml:space="preserve">
+        <value>A currency code is required for the purchase order.</value>
+    </data>
+    <data name="PurchaseOrder.CurrencyMismatch" xml:space="preserve">
+        <value>All purchase order lines must use the order currency.</value>
+    </data>
+    <data name="PurchaseOrder.CannotMutateSubmittedOrder" xml:space="preserve">
+        <value>Submitted purchase orders cannot be changed.</value>
+    </data>
+    <data name="PurchaseOrder.StatusMustBePendingApproval" xml:space="preserve">
+        <value>This operation requires a purchase order pending approval.</value>
+    </data>
+    <data name="PurchaseOrder.StatusMustBeApproved" xml:space="preserve">
+        <value>This operation requires an approved purchase order.</value>
+    </data>
+    <data name="PurchaseOrder.LinesRequired" xml:space="preserve">
+        <value>The purchase order must contain at least one line.</value>
+    </data>
+    <data name="PurchaseOrder.RejectionReasonRequired" xml:space="preserve">
+        <value>A rejection reason is required.</value>
+    </data>
+    <data name="PurchaseOrder.AlreadyShipped" xml:space="preserve">
+        <value>This purchase order has already been shipped.</value>
+    </data>
+    <data name="PurchaseOrder.CarrierNameRequired" xml:space="preserve">
+        <value>Carrier name is required.</value>
+    </data>
+    <data name="PurchaseOrder.TrackingNumberRequired" xml:space="preserve">
+        <value>Tracking number is required.</value>
+    </data>
+    <data name="PurchaseOrder.ProductRequired" xml:space="preserve">
+        <value>A product is required for the purchase order line.</value>
+    </data>
+    <data name="PurchaseOrder.ProductListingRequired" xml:space="preserve">
+        <value>A product listing is required for the purchase order line.</value>
+    </data>
+    <data name="PurchaseOrder.ProductNameSnapshotRequired" xml:space="preserve">
+        <value>Product name snapshot is required.</value>
+    </data>
+    <data name="PurchaseOrder.SkuSnapshotRequired" xml:space="preserve">
+        <value>SKU snapshot is required.</value>
+    </data>
+    <data name="PurchaseOrder.UnitPriceMustBePositive" xml:space="preserve">
+        <value>Unit price must be greater than zero.</value>
+    </data>
+    <data name="PurchaseOrder.DiscountedPriceInvalid" xml:space="preserve">
+        <value>Discounted unit price is invalid.</value>
+    </data>
+    <data name="PurchaseOrder.QuantityMustBePositive" xml:space="preserve">
+        <value>Quantity must be greater than zero.</value>
+    </data>
+    <data name="PurchaseOrder.LineRequired" xml:space="preserve">
+        <value>A purchase order line is required.</value>
+    </data>
+    <data name="PurchaseOrder.OriginalItemRequired" xml:space="preserve">
+        <value>An original inventory item is required.</value>
+    </data>
+    <data name="PurchaseOrder.ReservedItemRequired" xml:space="preserve">
+        <value>A reserved inventory item is required.</value>
+    </data>
+    <data name="ReturnRequest.EntityName" xml:space="preserve">
+        <value>Return Request</value>
+    </data>
+    <data name="ReturnRequest.PurchaseOrderRequired" xml:space="preserve">
+        <value>A purchase order is required for the return request.</value>
+    </data>
+    <data name="ReturnRequest.UserRequired" xml:space="preserve">
+        <value>A user is required for the return request.</value>
+    </data>
+    <data name="ReturnRequest.ReasonRequired" xml:space="preserve">
+        <value>A return reason is required.</value>
+    </data>
+    <data name="ReturnRequest.CannotMutateSubmittedRequest" xml:space="preserve">
+        <value>Submitted return requests cannot be changed.</value>
+    </data>
+    <data name="ReturnRequest.StatusMustBePending" xml:space="preserve">
+        <value>This operation requires a pending return request.</value>
+    </data>
+    <data name="ReturnRequest.LinesRequired" xml:space="preserve">
+        <value>The return request must contain at least one line.</value>
+    </data>
+    <data name="ReturnRequest.ResolutionNoteRequired" xml:space="preserve">
+        <value>A resolution note is required.</value>
+    </data>
+    <data name="ReturnRequest.PurchaseOrderLineRequired" xml:space="preserve">
+        <value>A purchase order line is required for the return line.</value>
+    </data>
+    <data name="ReturnRequest.QuantityMustBePositive" xml:space="preserve">
+        <value>Return quantity must be greater than zero.</value>
+    </data>
+    <data name="ProductListing.NotSellable" xml:space="preserve">
+        <value>This product listing is not currently available for purchase.</value>
+    </data>
+    <data name="Product.ProductNotAvailable" xml:space="preserve">
+        <value>This product is not available for purchase.</value>
+    </data>
+    <data name="Campaign.NotApplicable" xml:space="preserve">
+        <value>The selected campaign is not active or is not applicable to this product.</value>
+    </data>
+    <data name="PurchaseOrder.AccessDenied" xml:space="preserve">
+        <value>You are not authorized to access this purchase order.</value>
+    </data>
+    <data name="PurchaseOrder.InsufficientStock" xml:space="preserve">
+        <value>There is insufficient available stock for this purchase.</value>
+    </data>
+    <data name="PurchaseOrder.InvalidReservedInventoryState" xml:space="preserve">
+        <value>The reserved inventory state is invalid for this order operation.</value>
+    </data>
+    <data name="PurchaseOrder.NoteMaxLength" xml:space="preserve">
+        <value>Order note cannot exceed 1024 characters.</value>
+    </data>
+    <data name="PurchaseOrder.ShippingInfoRequired" xml:space="preserve">
+        <value>Shipping information is required.</value>
+    </data>
+    <data name="PurchaseOrder.CarrierNameMaxLength" xml:space="preserve">
+        <value>Carrier name cannot exceed 128 characters.</value>
+    </data>
+    <data name="PurchaseOrder.TrackingNumberMaxLength" xml:space="preserve">
+        <value>Tracking number cannot exceed 128 characters.</value>
+    </data>
+    <data name="PurchaseOrder.TrackingUrlMaxLength" xml:space="preserve">
+        <value>Tracking URL cannot exceed 512 characters.</value>
+    </data>
+    <data name="ReturnRequest.AccessDenied" xml:space="preserve">
+        <value>You are not authorized to access this return request.</value>
+    </data>
+    <data name="ReturnRequest.DuplicateLinesNotAllowed" xml:space="preserve">
+        <value>A purchase order line cannot appear more than once in a return request.</value>
+    </data>
+    <data name="ReturnRequest.InvalidQuantity" xml:space="preserve">
+        <value>The requested return quantity exceeds the remaining returnable quantity.</value>
+    </data>
+    <data name="ReturnRequest.NotEligible" xml:space="preserve">
+        <value>This purchase order is not eligible for a return request.</value>
+    </data>
+    <data name="ReturnRequest.ReasonMaxLength" xml:space="preserve">
+        <value>Return reason cannot exceed 1024 characters.</value>
+    </data>
+    <data name="ReturnRequest.ResolutionNoteMaxLength" xml:space="preserve">
+        <value>Resolution note cannot exceed 1024 characters.</value>
+    </data>
+    <data name="ReturnRequest.NotApproved" xml:space="preserve">
+        <value>Only approved return requests can be received.</value>
+    </data>
+    <data name="ReturnRequest.AlreadyReceived" xml:space="preserve">
+        <value>This return request has already been received.</value>
+    </data>
+    <data name="ReturnRequest.InvalidReceiveQuantity" xml:space="preserve">
+        <value>Received quantity must be greater than zero and cannot exceed the approved return quantity.</value>
+    </data>
+    <data name="ReturnRequest.InvalidRestockQuantity" xml:space="preserve">
+        <value>Restock quantity cannot be negative or exceed the received quantity.</value>
+    </data>
+    <data name="ReturnRequest.CannotReceiveRejected" xml:space="preserve">
+        <value>Rejected return requests cannot be received.</value>
+    </data>
+    <data name="ReturnRequest.CannotReceivePending" xml:space="preserve">
+        <value>Pending return requests cannot be received before approval.</value>
+    </data>
+    <data name="ReturnRequest.ReceiveNotAllowed" xml:space="preserve">
+        <value>This return request cannot be received in its current state.</value>
+    </data>
+    <data name="ReturnRequestLine.NotFound" xml:space="preserve">
+        <value>Return request line was not found.</value>
+    </data>
+    <data name="Cart.EntityName" xml:space="preserve">
+        <value>Cart</value>
+    </data>
+    <data name="Cart.NotActive" xml:space="preserve">
+        <value>This cart is not active.</value>
+    </data>
+    <data name="Cart.PricePreviewInvalid" xml:space="preserve">
+        <value>The cart price preview is invalid.</value>
+    </data>
+    <data name="Payment.EntityName" xml:space="preserve">
+        <value>Payment</value>
+    </data>
+    <data name="Payment.AmountInvalid" xml:space="preserve">
+        <value>Payment amount is invalid.</value>
+    </data>
+    <data name="Payment.Expired" xml:space="preserve">
+        <value>This payment reservation has expired.</value>
+    </data>
+    <data name="Payment.FailureReasonMaxLength" xml:space="preserve">
+        <value>Payment failure reason cannot exceed 1024 characters.</value>
+    </data>
+    <data name="Payment.FailureReasonRequired" xml:space="preserve">
+        <value>A payment failure reason is required.</value>
+    </data>
+    <data name="Payment.IdempotencyConflict" xml:space="preserve">
+        <value>The idempotency key does not match this operation.</value>
+    </data>
+    <data name="Payment.IdempotencyKeyMaxLength" xml:space="preserve">
+        <value>Idempotency key cannot exceed 128 characters.</value>
+    </data>
+    <data name="Payment.IdempotencyKeyRequired" xml:space="preserve">
+        <value>Idempotency key is required for this payment operation.</value>
+    </data>
+    <data name="Payment.InvalidStateTransition" xml:space="preserve">
+        <value>The requested payment state transition is not allowed.</value>
+    </data>
+    <data name="Payment.NotExpired" xml:space="preserve">
+        <value>This payment reservation has not expired yet.</value>
+    </data>
+    <data name="Campaign.CouponCodeMaxLength" xml:space="preserve">
+        <value>Coupon code cannot exceed 64 characters.</value>
+    </data>
+    <data name="Campaign.CouponCodeRequired" xml:space="preserve">
+        <value>Coupon code is required.</value>
+    </data>
+    <data name="Campaign.FreeShippingDiscountMustBeZero" xml:space="preserve">
+        <value>Free shipping campaigns must use a zero discount value.</value>
+    </data>
+    <data name="Campaign.MinimumOrderAmountInvalid" xml:space="preserve">
+        <value>Minimum order amount cannot be negative.</value>
+    </data>
+    <data name="PurchaseOrder.AmountInvalid" xml:space="preserve">
+        <value>Purchase order amount is invalid.</value>
+    </data>
+    <data name="PurchaseOrder.StatusMustBePaymentPending" xml:space="preserve">
+        <value>This operation requires a purchase order pending payment.</value>
+    </data>
+    <data name="UserSaleRequest.EntityName" xml:space="preserve">
+        <value>User sale request</value>
+    </data>
+    <data name="UserSaleRequest.AccessDenied" xml:space="preserve">
+        <value>You are not authorized to access this sale request.</value>
+    </data>
+    <data name="UserSaleRequest.AmountInvalid" xml:space="preserve">
+        <value>The sale request amount is invalid.</value>
+    </data>
+    <data name="UserSaleRequest.DescriptionRequired" xml:space="preserve">
+        <value>Sale request description is required.</value>
+    </data>
+    <data name="UserSaleRequest.RejectionReasonRequired" xml:space="preserve">
+        <value>A rejection reason is required.</value>
+    </data>
+    <data name="UserSaleRequest.StatusMustBeApproved" xml:space="preserve">
+        <value>This operation requires an approved sale request.</value>
+    </data>
+    <data name="UserSaleRequest.StatusMustBePending" xml:space="preserve">
+        <value>This operation requires a pending sale request.</value>
+    </data>
+    <data name="UserSaleRequest.TitleRequired" xml:space="preserve">
+        <value>Sale request title is required.</value>
+    </data>
+    <data name="PartSaleOperation.EntityName" xml:space="preserve">
+        <value>Part sale operation</value>
+    </data>
 </root>

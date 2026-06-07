@@ -26,6 +26,7 @@ public class FacilityController : AuthorizedBaseController
     /// <param name="query">Pagination and filtering parameters</param>
     /// <returns>A paginated list of facilities</returns>
     /// <response code="200">Returns the requested page of facilities</response>
+    /// /// <response code="404">Associated organization not found.</response>
     [ProducesResponseType(typeof(PaginatedList<FacilityDto>), StatusCodes.Status200OK)]
     [RequireRoles(AppRoles.GeneralAdmin)]
     [HttpGet]

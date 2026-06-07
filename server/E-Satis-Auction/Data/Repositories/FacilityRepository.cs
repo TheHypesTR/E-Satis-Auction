@@ -62,19 +62,4 @@ public class FacilityRepository : GenericRepository<Facility>, IFacilityReposito
             .Select(f => new { f.Id, f.Name })
             .ToDictionaryAsync(f => f.Id, f => f.Name, cancellationToken);
     }
-
-    public async Task<List<Guid>> GetFacilityIdsByOrganizationIdsAsync(IEnumerable<Guid> organizationIds, CancellationToken cancellationToken = default)
-    {
-        List<Guid> ids = organizationIds.Distinct().ToList();
-        if (ids.Count is 0)
-        {
-            return [];
-        }
-
-        return await _dbSet
-            .AsNoTracking()
-            .Where(f => ids.Contains(f.OrganizationId))
-            .Select(f => f.Id)
-            .ToListAsync(cancellationToken);
-    }
 }

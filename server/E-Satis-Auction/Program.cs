@@ -15,9 +15,23 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
         .AddSupportedCultures(supportedCultures)
         .AddSupportedUICultures(supportedCultures);
 });
-builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        ValidationProblemDetails problemDetails = new(context.ModelState)
+        {
+            Status = StatusCodes.Status400BadRequest
+        };
 
-builder.Services.AddControllers().AddDataAnnotationsLocalization();
+        return new BadRequestObjectResult(problemDetails);
+    };
+});
+
+builder.Services.AddControllers(options =>
+{
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+}).AddDataAnnotationsLocalization();
 builder.Services.AddScalarOpenApi();
 
 builder.Services.AddPersistenceServices(builder.Configuration);
@@ -54,11 +68,11 @@ app.UseExceptionHandler();
 
 await app.SeedDatabaseAsync();
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.MapOpenApi();
     app.MapScalarApiReference();
-}
+//}
 
 app.UseHttpsRedirection();
 

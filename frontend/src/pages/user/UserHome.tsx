@@ -149,9 +149,8 @@ export default function UserHome() {
                 <Link
                   key={p.id}
                   to={`/user/catalog/${p.id}`}
-                  style={{ textDecoration: 'none' }}
                   className="user-product-card animate-fade-up"
-                  style={{ animationDelay: `${i * 0.06}s` } as React.CSSProperties}
+                  style={{ textDecoration: 'none', animationDelay: `${i * 0.06}s` } as React.CSSProperties}
                 >
                   <div className="user-product-img" style={{ background: grad }}>
                     <ShoppingBag size={36} color="rgba(255,255,255,0.6)" />

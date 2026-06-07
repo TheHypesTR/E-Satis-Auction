@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search, Filter, ShoppingBag, Package, X, ChevronDown } from 'lucide-react';
 import api from '../../api/axios';
@@ -52,14 +52,6 @@ export default function UserCatalog() {
   const [addedId, setAddedId]     = useState<string | null>(null);
 
   const { addItem } = useCart();
-
-  const fetchProducts = useCallback(() => {
-    setLoading(true);
-    api.get('/Product?pageSize=50').then(res => {
-      const data = res.data?.items || res.data?.data || [];
-      setProducts(data);
-    }).catch(() => setProducts([])).finally(() => setLoading(false));
-  }, []);
 
   useEffect(() => {
     void api.get('/Product?pageSize=50').then(res => {
@@ -213,9 +205,8 @@ export default function UserCatalog() {
               <Link
                 key={p.id}
                 to={`/user/catalog/${p.id}`}
-                style={{ textDecoration: 'none' }}
                 className={`user-product-card animate-fade-up`}
-                style={{ animationDelay: `${Math.min(i, 8) * 0.05}s` } as React.CSSProperties}
+                style={{ textDecoration: 'none', animationDelay: `${Math.min(i, 8) * 0.05}s` } as React.CSSProperties}
               >
                 <div className="user-product-img" style={{ background: grad }}>
                   <ShoppingBag size={36} color="rgba(255,255,255,0.6)" />

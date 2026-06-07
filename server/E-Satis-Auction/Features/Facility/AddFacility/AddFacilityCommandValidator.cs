@@ -15,9 +15,6 @@ public class AddFacilityCommandValidator : AbstractValidator<AddFacilityCommand>
             .NotEmpty().WithMessage(ErrorMessages.Validation.DescriptionRequired)
             .Length(10, 2000).WithMessage(ErrorMessages.Validation.DescriptionLength);
 
-        RuleFor(x => x.OrganizationId)
-            .NotEmpty().WithMessage(ErrorMessages.Validation.InvalidIdentifier);
-
         RuleFor(x => x.CapacityM3)
             .GreaterThan(0).WithMessage(ErrorMessages.Validation.CapacityInvalid);
 

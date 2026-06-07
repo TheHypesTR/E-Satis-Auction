@@ -14,7 +14,6 @@ public class Facility : BaseEntity
 
     public Guid AddressId { get; private set; }
     public Address Address { get; private set; } = null!;
-    public Guid OrganizationId { get; private set; }
     public ICollection<FacilityManager> Managers { get; private set; } = new List<FacilityManager>();
 
     protected Facility()

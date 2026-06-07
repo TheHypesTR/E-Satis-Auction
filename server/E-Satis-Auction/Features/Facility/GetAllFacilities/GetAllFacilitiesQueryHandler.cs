@@ -53,11 +53,6 @@ public class GetAllFacilitiesQueryHandler : IQueryHandler<GetAllFacilitiesQuery,
         {
             query = query.Where(f => f.Status == filters.Status.Value);
         }
-
-        if (filters.OrganizationId.HasValue)
-        {
-            query = query.Where(f => f.OrganizationId == filters.OrganizationId.Value);
-        }
         
         if (!string.IsNullOrWhiteSpace(filters.City))
         {

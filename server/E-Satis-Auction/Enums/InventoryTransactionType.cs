@@ -10,5 +10,11 @@ public enum InventoryTransactionType
     Cancelled = 6,
     Damaged = 7,
     Archived = 8,
-    Adjusted = 9
+    Adjusted = 9,
+    PurchaseReserved = 10,
+    PurchaseReleased = 11,
+    PurchaseShipped = 12,
+    PurchaseReturned = 13,
+    PartSaleConsumed = 14,
+    PartSaleCreated = 15
 }

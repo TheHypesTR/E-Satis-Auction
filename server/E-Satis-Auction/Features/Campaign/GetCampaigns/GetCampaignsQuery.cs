@@ -1,0 +1,12 @@
+using E_Satis_Auction.Common.Interfaces.Messaging;
+using E_Satis_Auction.Common.Models;
+using E_Satis_Auction.Dtos.Commerce;
+using E_Satis_Auction.Enums;
+
+namespace E_Satis_Auction.Features.Campaign.GetCampaigns;
+
+public sealed record GetCampaignsQuery(
+    CampaignStatus? Status = null,
+    CampaignScope? Scope = null,
+    int PageNumber = 1,
+    int PageSize = 10) : IQuery<PaginatedList<CampaignDto>>, IPaginatedQuery;
