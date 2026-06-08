@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, CreditCard, CheckCircle2, ChevronRight, Lock, AlertCircle } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import api from '../../api/axios';
 
 type Step = 'address' | 'payment' | 'review';
 
@@ -86,12 +87,32 @@ export default function UserCheckout() {
     if (idx < steps.length - 1) setStep(steps[idx + 1].key);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (items.length === 0) return;
     setLoading(true);
-    setTimeout(() => {
+    setCardError('');
+    try {
+      // 1. Önce sepeti backend'e senkronize et (Çünkü Payments/initiate backend cart üzerinden çalışıyor)
+      await api.put('/Cart/listing', {
+        productListingId: items[0].id,
+        quantity: items[0].quantity
+      });
+
+      // 2. Ödemeyi başlat
+      const idempotencyKey = `checkout_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+      await api.post('/Payments/initiate', {
+        idempotencyKey
+      });
+
+      // Başarılı
       clearCart();
       navigate('/user/order-success');
-    }, 1800);
+    } catch (err: any) {
+      console.error(err);
+      setCardError('Ödeme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (items.length === 0) {

@@ -25,11 +25,11 @@ const MOCK_CARDS = [
 ];
 
 const tabs = [
-  { key: 'orders',    label: 'Siparişlerim',    icon: Package },
-  { key: 'addresses', label: 'Adreslerim',      icon: MapPin },
-  { key: 'cards',     label: 'Kayıtlı Kartlarım',icon: CreditCard },
-  { key: 'security',  label: 'Güvenlik',        icon: Shield },
-  { key: 'notifs',    label: 'Bildirimler',     icon: Bell },
+  { key: 'orders', label: 'Siparişlerim', icon: Package },
+  { key: 'addresses', label: 'Adreslerim', icon: MapPin },
+  { key: 'cards', label: 'Kayıtlı Kartlarım', icon: CreditCard },
+  { key: 'security', label: 'Güvenlik', icon: Shield },
+  { key: 'notifs', label: 'Bildirimler', icon: Bell },
 ];
 
 const statusTranslations: Record<string, string> = {
@@ -43,9 +43,9 @@ const statusTranslations: Record<string, string> = {
 };
 
 const statusConfig: Record<string, { badge: string; dot: string }> = {
-  'Delivered': { badge: 'badge-green',  dot: '#6ee7b7' },
-  'Shipped':       { badge: 'badge-blue',   dot: '#93c5fd' },
-  'PendingApproval':     { badge: 'badge-amber',  dot: '#fcd34d' },
+  'Delivered': { badge: 'badge-green', dot: '#6ee7b7' },
+  'Shipped': { badge: 'badge-blue', dot: '#93c5fd' },
+  'PendingApproval': { badge: 'badge-amber', dot: '#fcd34d' },
   'Approved': { badge: 'badge-blue', dot: '#93c5fd' },
   'Cancelled': { badge: 'badge-red', dot: '#f87171' },
   'Rejected': { badge: 'badge-red', dot: '#f87171' },
@@ -318,10 +318,10 @@ export default function UserProfile() {
               <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: 20 }}>Bildirim Tercihleri</h2>
               <div className="glass-card" style={{ padding: '24px' }}>
                 {[
-                  { label: 'Sipariş Güncellemeleri',  sub: 'Kargo ve teslimat bildirimleri',     on: true },
-                  { label: 'Kampanyalar',              sub: 'İndirim ve promosyon haberleri',     on: false },
-                  { label: 'Fiyat Düşüşleri',         sub: 'Takip ettiğin ürün fiyat bildirimi', on: true },
-                  { label: 'Güvenlik Uyarıları',      sub: 'Hesap giriş ve şifre uyarıları',     on: true },
+                  { label: 'Sipariş Güncellemeleri', sub: 'Kargo ve teslimat bildirimleri', on: true },
+                  { label: 'Kampanyalar', sub: 'İndirim ve promosyon haberleri', on: false },
+                  { label: 'Fiyat Düşüşleri', sub: 'Takip ettiğin ürün fiyat bildirimi', on: true },
+                  { label: 'Güvenlik Uyarıları', sub: 'Hesap giriş ve şifre uyarıları', on: true },
                 ].map((n, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0', borderBottom: i < 3 ? '1px solid var(--glass-border)' : 'none' }}>
                     <div>
@@ -409,7 +409,7 @@ export default function UserProfile() {
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
               <button className="btn btn-ghost" onClick={() => setShowAddCard(false)}>İptal</button>
               <button className="btn btn-primary" onClick={() => handleMockAction(setShowAddCard)}>
-                {actionSaved ? <><Check size={16}/> Kaydedildi</> : 'Kaydet'}
+                {actionSaved ? <><Check size={16} /> Kaydedildi</> : 'Kaydet'}
               </button>
             </div>
           </div>
@@ -446,7 +446,7 @@ export default function UserProfile() {
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
               <button className="btn btn-ghost" onClick={() => setShowCancelOrderModal(false)}>Vazgeç</button>
               <button className="btn" style={{ background: 'rgba(248,113,113,0.15)', color: '#f87171', border: '1px solid rgba(248,113,113,0.3)' }} onClick={() => handleMockAction(setShowCancelOrderModal)}>
-                {actionSaved ? <><Check size={16}/> İptal Edildi</> : 'Evet, İptal Et'}
+                {actionSaved ? <><Check size={16} /> İptal Edildi</> : 'Evet, İptal Et'}
               </button>
             </div>
           </div>
