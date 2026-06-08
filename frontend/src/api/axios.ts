@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://e-satis.thehypes.tr/api', // LaunchSettings.json'a göre belirlenmiş URL
+  baseURL: '/api', // Vite proxy üzerinden yönlendirilecek
   headers: {
     'Content-Type': 'application/json',
   },
