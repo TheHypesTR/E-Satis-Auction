@@ -8,8 +8,16 @@ interface ReturnRequest {
   userDisplayName: string;
   reason: string;
   createdAt: string;
-  status: string;
+  status: string | number;
 }
+
+const statusEnumMap: Record<number, string> = {
+  1: 'Pending',
+  2: 'Approved',
+  3: 'Rejected',
+  4: 'Received',
+  5: 'Cancelled'
+};
 
 const statusColors: Record<string, string> = {
   'Pending': 'amber',
@@ -123,8 +131,9 @@ export default function Returns() {
             </thead>
             <tbody>
               {filtered.map((r) => {
-                const colorKey = statusColors[r.status] || 'purple';
-                const statusName = statusTranslations[r.status] || r.status;
+                const statusStr = typeof r.status === 'number' ? statusEnumMap[r.status] : r.status;
+                const colorKey = statusColors[statusStr] || 'purple';
+                const statusName = statusTranslations[statusStr] || statusStr;
                 return (
                   <tr key={r.id}>
                     <td>
@@ -166,7 +175,9 @@ export default function Returns() {
       </div>
 
       {/* Return Management Modal */}
-      {selectedReturn && (
+      {selectedReturn && (() => {
+        const statusStr = typeof selectedReturn.status === 'number' ? statusEnumMap[selectedReturn.status] : selectedReturn.status;
+        return (
         <div className="modal-overlay" onClick={() => setSelectedReturn(null)}>
           <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, width: '100%' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
@@ -183,22 +194,22 @@ export default function Returns() {
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: 4 }}>İade Sebebi:</p>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)' }}>{selectedReturn.reason}</p>
               </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 24 }}>Mevcut Durum: <span className={`badge badge-${statusColors[selectedReturn.status]}`}>{statusTranslations[selectedReturn.status] || selectedReturn.status}</span></p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 24 }}>Mevcut Durum: <span className={`badge badge-${statusColors[statusStr]}`}>{statusTranslations[statusStr] || statusStr}</span></p>
 
               <div className="glow-divider" style={{ marginBottom: 20 }} />
 
               <h3 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: 12 }}>İşlem Yap</h3>
               <div style={{ display: 'flex', gap: 12 }}>
                 <button 
-                  className={`btn ${selectedReturn.status === 'Approved' ? 'btn-primary' : 'btn-ghost'}`}
+                  className={`btn ${statusStr === 'Approved' ? 'btn-primary' : 'btn-ghost'}`}
                   style={{ flex: 1, gap: 8, padding: '10px' }}
                   onClick={() => handleUpdateStatus(selectedReturn.id, 'approve')}
                 >
                   <CheckCircle size={16} /> Onayla
                 </button>
                 <button 
-                  className={`btn ${selectedReturn.status === 'Rejected' ? 'btn-primary' : 'btn-ghost'}`}
-                  style={{ flex: 1, gap: 8, padding: '10px', color: selectedReturn.status !== 'Rejected' ? '#f87171' : undefined }}
+                  className={`btn ${statusStr === 'Rejected' ? 'btn-primary' : 'btn-ghost'}`}
+                  style={{ flex: 1, gap: 8, padding: '10px', color: statusStr !== 'Rejected' ? '#f87171' : undefined }}
                   onClick={() => handleUpdateStatus(selectedReturn.id, 'reject')}
                 >
                   <XCircle size={16} /> Reddet
@@ -211,7 +222,8 @@ export default function Returns() {
             </div>
           </div>
         </div>
-      )}
+        );
+      })()}
     </div>
   );
 }

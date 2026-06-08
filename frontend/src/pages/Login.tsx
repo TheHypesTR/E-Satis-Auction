@@ -20,10 +20,22 @@ export default function Login() {
       const token = response.data?.accessToken || response.data?.token;
       if (token) {
         localStorage.setItem('token', token);
+        // Fetch user profile to determine role
+        try {
+          const meResponse = await api.get('/Auth/me', { headers: { Authorization: `Bearer ${token}` } });
+          const roles = meResponse.data?.roles || [];
+          if (roles.includes('Admin') || roles.includes('SystemAdmin')) {
+            navigate('/dashboard');
+          } else {
+            navigate('/user/catalog');
+          }
+        } catch {
+          navigate('/user/catalog'); // Fallback
+        }
       } else {
         localStorage.setItem('token', 'dev-token');
+        navigate('/dashboard');
       }
-      navigate('/dashboard');
     } catch {
       setError('Giriş başarısız. E-posta veya şifre hatalı.');
     } finally {

@@ -33,6 +33,9 @@ export default function Products() {
   const [showAddProductModal, setShowAddProductModal] = useState(false);
   const [showEditProductModal, setShowEditProductModal] = useState(false);
   const [showDeleteProductModal, setShowDeleteProductModal] = useState(false);
+  const [showAuctionModal, setShowAuctionModal] = useState(false);
+  const [auctionStartingPrice, setAuctionStartingPrice] = useState('');
+  const [auctionDuration, setAuctionDuration] = useState('60'); // minutes
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [actionSaved, setActionSaved] = useState(false);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
@@ -57,15 +60,27 @@ export default function Products() {
     setProducts(prev => prev.map(p => p.id === id ? { ...p, saleStatus: newStatus } : p));
   };
 
-  const handleSaveCampaign = () => {
+  const handleSaveCampaign = async () => {
     if (!campaignTitle || !campaignDiscount) return;
-    setCampaignSaved(true);
-    setTimeout(() => {
-      setCampaignSaved(false);
-      setShowCampaignModal(false);
-      setCampaignTitle('');
-      setCampaignDiscount('');
-    }, 1500);
+    try {
+      await api.post('/AdminCampaign', {
+        name: campaignTitle,
+        description: 'Frontend üzerinden eklendi',
+        scope: 3, // CartOrder (Global)
+        discountType: 1, // Percentage
+        discountValue: Number(campaignDiscount),
+        currency: 'TRY'
+      });
+      setCampaignSaved(true);
+      setTimeout(() => {
+        setCampaignSaved(false);
+        setShowCampaignModal(false);
+        setCampaignTitle('');
+        setCampaignDiscount('');
+      }, 1500);
+    } catch (err) {
+      console.error('Campaign save failed', err);
+    }
   };
 
   const handleMockAction = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
@@ -184,9 +199,12 @@ export default function Products() {
                             <MoreVertical size={14} />
                           </button>
                           {activeMenuId === p.id && (
-                            <div style={{ position: 'absolute', right: 0, top: '100%', marginTop: 4, background: 'var(--bg-secondary)', border: '1px solid var(--glass-border)', borderRadius: 8, padding: 4, zIndex: 10, minWidth: 120, display: 'flex', flexDirection: 'column', gap: 2, textAlign: 'left' }}>
+                            <div style={{ position: 'absolute', right: 0, top: '100%', marginTop: 4, background: 'var(--bg-secondary)', border: '1px solid var(--glass-border)', borderRadius: 8, padding: 4, zIndex: 10, minWidth: 160, display: 'flex', flexDirection: 'column', gap: 2, textAlign: 'left' }}>
                               <button className="btn btn-ghost" style={{ justifyContent: 'flex-start', padding: '6px 12px', fontSize: '0.8rem', gap: 8 }} onClick={() => { setSelectedProduct(p); setShowEditProductModal(true); setActiveMenuId(null); }}>
                                 <Edit2 size={12} /> Düzenle
+                              </button>
+                              <button className="btn btn-ghost" style={{ justifyContent: 'flex-start', padding: '6px 12px', fontSize: '0.8rem', gap: 8, color: '#a78bfa' }} onClick={() => { setSelectedProduct(p); setShowAuctionModal(true); setActiveMenuId(null); }}>
+                                <Play size={12} /> Açık Artırma Başlat
                               </button>
                               <button className="btn btn-ghost" style={{ justifyContent: 'flex-start', padding: '6px 12px', fontSize: '0.8rem', color: '#f87171', gap: 8 }} onClick={() => { setSelectedProduct(p); setShowDeleteProductModal(true); setActiveMenuId(null); }}>
                                 <Trash2 size={12} /> Sil
@@ -263,6 +281,80 @@ export default function Products() {
               <button className="btn btn-ghost" onClick={() => setShowCampaignModal(false)}>İptal</button>
               <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleSaveCampaign}>
                 {campaignSaved ? <><Check size={16} /> Kaydedildi</> : 'Kampanyayı Başlat'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Auction Modal */}
+      {showAuctionModal && selectedProduct && (
+        <div className="modal-overlay" onClick={() => setShowAuctionModal(false)}>
+          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 450, width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, color: '#a78bfa' }}>
+                <Play size={20} /> Açık Artırma Başlat
+              </h2>
+              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowAuctionModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            
+            <p style={{ color: 'var(--text-muted)', marginBottom: 20, fontSize: '0.9rem' }}>
+              <strong style={{ color: 'var(--text-primary)' }}>{selectedProduct.name}</strong> için açık artırma ayarlarını yapılandırın.
+            </p>
+
+            <div style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div className="form-group">
+                <label className="form-label">Başlangıç Fiyatı (₺)</label>
+                <input
+                  type="number"
+                  className="form-input"
+                  placeholder="Örn: 1500"
+                  value={auctionStartingPrice}
+                  onChange={e => setAuctionStartingPrice(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Süre (Dakika)</label>
+                <input
+                  type="number"
+                  className="form-input"
+                  placeholder="Örn: 60"
+                  value={auctionDuration}
+                  onChange={e => setAuctionDuration(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+              <button className="btn btn-ghost" onClick={() => setShowAuctionModal(false)}>İptal</button>
+              <button className="btn btn-primary" style={{ gap: 8 }} onClick={async () => {
+                if (!auctionStartingPrice || !auctionDuration) return;
+                try {
+                  // MOCK: In a real system, you'd need the ProductListingId, not the ProductId
+                  const res = await api.post('/AdminAuction', {
+                    productListingId: selectedProduct.id, 
+                    startingPrice: Number(auctionStartingPrice),
+                    minimumBidIncrement: 10,
+                    startsAt: new Date().toISOString(),
+                    endsAt: new Date(Date.now() + Number(auctionDuration) * 60000).toISOString()
+                  });
+                  // Optionally schedule it
+                  await api.put(`/AdminAuction/${res.data.id}/schedule`);
+                  
+                  setActionSaved(true);
+                  setTimeout(() => {
+                    setActionSaved(false);
+                    setShowAuctionModal(false);
+                    setAuctionStartingPrice('');
+                    setAuctionDuration('60');
+                  }, 1500);
+                } catch (err) {
+                  console.error('Auction creation failed', err);
+                }
+              }}>
+                {actionSaved ? <><Check size={16} /> Başlatıldı</> : 'Açık Artırmayı Başlat'}
               </button>
             </div>
           </div>
