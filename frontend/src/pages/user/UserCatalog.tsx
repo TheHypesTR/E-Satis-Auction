@@ -26,11 +26,7 @@ const GRADIENTS = [
   'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
 ];
 
-const MOCK_PRICE = (sku: string) => {
-  let h = 0;
-  for (let i = 0; i < sku.length; i++) h = (h * 31 + sku.charCodeAt(i)) >>> 0;
-  return (50 + (h % 950));
-};
+
 
 const sortOptions = [
   { value: 'default', label: 'Varsayılan Sıralama' },
@@ -76,7 +72,7 @@ export default function UserCatalog() {
   const handleAddToCart = (p: Product, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const price = p.price ?? MOCK_PRICE(p.sku);
+    const price = p.price ?? 0;
     addItem({
       id: p.id, name: p.name, sku: p.sku, price,
       categoryName: p.categoryName,
@@ -96,8 +92,8 @@ export default function UserCatalog() {
 
   if (sort === 'name_asc')   filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
   if (sort === 'name_desc')  filtered = [...filtered].sort((a, b) => b.name.localeCompare(a.name));
-  if (sort === 'price_asc')  filtered = [...filtered].sort((a, b) => MOCK_PRICE(a.sku) - MOCK_PRICE(b.sku));
-  if (sort === 'price_desc') filtered = [...filtered].sort((a, b) => MOCK_PRICE(b.sku) - MOCK_PRICE(a.sku));
+  if (sort === 'price_asc')  filtered = [...filtered].sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
+  if (sort === 'price_desc') filtered = [...filtered].sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
 
   return (
     <div className="user-page">
@@ -198,7 +194,7 @@ export default function UserCatalog() {
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 20 }}>
           {filtered.map((p, i) => {
-            const price = p.price ?? MOCK_PRICE(p.sku);
+            const price = p.price ?? 0;
             const grad  = GRADIENTS[i % GRADIENTS.length];
             const isAdded = addedId === p.id;
             return (

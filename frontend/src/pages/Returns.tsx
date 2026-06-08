@@ -1,42 +1,71 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Filter, RefreshCcw, CheckCircle, XCircle, X } from 'lucide-react';
+import api from '../api/axios';
 
 interface ReturnRequest {
   id: string;
   orderNumber: string;
-  customerName: string;
+  userDisplayName: string;
   reason: string;
-  date: string;
-  status: 'Bekliyor' | 'Onaylandı' | 'Reddedildi';
+  createdAt: string;
+  status: string;
 }
 
-const MOCK_RETURNS: ReturnRequest[] = [
-  { id: '1', orderNumber: 'ESA-A4F2B1', customerName: 'Ali Yılmaz', reason: 'Ürün hasarlı geldi', date: '2026-05-28', status: 'Bekliyor' },
-  { id: '2', orderNumber: 'ESA-C8D3E0', customerName: 'Ayşe Demir', reason: 'Beklediğim gibi çıkmadı', date: '2026-05-22', status: 'Onaylandı' },
-  { id: '3', orderNumber: 'ESA-F1A9B7', customerName: 'Mehmet Kaya', reason: 'Yanlış ürün gönderilmiş', date: '2026-05-11', status: 'Reddedildi' },
-];
-
 const statusColors: Record<string, string> = {
-  'Bekliyor': 'amber',
-  'Onaylandı': 'green',
-  'Reddedildi': 'red',
+  'Pending': 'amber',
+  'Approved': 'green',
+  'Rejected': 'red',
+  'Received': 'blue',
+  'Cancelled': 'gray'
+};
+
+const statusTranslations: Record<string, string> = {
+  'Pending': 'Bekliyor',
+  'Approved': 'Onaylandı',
+  'Rejected': 'Reddedildi',
+  'Received': 'Teslim Alındı',
+  'Cancelled': 'İptal Edildi'
 };
 
 export default function Returns() {
-  const [returns, setReturns] = useState<ReturnRequest[]>(MOCK_RETURNS);
+  const [returns, setReturns] = useState<ReturnRequest[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedReturn, setSelectedReturn] = useState<ReturnRequest | null>(null);
 
+  const fetchReturns = () => {
+    setLoading(true);
+    api.get('/AdminReturnRequest')
+      .then(res => {
+        const data = res.data?.items || res.data?.data || [];
+        setReturns(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setReturns([]);
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchReturns();
+  }, []);
+
   const filtered = returns.filter(r =>
     r.orderNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    r.customerName.toLowerCase().includes(searchTerm.toLowerCase())
+    (r.userDisplayName && r.userDisplayName.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  const handleUpdateStatus = (id: string, newStatus: ReturnRequest['status']) => {
-    setReturns(prev => prev.map(r => r.id === id ? { ...r, status: newStatus } : r));
-    if (selectedReturn && selectedReturn.id === id) {
-      setSelectedReturn({ ...selectedReturn, status: newStatus });
-    }
+  const handleUpdateStatus = (id: string, action: 'approve' | 'reject' | 'receive') => {
+    api.put(`/AdminReturnRequest/${id}/${action}`, {})
+      .then(() => {
+        // Refresh list
+        fetchReturns();
+        setSelectedReturn(null);
+      })
+      .catch(err => {
+        console.error('Status update failed', err);
+      });
   };
 
   return (
@@ -70,7 +99,12 @@ export default function Returns() {
           </div>
         </div>
 
-        {filtered.length === 0 ? (
+        {loading ? (
+           <div style={{ padding: '60px 0', textAlign: 'center', color: 'var(--text-muted)' }}>
+             <RefreshCcw size={32} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
+             <p>Yükleniyor...</p>
+           </div>
+        ) : filtered.length === 0 ? (
            <div style={{ padding: '60px 0', textAlign: 'center', color: 'var(--text-muted)' }}>
              <RefreshCcw size={32} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
              <p>İade talebi bulunamadı.</p>
@@ -90,6 +124,7 @@ export default function Returns() {
             <tbody>
               {filtered.map((r) => {
                 const colorKey = statusColors[r.status] || 'purple';
+                const statusName = statusTranslations[r.status] || r.status;
                 return (
                   <tr key={r.id}>
                     <td>
@@ -99,18 +134,18 @@ export default function Returns() {
                     </td>
                     <td>
                       <div style={{ fontWeight: 500, color: 'var(--text-primary)', fontSize: '0.92rem' }}>
-                        {r.customerName}
+                        {r.userDisplayName}
                       </div>
                     </td>
                     <td>
-                      <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{r.date}</span>
+                      <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{new Date(r.createdAt).toLocaleDateString('tr-TR')}</span>
                     </td>
                     <td>
                       <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{r.reason}</span>
                     </td>
                     <td>
                       <span className={`badge badge-${colorKey}`}>
-                        {r.status}
+                        {statusName}
                       </span>
                     </td>
                     <td style={{ textAlign: 'right' }}>
@@ -143,28 +178,28 @@ export default function Returns() {
 
             <div style={{ marginBottom: 24 }}>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8 }}>Sipariş No: <strong style={{ color: 'var(--text-primary)' }}>{selectedReturn.orderNumber}</strong></p>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8 }}>Müşteri: <strong style={{ color: 'var(--text-primary)' }}>{selectedReturn.customerName}</strong></p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8 }}>Müşteri: <strong style={{ color: 'var(--text-primary)' }}>{selectedReturn.userDisplayName}</strong></p>
               <div style={{ padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: 8, border: '1px solid var(--glass-border)', margin: '12px 0' }}>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: 4 }}>İade Sebebi:</p>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)' }}>{selectedReturn.reason}</p>
               </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 24 }}>Mevcut Durum: <span className={`badge badge-${statusColors[selectedReturn.status]}`}>{selectedReturn.status}</span></p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 24 }}>Mevcut Durum: <span className={`badge badge-${statusColors[selectedReturn.status]}`}>{statusTranslations[selectedReturn.status] || selectedReturn.status}</span></p>
 
               <div className="glow-divider" style={{ marginBottom: 20 }} />
 
               <h3 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: 12 }}>İşlem Yap</h3>
               <div style={{ display: 'flex', gap: 12 }}>
                 <button 
-                  className={`btn ${selectedReturn.status === 'Onaylandı' ? 'btn-primary' : 'btn-ghost'}`}
+                  className={`btn ${selectedReturn.status === 'Approved' ? 'btn-primary' : 'btn-ghost'}`}
                   style={{ flex: 1, gap: 8, padding: '10px' }}
-                  onClick={() => handleUpdateStatus(selectedReturn.id, 'Onaylandı')}
+                  onClick={() => handleUpdateStatus(selectedReturn.id, 'approve')}
                 >
                   <CheckCircle size={16} /> Onayla
                 </button>
                 <button 
-                  className={`btn ${selectedReturn.status === 'Reddedildi' ? 'btn-primary' : 'btn-ghost'}`}
-                  style={{ flex: 1, gap: 8, padding: '10px', color: selectedReturn.status !== 'Reddedildi' ? '#f87171' : undefined }}
-                  onClick={() => handleUpdateStatus(selectedReturn.id, 'Reddedildi')}
+                  className={`btn ${selectedReturn.status === 'Rejected' ? 'btn-primary' : 'btn-ghost'}`}
+                  style={{ flex: 1, gap: 8, padding: '10px', color: selectedReturn.status !== 'Rejected' ? '#f87171' : undefined }}
+                  onClick={() => handleUpdateStatus(selectedReturn.id, 'reject')}
                 >
                   <XCircle size={16} /> Reddet
                 </button>

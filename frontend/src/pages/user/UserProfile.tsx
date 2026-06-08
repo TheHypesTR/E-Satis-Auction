@@ -5,20 +5,23 @@ import {
   Edit3, LogOut, ShoppingBag, Clock, CreditCard, X
 } from 'lucide-react';
 
-const MOCK_ORDERS = [
-  { id: 'ESA-A4F2B1', date: '27 Mayıs 2026', total: '₺2.340', status: 'Teslim Edildi', items: 3 },
-  { id: 'ESA-C8D3E0', date: '21 Mayıs 2026', total: '₺890',   status: 'Kargoda',       items: 1 },
-  { id: 'ESA-F1A9B7', date: '10 Mayıs 2026', total: '₺5.120', status: 'Teslim Edildi', items: 7 },
-];
+import { useEffect } from 'react';
+import api from '../api/axios';
+
+interface Order {
+  id: string;
+  orderNumber: string;
+  totalAmount: number;
+  createdAt: string;
+  status: string;
+}
 
 const MOCK_ADDRESSES = [
-  { label: 'Ev', full: 'Bağcılar Mah. Atatürk Cad. No:14/3 Kadıköy / İstanbul 34000' },
-  { label: 'İş', full: 'Maslak Plaza Kat:7 Sarıyer / İstanbul 34398' },
+  { label: 'Ev', full: 'Merkez Mah. Bor Cad. No:1 Niğde Merkez / Niğde 51000' },
 ];
 
 const MOCK_CARDS = [
-  { id: '1', bank: 'Garanti BBVA', last4: '4532', brand: 'Mastercard' },
-  { id: '2', bank: 'İş Bankası', last4: '9812', brand: 'Visa' },
+  { id: '1', bank: 'Ziraat Bankası', last4: '1234', brand: 'Troy' },
 ];
 
 const tabs = [
@@ -29,10 +32,24 @@ const tabs = [
   { key: 'notifs',    label: 'Bildirimler',     icon: Bell },
 ];
 
+const statusTranslations: Record<string, string> = {
+  'PendingApproval': 'Bekliyor',
+  'Approved': 'Onaylandı',
+  'Shipped': 'Kargolandı',
+  'Cancelled': 'İptal',
+  'Rejected': 'Reddedildi',
+  'Delivered': 'Teslim Edildi',
+  'PaymentPending': 'Ödeme Bekleniyor'
+};
+
 const statusConfig: Record<string, { badge: string; dot: string }> = {
-  'Teslim Edildi': { badge: 'badge-green',  dot: '#6ee7b7' },
-  'Kargoda':       { badge: 'badge-blue',   dot: '#93c5fd' },
-  'İşleniyor':     { badge: 'badge-amber',  dot: '#fcd34d' },
+  'Delivered': { badge: 'badge-green',  dot: '#6ee7b7' },
+  'Shipped':       { badge: 'badge-blue',   dot: '#93c5fd' },
+  'PendingApproval':     { badge: 'badge-amber',  dot: '#fcd34d' },
+  'Approved': { badge: 'badge-blue', dot: '#93c5fd' },
+  'Cancelled': { badge: 'badge-red', dot: '#f87171' },
+  'Rejected': { badge: 'badge-red', dot: '#f87171' },
+  'PaymentPending': { badge: 'badge-amber', dot: '#fcd34d' }
 };
 
 export default function UserProfile() {
@@ -41,6 +58,22 @@ export default function UserProfile() {
   const [editing, setEditing] = useState(false);
   const [userName, setUserName] = useState('Kullanıcı');
   const [userEmail, setUserEmail] = useState('kullanici@esatis.com');
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+
+  useEffect(() => {
+    setLoadingOrders(true);
+    api.get('/PurchaseOrder')
+      .then(res => {
+        const data = res.data?.items || res.data?.data || [];
+        setOrders(data);
+        setLoadingOrders(false);
+      })
+      .catch(() => {
+        setOrders([]);
+        setLoadingOrders(false);
+      });
+  }, []);
 
   // Modals
   const [showAddAddress, setShowAddAddress] = useState(false);
@@ -136,7 +169,11 @@ export default function UserProfile() {
           {activeTab === 'orders' && (
             <div>
               <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: 20 }}>Sipariş Geçmişi</h2>
-              {MOCK_ORDERS.length === 0 ? (
+              {loadingOrders ? (
+                <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-muted)' }}>
+                  <p>Siparişler yükleniyor...</p>
+                </div>
+              ) : orders.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-muted)' }}>
                   <ShoppingBag size={40} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
                   <p>Henüz siparişiniz bulunmuyor.</p>
@@ -144,8 +181,8 @@ export default function UserProfile() {
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                  {MOCK_ORDERS.map(order => {
-                    const cfg = statusConfig[order.status] ?? statusConfig['İşleniyor'];
+                  {orders.map(order => {
+                    const cfg = statusConfig[order.status] ?? statusConfig['PendingApproval'];
                     return (
                       <div key={order.id} className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '20px 24px' }}>
                         <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -153,18 +190,18 @@ export default function UserProfile() {
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4, flexWrap: 'wrap' }}>
-                            <code style={{ fontWeight: 700, color: '#a78bfa', fontSize: '0.9rem' }}>{order.id}</code>
+                            <code style={{ fontWeight: 700, color: '#a78bfa', fontSize: '0.9rem' }}>{order.orderNumber}</code>
                             <span className={`badge ${cfg.badge}`}>
                               <span style={{ width: 5, height: 5, borderRadius: '50%', background: cfg.dot, display: 'inline-block' }} />
-                              {order.status}
+                              {statusTranslations[order.status] || order.status}
                             </span>
                           </div>
                           <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                            <Clock size={12} /> {order.date} · {order.items} ürün
+                            <Clock size={12} /> {new Date(order.createdAt).toLocaleDateString('tr-TR')}
                           </div>
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>{order.total}</div>
+                          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>₺{order.totalAmount.toLocaleString('tr-TR')}</div>
                           <button className="btn btn-ghost" style={{ padding: '5px 12px', fontSize: '0.78rem', marginTop: 6 }}>Detay</button>
                         </div>
                       </div>

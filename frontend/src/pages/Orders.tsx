@@ -1,43 +1,74 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Filter, Package, CheckCircle, Truck, X } from 'lucide-react';
+import api from '../api/axios';
 
 interface Order {
   id: string;
   orderNumber: string;
-  customerName: string;
+  userDisplayName: string;
   totalAmount: number;
-  date: string;
-  status: 'Bekliyor' | 'Onaylandı' | 'Kargolandı' | 'İptal';
+  createdAt: string;
+  status: string;
 }
 
-const MOCK_ORDERS: Order[] = [
-  { id: '1', orderNumber: 'ESA-A4F2B1', customerName: 'Ali Yılmaz', totalAmount: 2340, date: '2026-05-27', status: 'Bekliyor' },
-  { id: '2', orderNumber: 'ESA-C8D3E0', customerName: 'Ayşe Demir', totalAmount: 890, date: '2026-05-21', status: 'Onaylandı' },
-  { id: '3', orderNumber: 'ESA-F1A9B7', customerName: 'Mehmet Kaya', totalAmount: 5120, date: '2026-05-10', status: 'Kargolandı' },
-];
-
 const statusColors: Record<string, string> = {
-  'Bekliyor': 'amber',
-  'Onaylandı': 'blue',
-  'Kargolandı': 'green',
-  'İptal': 'red',
+  'PendingApproval': 'amber',
+  'Approved': 'blue',
+  'Shipped': 'green',
+  'Cancelled': 'red',
+  'Rejected': 'red',
+  'Delivered': 'green',
+  'PaymentPending': 'amber'
+};
+
+const statusTranslations: Record<string, string> = {
+  'PendingApproval': 'Bekliyor',
+  'Approved': 'Onaylandı',
+  'Shipped': 'Kargolandı',
+  'Cancelled': 'İptal',
+  'Rejected': 'Reddedildi',
+  'Delivered': 'Teslim Edildi',
+  'PaymentPending': 'Ödeme Bekleniyor'
 };
 
 export default function Orders() {
-  const [orders, setOrders] = useState<Order[]>(MOCK_ORDERS);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
+  const fetchOrders = () => {
+    setLoading(true);
+    api.get('/AdminPurchaseOrder')
+      .then(res => {
+        const data = res.data?.items || res.data?.data || [];
+        setOrders(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setOrders([]);
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
   const filtered = orders.filter(o =>
     o.orderNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    o.customerName.toLowerCase().includes(searchTerm.toLowerCase())
+    (o.userDisplayName && o.userDisplayName.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  const handleUpdateStatus = (id: string, newStatus: Order['status']) => {
-    setOrders(prev => prev.map(o => o.id === id ? { ...o, status: newStatus } : o));
-    if (selectedOrder && selectedOrder.id === id) {
-      setSelectedOrder({ ...selectedOrder, status: newStatus });
-    }
+  const handleUpdateStatus = (id: string, action: 'approve' | 'ship') => {
+    api.put(`/AdminPurchaseOrder/${id}/${action}`, {})
+      .then(() => {
+        fetchOrders();
+        setSelectedOrder(null);
+      })
+      .catch(err => {
+        console.error('Status update failed', err);
+      });
   };
 
   return (
@@ -71,7 +102,12 @@ export default function Orders() {
           </div>
         </div>
 
-        {filtered.length === 0 ? (
+        {loading ? (
+           <div style={{ padding: '60px 0', textAlign: 'center', color: 'var(--text-muted)' }}>
+             <Package size={32} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
+             <p>Yükleniyor...</p>
+           </div>
+        ) : filtered.length === 0 ? (
            <div style={{ padding: '60px 0', textAlign: 'center', color: 'var(--text-muted)' }}>
              <Package size={32} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
              <p>Sipariş bulunamadı.</p>
@@ -91,6 +127,7 @@ export default function Orders() {
             <tbody>
               {filtered.map((o) => {
                 const colorKey = statusColors[o.status] || 'purple';
+                const statusName = statusTranslations[o.status] || o.status;
                 return (
                   <tr key={o.id}>
                     <td>
@@ -100,18 +137,18 @@ export default function Orders() {
                     </td>
                     <td>
                       <div style={{ fontWeight: 500, color: 'var(--text-primary)', fontSize: '0.92rem' }}>
-                        {o.customerName}
+                        {o.userDisplayName}
                       </div>
                     </td>
                     <td>
-                      <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{o.date}</span>
+                      <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{new Date(o.createdAt).toLocaleDateString('tr-TR')}</span>
                     </td>
                     <td>
                       <span style={{ fontWeight: 600 }}>₺{o.totalAmount.toLocaleString('tr-TR')}</span>
                     </td>
                     <td>
                       <span className={`badge badge-${colorKey}`}>
-                        {o.status}
+                        {statusName}
                       </span>
                     </td>
                     <td style={{ textAlign: 'right' }}>
@@ -144,27 +181,27 @@ export default function Orders() {
 
             <div style={{ marginBottom: 24 }}>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8 }}>Sipariş No: <strong style={{ color: 'var(--text-primary)' }}>{selectedOrder.orderNumber}</strong></p>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8 }}>Müşteri: <strong style={{ color: 'var(--text-primary)' }}>{selectedOrder.customerName}</strong></p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8 }}>Müşteri: <strong style={{ color: 'var(--text-primary)' }}>{selectedOrder.userDisplayName}</strong></p>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8 }}>Tutar: <strong style={{ color: 'var(--text-primary)' }}>₺{selectedOrder.totalAmount.toLocaleString('tr-TR')}</strong></p>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 24 }}>Mevcut Durum: <span className={`badge badge-${statusColors[selectedOrder.status]}`}>{selectedOrder.status}</span></p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 24 }}>Mevcut Durum: <span className={`badge badge-${statusColors[selectedOrder.status]}`}>{statusTranslations[selectedOrder.status] || selectedOrder.status}</span></p>
 
               <div className="glow-divider" style={{ marginBottom: 20 }} />
 
               <h3 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: 12 }}>Durum Güncelle</h3>
               <div style={{ display: 'flex', gap: 12 }}>
                 <button 
-                  className={`btn ${selectedOrder.status === 'Onaylandı' ? 'btn-primary' : 'btn-ghost'}`}
+                  className={`btn ${selectedOrder.status === 'Approved' ? 'btn-primary' : 'btn-ghost'}`}
                   style={{ flex: 1, gap: 8, padding: '10px' }}
-                  onClick={() => handleUpdateStatus(selectedOrder.id, 'Onaylandı')}
+                  onClick={() => handleUpdateStatus(selectedOrder.id, 'approve')}
                 >
-                  <CheckCircle size={16} /> Onaylandı
+                  <CheckCircle size={16} /> Onayla
                 </button>
                 <button 
-                  className={`btn ${selectedOrder.status === 'Kargolandı' ? 'btn-primary' : 'btn-ghost'}`}
+                  className={`btn ${selectedOrder.status === 'Shipped' ? 'btn-primary' : 'btn-ghost'}`}
                   style={{ flex: 1, gap: 8, padding: '10px' }}
-                  onClick={() => handleUpdateStatus(selectedOrder.id, 'Kargolandı')}
+                  onClick={() => handleUpdateStatus(selectedOrder.id, 'ship')}
                 >
-                  <Truck size={16} /> Kargolandı
+                  <Truck size={16} /> Kargola
                 </button>
               </div>
             </div>

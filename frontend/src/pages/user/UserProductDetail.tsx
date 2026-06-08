@@ -23,11 +23,7 @@ const GRADIENTS = [
   'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
 ];
 
-const MOCK_PRICE = (sku: string) => {
-  let h = 0;
-  for (let i = 0; i < sku.length; i++) h = (h * 31 + sku.charCodeAt(i)) >>> 0;
-  return (50 + (h % 950));
-};
+
 
 const highlights = [
   { icon: Truck,  text: 'Ücretsiz kargo — 500₺ üzeri siparişlerde' },
@@ -56,7 +52,7 @@ export default function UserProductDetail() {
 
   const handleAddToCart = () => {
     if (!product) return;
-    const price = product.price ?? MOCK_PRICE(product.sku);
+    const price = product.price ?? 0;
     const idx   = parseInt((product.id || '0').replace(/-/g, '').slice(0, 8), 16);
     addItem({
       id: product.id, name: product.name, sku: product.sku, price,
@@ -100,7 +96,7 @@ export default function UserProductDetail() {
     );
   }
 
-  const price   = product.price ?? MOCK_PRICE(product.sku);
+  const price   = product.price ?? 0;
   const idx     = parseInt((product.id || '0').replace(/-/g, '').slice(0, 8), 16);
   const gradient = GRADIENTS[idx % GRADIENTS.length] ?? GRADIENTS[0];
 

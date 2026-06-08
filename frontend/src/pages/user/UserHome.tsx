@@ -28,11 +28,7 @@ const features = [
   { icon: Zap,     title: 'Anlık Stok Takibi',  desc: 'Gerçek zamanlı envanter',      color: '#a78bfa' },
 ];
 
-const MOCK_PRICE = (sku: string) => {
-  let h = 0;
-  for (let i = 0; i < sku.length; i++) h = (h * 31 + sku.charCodeAt(i)) >>> 0;
-  return (50 + (h % 950));
-};
+
 
 export default function UserHome() {
   const [featured, setFeatured] = useState<Product[]>([]);
@@ -49,7 +45,7 @@ export default function UserHome() {
   const handleAddToCart = (p: Product, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const price = p.price ?? MOCK_PRICE(p.sku);
+    const price = p.price ?? 0;
     addItem({
       id: p.id,
       name: p.name,
@@ -143,7 +139,7 @@ export default function UserHome() {
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 20 }}>
             {featured.map((p, i) => {
-              const price = p.price ?? MOCK_PRICE(p.sku);
+              const price = p.price ?? 0;
               const grad  = GRADIENTS[i % GRADIENTS.length];
               return (
                 <Link
