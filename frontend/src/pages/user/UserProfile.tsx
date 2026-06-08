@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Package, MapPin, Bell, Shield, ChevronRight,
-  Edit3, LogOut, ShoppingBag, Clock, CreditCard, Plus, X
+  Edit3, LogOut, ShoppingBag, Clock, CreditCard, X
 } from 'lucide-react';
 
 const MOCK_ORDERS = [

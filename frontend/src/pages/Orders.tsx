@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Filter, MoreVertical, Package, CheckCircle, Truck, X } from 'lucide-react';
+import { Search, Filter, Package, CheckCircle, Truck, X } from 'lucide-react';
 
 interface Order {
   id: string;
