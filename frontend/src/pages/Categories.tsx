@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Tag, Plus, Search, ChevronRight, CheckCircle2, XCircle, Layers } from 'lucide-react';
+import { Tag, Plus, Search, ChevronRight, CheckCircle2, XCircle, Layers, X, Check } from 'lucide-react';
 import api from '../api/axios';
 
 interface AttributeSummary {
@@ -40,6 +40,17 @@ export default function Categories() {
   const [search, setSearch]         = useState('');
   const [expanded, setExpanded]     = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState<boolean | null>(null);
+  
+  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
+  const [actionSaved, setActionSaved] = useState(false);
+
+  const handleMockAction = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
+    setActionSaved(true);
+    setTimeout(() => {
+      setActionSaved(false);
+      setter(false);
+    }, 1000);
+  };
 
   useEffect(() => {
     void api.get('/Category').then(res => {
@@ -64,7 +75,7 @@ export default function Categories() {
           <h1 className="page-title">Kategoriler</h1>
           <p className="page-subtitle">{categories.length} kategori — dinamik attribute şeması</p>
         </div>
-        <button className="btn btn-primary">
+        <button className="btn btn-primary" onClick={() => setShowAddCategoryModal(true)}>
           <Plus size={16} />
           Yeni Kategori
         </button>
@@ -226,6 +237,43 @@ export default function Categories() {
               </div>
             );
           })}
+        </div>
+      )}
+      {showAddCategoryModal && (
+        <div className="modal-overlay" onClick={() => setShowAddCategoryModal(false)}>
+          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Tag size={20} color="#a78bfa" /> Yeni Kategori Ekle
+              </h2>
+              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowAddCategoryModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
+              <div className="form-group">
+                <label className="form-label">Kategori Adı</label>
+                <input type="text" className="form-input" placeholder="Örn: Elektronik" />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Açıklama</label>
+                <textarea className="form-input" placeholder="Kategori açıklaması (opsiyonel)" rows={3} style={{ resize: 'vertical' }}></textarea>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Durum</label>
+                <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }}>
+                  <option value="active">Aktif</option>
+                  <option value="inactive">Pasif</option>
+                </select>
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+              <button className="btn btn-ghost" onClick={() => setShowAddCategoryModal(false)}>İptal</button>
+              <button className="btn btn-primary" style={{ gap: 8 }} onClick={() => handleMockAction(setShowAddCategoryModal)}>
+                {actionSaved ? <><Check size={16}/> Eklendi</> : 'Kategori Ekle'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
