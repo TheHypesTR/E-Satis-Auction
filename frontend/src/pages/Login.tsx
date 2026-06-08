@@ -16,8 +16,8 @@ export default function Login() {
     setError('');
 
     try {
-      const response = await api.post('/Auth/login', { email, password });
-      const token = response.data?.token || response.data?.data?.token;
+      const response = await api.post('/Auth/login', { identifier: email, password });
+      const token = response.data?.accessToken || response.data?.token;
       if (token) {
         localStorage.setItem('token', token);
       } else {
@@ -25,9 +25,7 @@ export default function Login() {
       }
       navigate('/dashboard');
     } catch {
-      // Dev bypass — backend olmasa da çalışsın
-      localStorage.setItem('token', 'dev-token');
-      navigate('/dashboard');
+      setError('Giriş başarısız. E-posta veya şifre hatalı.');
     } finally {
       setLoading(false);
     }
