@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 
 import { useEffect } from 'react';
-import api from '../api/axios';
+import api from '../../api/axios';
 
 interface Order {
   id: string;
