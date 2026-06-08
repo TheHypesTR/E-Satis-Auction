@@ -47,15 +47,32 @@ export default function UserProductDetail() {
   const [reviewSent, setReviewSent] = useState(false);
   const { addItem } = useCart();
 
+  const [auction, setAuction] = useState<any>(null);
+
   useEffect(() => {
     if (!id) return;
     void api.get(`/ProductListing/${id}`)
-      .then(res => { 
+      .then(async res => { 
         const data = res.data;
         if (data) {
           data.name = data.productName || data.name;
         }
         setProduct(data); 
+
+        // Check if there's an active auction for this listing
+        try {
+          const aucRes = await api.get('/Auction');
+          const auctions = aucRes.data?.items || aucRes.data?.data || [];
+          const activeAuction = auctions.find((a: any) => 
+            a.productListingId === id && (a.status === 'Active' || a.status === 2 || a.status === 'Scheduled' || a.status === 1)
+          );
+          if (activeAuction) {
+            setAuction(activeAuction);
+          }
+        } catch (e) {
+          console.error('Failed to fetch auction', e);
+        }
+
         setLoading(false); 
       })
       .catch(() => { setProduct(null); setLoading(false); });
@@ -167,58 +184,82 @@ export default function UserProductDetail() {
             </div>
           </div>
 
-          {/* Qty */}
-          <div style={{ marginBottom: 24 }}>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Miktar</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <button className="btn btn-ghost" style={{ width: 40, height: 40, padding: 0, fontSize: '1.2rem' }}
-                onClick={() => setQty(q => Math.max(1, q - 1))}>−</button>
-              <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: '1.2rem', minWidth: 32, textAlign: 'center' }}>{qty}</span>
-              <button className="btn btn-ghost" style={{ width: 40, height: 40, padding: 0, fontSize: '1.2rem' }}
-                onClick={() => setQty(q => q + 1)}>+</button>
-              <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                Toplam: <strong style={{ color: 'var(--text-primary)' }}>₺{(price * qty).toLocaleString('tr-TR')}</strong>
-              </span>
+          {auction ? (
+            <div style={{ marginBottom: 24, padding: '16px', background: 'rgba(167, 139, 250, 0.1)', border: '1px solid rgba(167, 139, 250, 0.3)', borderRadius: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                <div style={{ background: '#a78bfa', color: '#fff', padding: '4px 8px', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600 }}>AÇIK ARTIRMADA</div>
+                <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                  Açılış Fiyatı: <strong style={{ color: 'var(--text-primary)' }}>₺{auction.startingPrice?.toLocaleString('tr-TR')}</strong>
+                </div>
+              </div>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                Bu ürün şu anda açık artırmadadır. Doğrudan satın alınamaz.
+              </p>
+              <button
+                className="btn btn-primary"
+                style={{ width: '100%', marginTop: 16, padding: '15px' }}
+                onClick={() => { /* Real implementation would navigate to auction detail or bid modal */ }}
+                disabled={auction.status === 1 || auction.status === 'Scheduled'}
+              >
+                {auction.status === 1 || auction.status === 'Scheduled' ? 'Açık Artırma Henüz Başlamadı' : 'Teklif Ver'}
+              </button>
             </div>
-          </div>
+          ) : (
+            <>
+              {/* Qty */}
+              <div style={{ marginBottom: 24 }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Miktar</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <button className="btn btn-ghost" style={{ width: 40, height: 40, padding: 0, fontSize: '1.2rem' }}
+                    onClick={() => setQty(q => Math.max(1, q - 1))}>−</button>
+                  <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: '1.2rem', minWidth: 32, textAlign: 'center' }}>{qty}</span>
+                  <button className="btn btn-ghost" style={{ width: 40, height: 40, padding: 0, fontSize: '1.2rem' }}
+                    onClick={() => setQty(q => q + 1)}>+</button>
+                  <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                    Toplam: <strong style={{ color: 'var(--text-primary)' }}>₺{(price * qty).toLocaleString('tr-TR')}</strong>
+                  </span>
+                </div>
+              </div>
 
-          {/* CTA */}
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <button
-              className="btn btn-primary"
-              style={{ flex: 1, padding: '15px', fontSize: '1rem', gap: 8, minWidth: '150px' }}
-              onClick={handleAddToCart}
-            >
-              {added ? <><Check size={18} /> Sepete Eklendi!</> : <><ShoppingCart size={18} /> Sepete Ekle</>}
-            </button>
-            <button
-              className="btn btn-ghost"
-              style={{ flex: 1, padding: '15px', minWidth: '120px' }}
-              onClick={() => setShowOfferModal(true)}
-            >
-              <Handshake size={18} /> Teklif Yap
-            </button>
-            <button
-              className="btn btn-ghost"
-              style={{ flex: 1, padding: '15px', minWidth: '150px' }}
-              onClick={() => setShowReviewModal(true)}
-            >
-              <Star size={18} /> Değerlendirme Yaz
-            </button>
-            <button
-              className="btn btn-ghost"
-              style={{ padding: '15px 20px', background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', flex: '1 1 100%' }}
-              onClick={() => { handleAddToCart(); navigate('/user/checkout'); }}
-            >
-              Hemen Al
-            </button>
-          </div>
+              {/* CTA */}
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                <button
+                  className="btn btn-primary"
+                  style={{ flex: 1, padding: '15px', fontSize: '1rem', gap: 8, minWidth: '150px' }}
+                  onClick={handleAddToCart}
+                >
+                  {added ? <><Check size={18} /> Sepete Eklendi!</> : <><ShoppingCart size={18} /> Sepete Ekle</>}
+                </button>
+                <button
+                  className="btn btn-ghost"
+                  style={{ flex: 1, padding: '15px', minWidth: '120px' }}
+                  onClick={() => setShowOfferModal(true)}
+                >
+                  <Handshake size={18} /> Teklif Yap
+                </button>
+                <button
+                  className="btn btn-ghost"
+                  style={{ flex: 1, padding: '15px', minWidth: '150px' }}
+                  onClick={() => setShowReviewModal(true)}
+                >
+                  <Star size={18} /> Değerlendirme Yaz
+                </button>
+                <button
+                  className="btn btn-ghost"
+                  style={{ padding: '15px 20px', background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', flex: '1 1 100%' }}
+                  onClick={() => { handleAddToCart(); navigate('/user/checkout'); }}
+                >
+                  Hemen Al
+                </button>
+              </div>
 
-          {added && (
-            <div className="animate-fade-up" style={{ marginTop: 16, padding: '12px 16px', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 10, color: '#6ee7b7', fontSize: '0.88rem', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Check size={16} />
-              Ürün sepete eklendi! <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#a78bfa', fontSize: '0.88rem', textDecoration: 'underline' }} onClick={() => navigate('/user/cart')}>Sepete git →</button>
-            </div>
+              {added && (
+                <div className="animate-fade-up" style={{ marginTop: 16, padding: '12px 16px', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 10, color: '#6ee7b7', fontSize: '0.88rem', display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Check size={16} />
+                  Ürün sepete eklendi! <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#a78bfa', fontSize: '0.88rem', textDecoration: 'underline' }} onClick={() => navigate('/user/cart')}>Sepete git →</button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

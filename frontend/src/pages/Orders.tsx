@@ -8,8 +8,18 @@ interface Order {
   userDisplayName: string;
   totalAmount: number;
   createdAt: string;
-  status: string;
+  status: string | number;
 }
+
+const statusEnumMap: Record<number, string> = {
+  1: 'PendingApproval',
+  2: 'Approved',
+  3: 'Rejected',
+  4: 'Shipped',
+  5: 'Delivered',
+  6: 'Cancelled',
+  7: 'PaymentPending'
+};
 
 const statusColors: Record<string, string> = {
   'PendingApproval': 'amber',
@@ -126,8 +136,9 @@ export default function Orders() {
             </thead>
             <tbody>
               {filtered.map((o) => {
-                const colorKey = statusColors[o.status] || 'purple';
-                const statusName = statusTranslations[o.status] || o.status;
+                const statusStr = typeof o.status === 'number' ? statusEnumMap[o.status] : o.status;
+                const colorKey = statusColors[statusStr] || 'purple';
+                const statusName = statusTranslations[statusStr] || statusStr;
                 return (
                   <tr key={o.id}>
                     <td>
@@ -169,7 +180,9 @@ export default function Orders() {
       </div>
 
       {/* Order Management Modal */}
-      {selectedOrder && (
+      {selectedOrder && (() => {
+        const statusStr = typeof selectedOrder.status === 'number' ? statusEnumMap[selectedOrder.status] : selectedOrder.status;
+        return (
         <div className="modal-overlay" onClick={() => setSelectedOrder(null)}>
           <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, width: '100%' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
@@ -183,21 +196,21 @@ export default function Orders() {
               <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8 }}>Sipariş No: <strong style={{ color: 'var(--text-primary)' }}>{selectedOrder.orderNumber}</strong></p>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8 }}>Müşteri: <strong style={{ color: 'var(--text-primary)' }}>{selectedOrder.userDisplayName}</strong></p>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8 }}>Tutar: <strong style={{ color: 'var(--text-primary)' }}>₺{selectedOrder.totalAmount.toLocaleString('tr-TR')}</strong></p>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 24 }}>Mevcut Durum: <span className={`badge badge-${statusColors[selectedOrder.status]}`}>{statusTranslations[selectedOrder.status] || selectedOrder.status}</span></p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 24 }}>Mevcut Durum: <span className={`badge badge-${statusColors[statusStr]}`}>{statusTranslations[statusStr] || statusStr}</span></p>
 
               <div className="glow-divider" style={{ marginBottom: 20 }} />
 
               <h3 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: 12 }}>Durum Güncelle</h3>
               <div style={{ display: 'flex', gap: 12 }}>
                 <button 
-                  className={`btn ${selectedOrder.status === 'Approved' ? 'btn-primary' : 'btn-ghost'}`}
+                  className={`btn ${statusStr === 'Approved' ? 'btn-primary' : 'btn-ghost'}`}
                   style={{ flex: 1, gap: 8, padding: '10px' }}
                   onClick={() => handleUpdateStatus(selectedOrder.id, 'approve')}
                 >
                   <CheckCircle size={16} /> Onayla
                 </button>
                 <button 
-                  className={`btn ${selectedOrder.status === 'Shipped' ? 'btn-primary' : 'btn-ghost'}`}
+                  className={`btn ${statusStr === 'Shipped' ? 'btn-primary' : 'btn-ghost'}`}
                   style={{ flex: 1, gap: 8, padding: '10px' }}
                   onClick={() => handleUpdateStatus(selectedOrder.id, 'ship')}
                 >
@@ -211,7 +224,8 @@ export default function Orders() {
             </div>
           </div>
         </div>
-      )}
+        );
+      })()}
     </div>
   );
 }
