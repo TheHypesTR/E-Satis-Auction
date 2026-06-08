@@ -23,7 +23,7 @@ export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   const [showCampaignModal, setShowCampaignModal] = useState(false);
   const [campaignTitle, setCampaignTitle] = useState('');
   const [campaignDiscount, setCampaignDiscount] = useState('');
@@ -58,7 +58,7 @@ export default function Products() {
   };
 
   const handleSaveCampaign = () => {
-    if(!campaignTitle || !campaignDiscount) return;
+    if (!campaignTitle || !campaignDiscount) return;
     setCampaignSaved(true);
     setTimeout(() => {
       setCampaignSaved(false);
@@ -227,24 +227,24 @@ export default function Products() {
                 <X size={18} />
               </button>
             </div>
-            
+
             <div style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div className="form-group">
                 <label className="form-label">Kampanya Adı</label>
-                <input 
-                  type="text" 
-                  className="form-input" 
-                  placeholder="Örn: Yıl Sonu İndirimi" 
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="Örn: Yıl Sonu İndirimi"
                   value={campaignTitle}
                   onChange={e => setCampaignTitle(e.target.value)}
                 />
               </div>
               <div className="form-group">
                 <label className="form-label">İndirim Oranı (%)</label>
-                <input 
-                  type="number" 
-                  className="form-input" 
-                  placeholder="Örn: 20" 
+                <input
+                  type="number"
+                  className="form-input"
+                  placeholder="Örn: 20"
                   value={campaignDiscount}
                   onChange={e => setCampaignDiscount(e.target.value)}
                 />
@@ -262,7 +262,7 @@ export default function Products() {
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
               <button className="btn btn-ghost" onClick={() => setShowCampaignModal(false)}>İptal</button>
               <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleSaveCampaign}>
-                {campaignSaved ? <><Check size={16}/> Kaydedildi</> : 'Kampanyayı Başlat'}
+                {campaignSaved ? <><Check size={16} /> Kaydedildi</> : 'Kampanyayı Başlat'}
               </button>
             </div>
           </div>
@@ -314,7 +314,7 @@ export default function Products() {
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
               <button className="btn btn-ghost" onClick={() => setShowAddProductModal(false)}>İptal</button>
               <button className="btn btn-primary" style={{ gap: 8 }} onClick={() => handleMockAction(setShowAddProductModal)}>
-                {actionSaved ? <><Check size={16}/> Kaydedildi</> : 'Ürünü Ekle'}
+                {actionSaved ? <><Check size={16} /> Kaydedildi</> : 'Ürünü Ekle'}
               </button>
             </div>
           </div>
@@ -355,7 +355,7 @@ export default function Products() {
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
               <button className="btn btn-ghost" onClick={() => setShowEditProductModal(false)}>İptal</button>
               <button className="btn btn-primary" style={{ gap: 8 }} onClick={() => handleMockAction(setShowEditProductModal)}>
-                {actionSaved ? <><Check size={16}/> Güncellendi</> : 'Değişiklikleri Kaydet'}
+                {actionSaved ? <><Check size={16} /> Güncellendi</> : 'Değişiklikleri Kaydet'}
               </button>
             </div>
           </div>
@@ -380,7 +380,7 @@ export default function Products() {
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
               <button className="btn btn-ghost" onClick={() => setShowDeleteProductModal(false)}>Vazgeç</button>
               <button className="btn" style={{ background: 'rgba(248,113,113,0.15)', color: '#f87171', border: '1px solid rgba(248,113,113,0.3)' }} onClick={() => handleMockAction(setShowDeleteProductModal)}>
-                {actionSaved ? <><Check size={16}/> Silindi</> : 'Evet, Ürünü Sil'}
+                {actionSaved ? <><Check size={16} /> Silindi</> : 'Evet, Ürünü Sil'}
               </button>
             </div>
           </div>

@@ -26,9 +26,9 @@ const GRADIENTS = [
 
 
 const highlights = [
-  { icon: Truck,  text: 'Ücretsiz kargo — 500₺ üzeri siparişlerde' },
+  { icon: Truck, text: 'Ücretsiz kargo — 500₺ üzeri siparişlerde' },
   { icon: Shield, text: '7/24 güvenceli ödeme altyapısı' },
-  { icon: Star,   text: 'Onaylı tedarikçi, orijinal ürün garantisi' },
+  { icon: Star, text: 'Onaylı tedarikçi, orijinal ürün garantisi' },
 ];
 
 export default function UserProductDetail() {
@@ -49,15 +49,22 @@ export default function UserProductDetail() {
 
   useEffect(() => {
     if (!id) return;
-    void api.get(`/Product/${id}`)
-      .then(res => { setProduct(res.data); setLoading(false); })
+    void api.get(`/ProductListing/${id}`)
+      .then(res => { 
+        const data = res.data;
+        if (data) {
+          data.name = data.productName || data.name;
+        }
+        setProduct(data); 
+        setLoading(false); 
+      })
       .catch(() => { setProduct(null); setLoading(false); });
   }, [id]);
 
   const handleAddToCart = () => {
     if (!product) return;
     const price = product.price ?? 0;
-    const idx   = parseInt((product.id || '0').replace(/-/g, '').slice(0, 8), 16);
+    const idx = parseInt((product.id || '0').replace(/-/g, '').slice(0, 8), 16);
     addItem({
       id: product.id, name: product.name, sku: product.sku, price,
       categoryName: product.categoryName,
@@ -111,8 +118,8 @@ export default function UserProductDetail() {
     );
   }
 
-  const price   = product.price ?? 0;
-  const idx     = parseInt((product.id || '0').replace(/-/g, '').slice(0, 8), 16);
+  const price = product.price ?? 0;
+  const idx = parseInt((product.id || '0').replace(/-/g, '').slice(0, 8), 16);
   const gradient = GRADIENTS[idx % GRADIENTS.length] ?? GRADIENTS[0];
 
   return (
@@ -228,17 +235,17 @@ export default function UserProductDetail() {
                 <X size={18} />
               </button>
             </div>
-            
+
             <div style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
                 <strong style={{ color: 'var(--text-primary)' }}>{product.name}</strong> ürünü için teklifinizi belirleyin. Satıcı değerlendirip size dönüş yapacaktır.
               </p>
               <div className="form-group">
                 <label className="form-label">Teklifiniz (₺)</label>
-                <input 
-                  type="number" 
-                  className="form-input" 
-                  placeholder="Örn: 500" 
+                <input
+                  type="number"
+                  className="form-input"
+                  placeholder="Örn: 500"
                   value={offerAmount}
                   onChange={e => setOfferAmount(e.target.value)}
                 />
@@ -248,7 +255,7 @@ export default function UserProductDetail() {
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
               <button className="btn btn-ghost" onClick={() => setShowOfferModal(false)}>İptal</button>
               <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleMakeOffer}>
-                {offerSent ? <><Check size={16}/> Gönderildi</> : 'Teklifi Gönder'}
+                {offerSent ? <><Check size={16} /> Gönderildi</> : 'Teklifi Gönder'}
               </button>
             </div>
           </div>
@@ -267,7 +274,7 @@ export default function UserProductDetail() {
                 <X size={18} />
               </button>
             </div>
-            
+
             <div style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'center', gap: 8, margin: '10px 0' }}>
                 {[1, 2, 3, 4, 5].map(s => (
@@ -278,9 +285,9 @@ export default function UserProductDetail() {
               </div>
               <div className="form-group">
                 <label className="form-label">Yorumunuz</label>
-                <textarea 
-                  className="form-input" 
-                  placeholder="Ürün hakkındaki düşüncelerinizi paylaşın..." 
+                <textarea
+                  className="form-input"
+                  placeholder="Ürün hakkındaki düşüncelerinizi paylaşın..."
                   rows={4}
                   style={{ resize: 'vertical' }}
                   value={reviewText}
@@ -292,7 +299,7 @@ export default function UserProductDetail() {
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
               <button className="btn btn-ghost" onClick={() => setShowReviewModal(false)}>İptal</button>
               <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleMakeReview}>
-                {reviewSent ? <><Check size={16}/> Gönderildi</> : 'Değerlendirmeyi Gönder'}
+                {reviewSent ? <><Check size={16} /> Gönderildi</> : 'Değerlendirmeyi Gönder'}
               </button>
             </div>
           </div>

@@ -50,9 +50,14 @@ export default function UserCatalog() {
   const { addItem } = useCart();
 
   useEffect(() => {
-    void api.get('/Product?pageSize=50').then(res => {
+    void api.get('/ProductListing?pageSize=50').then(res => {
       const data = res.data?.items || res.data?.data || [];
-      setProducts(data);
+      // Backend'den gelen ProductName alanını frontend Product arayüzündeki name alanına mapliyoruz
+      const mappedData = data.map((item: any) => ({
+        ...item,
+        name: item.productName || item.name,
+      }));
+      setProducts(mappedData);
       setLoading(false);
     }).catch(() => { setProducts([]); setLoading(false); });
     void api.get('/Category?pageSize=20').then(res => {

@@ -39,15 +39,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items]);
 
   const addItem = useCallback((item: Omit<CartItem, 'quantity'>, qty = 1) => {
-    setItems(prev => {
-      const existing = prev.find(i => i.id === item.id);
-      if (existing) {
-        return prev.map(i =>
-          i.id === item.id ? { ...i, quantity: i.quantity + qty } : i
-        );
-      }
-      return [...prev, { ...item, quantity: qty }];
-    });
+    // Backend sepet modeli tek listing tutuyor, mevcut sepeti eziyoruz
+    setItems([{ ...item, quantity: qty }]);
   }, []);
 
   const removeItem = useCallback((id: string) => {
