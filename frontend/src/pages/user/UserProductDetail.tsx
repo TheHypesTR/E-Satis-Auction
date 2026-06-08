@@ -41,6 +41,10 @@ export default function UserProductDetail() {
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [offerAmount, setOfferAmount] = useState('');
   const [offerSent, setOfferSent] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [reviewText, setReviewText] = useState('');
+  const [rating, setRating] = useState(0);
+  const [reviewSent, setReviewSent] = useState(false);
   const { addItem } = useCart();
 
   useEffect(() => {
@@ -70,6 +74,17 @@ export default function UserProductDetail() {
       setOfferSent(false);
       setShowOfferModal(false);
       setOfferAmount('');
+    }, 1500);
+  };
+
+  const handleMakeReview = () => {
+    if (!reviewText || rating === 0) return;
+    setReviewSent(true);
+    setTimeout(() => {
+      setReviewSent(false);
+      setShowReviewModal(false);
+      setReviewText('');
+      setRating(0);
     }, 1500);
   };
 
@@ -161,24 +176,31 @@ export default function UserProductDetail() {
           </div>
 
           {/* CTA */}
-          <div style={{ display: 'flex', gap: 12 }}>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <button
               className="btn btn-primary"
-              style={{ flex: 1, padding: '15px', fontSize: '1rem', gap: 8 }}
+              style={{ flex: 1, padding: '15px', fontSize: '1rem', gap: 8, minWidth: '150px' }}
               onClick={handleAddToCart}
             >
               {added ? <><Check size={18} /> Sepete Eklendi!</> : <><ShoppingCart size={18} /> Sepete Ekle</>}
             </button>
             <button
               className="btn btn-ghost"
-              style={{ flex: 1, padding: '15px' }}
+              style={{ flex: 1, padding: '15px', minWidth: '120px' }}
               onClick={() => setShowOfferModal(true)}
             >
               <Handshake size={18} /> Teklif Yap
             </button>
             <button
               className="btn btn-ghost"
-              style={{ padding: '15px 20px', background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)' }}
+              style={{ flex: 1, padding: '15px', minWidth: '150px' }}
+              onClick={() => setShowReviewModal(true)}
+            >
+              <Star size={18} /> Değerlendirme Yaz
+            </button>
+            <button
+              className="btn btn-ghost"
+              style={{ padding: '15px 20px', background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', flex: '1 1 100%' }}
               onClick={() => { handleAddToCart(); navigate('/user/checkout'); }}
             >
               Hemen Al
@@ -227,6 +249,50 @@ export default function UserProductDetail() {
               <button className="btn btn-ghost" onClick={() => setShowOfferModal(false)}>İptal</button>
               <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleMakeOffer}>
                 {offerSent ? <><Check size={16}/> Gönderildi</> : 'Teklifi Gönder'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Review Modal */}
+      {showReviewModal && (
+        <div className="modal-overlay" onClick={() => setShowReviewModal(false)}>
+          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 450, width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Star size={20} color="#fcd34d" /> Ürünü Değerlendir
+              </h2>
+              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowReviewModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            
+            <div style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: 8, margin: '10px 0' }}>
+                {[1, 2, 3, 4, 5].map(s => (
+                  <button key={s} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }} onClick={() => setRating(s)}>
+                    <Star size={32} fill={rating >= s ? '#fcd34d' : 'transparent'} color={rating >= s ? '#fcd34d' : 'var(--text-muted)'} />
+                  </button>
+                ))}
+              </div>
+              <div className="form-group">
+                <label className="form-label">Yorumunuz</label>
+                <textarea 
+                  className="form-input" 
+                  placeholder="Ürün hakkındaki düşüncelerinizi paylaşın..." 
+                  rows={4}
+                  style={{ resize: 'vertical' }}
+                  value={reviewText}
+                  onChange={e => setReviewText(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+              <button className="btn btn-ghost" onClick={() => setShowReviewModal(false)}>İptal</button>
+              <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleMakeReview}>
+                {reviewSent ? <><Check size={16}/> Gönderildi</> : 'Değerlendirmeyi Gönder'}
               </button>
             </div>
           </div>

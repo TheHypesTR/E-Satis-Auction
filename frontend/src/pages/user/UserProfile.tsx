@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Package, MapPin, Bell, Shield, ChevronRight,
-  Edit3, LogOut, ShoppingBag, Clock, CreditCard, X
+  Edit3, LogOut, ShoppingBag, Clock, CreditCard, X, Check, XCircle
 } from 'lucide-react';
 
 import { useEffect } from 'react';
@@ -78,6 +78,17 @@ export default function UserProfile() {
   // Modals
   const [showAddAddress, setShowAddAddress] = useState(false);
   const [showAddCard, setShowAddCard] = useState(false);
+  const [showCancelOrderModal, setShowCancelOrderModal] = useState(false);
+  const [cancelingOrder, setCancelingOrder] = useState<Order | null>(null);
+  const [actionSaved, setActionSaved] = useState(false);
+
+  const handleMockAction = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
+    setActionSaved(true);
+    setTimeout(() => {
+      setActionSaved(false);
+      setter(false);
+    }, 1000);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -202,7 +213,12 @@ export default function UserProfile() {
                         </div>
                         <div style={{ textAlign: 'right' }}>
                           <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>₺{order.totalAmount.toLocaleString('tr-TR')}</div>
-                          <button className="btn btn-ghost" style={{ padding: '5px 12px', fontSize: '0.78rem', marginTop: 6 }}>Detay</button>
+                          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 6 }}>
+                            {(order.status === 'PendingApproval' || order.status === 'PaymentPending') && (
+                              <button className="btn btn-ghost" style={{ padding: '5px 12px', fontSize: '0.78rem', color: '#f87171' }} onClick={() => { setCancelingOrder(order); setShowCancelOrderModal(true); }}>İptal Et</button>
+                            )}
+                            <button className="btn btn-ghost" style={{ padding: '5px 12px', fontSize: '0.78rem' }}>Detay</button>
+                          </div>
                         </div>
                       </div>
                     );
@@ -392,7 +408,46 @@ export default function UserProfile() {
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
               <button className="btn btn-ghost" onClick={() => setShowAddCard(false)}>İptal</button>
-              <button className="btn btn-primary" onClick={() => setShowAddCard(false)}>Kaydet</button>
+              <button className="btn btn-primary" onClick={() => handleMockAction(setShowAddCard)}>
+                {actionSaved ? <><Check size={16}/> Kaydedildi</> : 'Kaydet'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cancel Order Modal */}
+      {showCancelOrderModal && cancelingOrder && (
+        <div className="modal-overlay" onClick={() => setShowCancelOrderModal(false)}>
+          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 450, width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, color: '#f87171' }}>
+                <XCircle size={20} /> Siparişi İptal Et
+              </h2>
+              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowCancelOrderModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                <strong style={{ color: 'var(--text-primary)' }}>{cancelingOrder.orderNumber}</strong> numaralı siparişinizi iptal etmek istediğinize emin misiniz? Bu işlem geri alınamaz.
+              </p>
+              <div className="form-group">
+                <label className="form-label">İptal Nedeni</label>
+                <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }}>
+                  <option value="">Seçiniz...</option>
+                  <option value="Yanlış ürün siparişi verdim">Yanlış ürün siparişi verdim</option>
+                  <option value="Sipariş vermekten vazgeçtim">Sipariş vermekten vazgeçtim</option>
+                  <option value="Teslimat süresi çok uzun">Teslimat süresi çok uzun</option>
+                  <option value="Diğer">Diğer</option>
+                </select>
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+              <button className="btn btn-ghost" onClick={() => setShowCancelOrderModal(false)}>Vazgeç</button>
+              <button className="btn" style={{ background: 'rgba(248,113,113,0.15)', color: '#f87171', border: '1px solid rgba(248,113,113,0.3)' }} onClick={() => handleMockAction(setShowCancelOrderModal)}>
+                {actionSaved ? <><Check size={16}/> İptal Edildi</> : 'Evet, İptal Et'}
+              </button>
             </div>
           </div>
         </div>
