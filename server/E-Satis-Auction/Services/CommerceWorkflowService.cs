@@ -1,6 +1,7 @@
 using E_Satis_Auction.Common.Constants;
 using E_Satis_Auction.Common.Exceptions;
 using E_Satis_Auction.Common.Interfaces;
+using E_Satis_Auction.Dtos.Auction;
 using E_Satis_Auction.Dtos.Commerce;
 using E_Satis_Auction.Enums;
 using E_Satis_Auction.Interfaces.Repositories;
@@ -29,6 +30,8 @@ public sealed class CommerceWorkflowService : ICommerceWorkflowService
     private readonly ICampaignRepository _campaignRepository;
     private readonly IItemRepository _itemRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAuctionRepository _auctionRepository;
+    private readonly IAuctionRealtimeNotifier _auctionRealtimeNotifier;
 
     public CommerceWorkflowService(
         IShoppingCartRepository cartRepository,
@@ -38,7 +41,9 @@ public sealed class CommerceWorkflowService : ICommerceWorkflowService
         IProductRepository productRepository,
         ICampaignRepository campaignRepository,
         IItemRepository itemRepository,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IAuctionRepository auctionRepository,
+        IAuctionRealtimeNotifier auctionRealtimeNotifier)
     {
         _cartRepository = cartRepository;
         _paymentAttemptRepository = paymentAttemptRepository;
@@ -48,6 +53,8 @@ public sealed class CommerceWorkflowService : ICommerceWorkflowService
         _campaignRepository = campaignRepository;
         _itemRepository = itemRepository;
         _unitOfWork = unitOfWork;
+        _auctionRepository = auctionRepository;
+        _auctionRealtimeNotifier = auctionRealtimeNotifier;
     }
 
     public async Task<CartPricePreviewDto> PreviewCartAsync(ShoppingCartEntity cart, CancellationToken cancellationToken = default)
@@ -163,17 +170,29 @@ public sealed class CommerceWorkflowService : ICommerceWorkflowService
 
         PurchaseOrderEntity? order = await _purchaseOrderRepository.GetByIdWithDetailsAsync(payment.PurchaseOrderId, enableTracking: true, cancellationToken);
         NotFoundException.ThrowIfNull(order, ErrorMessages.PurchaseOrder.EntityName, payment.PurchaseOrderId);
+        Models.Commerce.Auction? auction = await _auctionRepository.GetByPurchaseOrderIdAsync(payment.PurchaseOrderId, enableTracking: true, cancellationToken);
 
         await _unitOfWork.BeginTransactionAsync(cancellationToken);
         try
         {
             payment.MarkSucceeded();
             order!.MarkPaymentSucceeded();
+            auction?.MarkPaymentSucceeded();
             _paymentAttemptRepository.Update(payment);
             _purchaseOrderRepository.Update(order);
+            if (auction is not null)
+            {
+                _auctionRepository.Update(auction);
+            }
 
             await _unitOfWork.CompleteAsync(cancellationToken);
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
+
+            if (auction is not null)
+            {
+                await _auctionRealtimeNotifier.BroadcastAuctionCompletedAsync(AuctionDtoMapper.ToSnapshotDto(auction, DateTimeOffset.UtcNow), cancellationToken);
+            }
+
             return CommerceDtoMapper.ToPaymentAttemptDto(payment);
         }
         catch
@@ -199,16 +218,28 @@ public sealed class CommerceWorkflowService : ICommerceWorkflowService
         {
             return CommerceDtoMapper.ToPaymentAttemptDto(payment);
         }
+        Models.Commerce.Auction? auction = await _auctionRepository.GetByPurchaseOrderIdAsync(payment.PurchaseOrderId, enableTracking: true, cancellationToken);
 
         await _unitOfWork.BeginTransactionAsync(cancellationToken);
         try
         {
             payment.MarkFailed(reason);
             await ReleaseReservedStockAsync(payment.PurchaseOrderId, cancellationToken);
+            auction?.MarkPaymentFailed();
             _paymentAttemptRepository.Update(payment);
+            if (auction is not null)
+            {
+                _auctionRepository.Update(auction);
+            }
 
             await _unitOfWork.CompleteAsync(cancellationToken);
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
+
+            if (auction is not null)
+            {
+                await _auctionRealtimeNotifier.BroadcastPaymentExpiredAsync(AuctionDtoMapper.ToSnapshotDto(auction, DateTimeOffset.UtcNow), cancellationToken);
+            }
+
             return CommerceDtoMapper.ToPaymentAttemptDto(payment);
         }
         catch
@@ -220,15 +251,27 @@ public sealed class CommerceWorkflowService : ICommerceWorkflowService
 
     public async Task ExpirePaymentAsync(PaymentAttemptEntity paymentAttempt, CancellationToken cancellationToken = default)
     {
+        Models.Commerce.Auction? auction = await _auctionRepository.GetByPurchaseOrderIdAsync(paymentAttempt.PurchaseOrderId, enableTracking: true, cancellationToken);
+
         await _unitOfWork.BeginTransactionAsync(cancellationToken);
         try
         {
             paymentAttempt.MarkExpired(DateTimeOffset.UtcNow);
             await ReleaseReservedStockAsync(paymentAttempt.PurchaseOrderId, cancellationToken);
+            auction?.MarkPaymentFailed();
             _paymentAttemptRepository.Update(paymentAttempt);
+            if (auction is not null)
+            {
+                _auctionRepository.Update(auction);
+            }
 
             await _unitOfWork.CompleteAsync(cancellationToken);
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
+
+            if (auction is not null)
+            {
+                await _auctionRealtimeNotifier.BroadcastPaymentExpiredAsync(AuctionDtoMapper.ToSnapshotDto(auction, DateTimeOffset.UtcNow), cancellationToken);
+            }
         }
         catch
         {

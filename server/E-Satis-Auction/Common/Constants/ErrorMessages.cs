@@ -63,6 +63,36 @@ public static class ErrorMessages
         public const string PricePreviewInvalid = "Cart.PricePreviewInvalid";
     }
 
+    public static class Auction
+    {
+        public const string AlreadyEnded = "Auction.AlreadyEnded";
+        public const string BidAmountInvalid = "Auction.BidAmountInvalid";
+        public const string BidBelowMinimumNextBid = "Auction.BidBelowMinimumNextBid";
+        public const string BidConcurrencyConflict = "Auction.BidConcurrencyConflict";
+        public const string CannotUpdateAfterBids = "Auction.CannotUpdateAfterBids";
+        public const string CannotUpdateInCurrentStatus = "Auction.CannotUpdateInCurrentStatus";
+        public const string CurrencyRequired = "Auction.CurrencyRequired";
+        public const string EntityName = "Auction.EntityName";
+        public const string InvalidDateRange = "Auction.InvalidDateRange";
+        public const string InvalidReservedInventoryState = "Auction.InvalidReservedInventoryState";
+        public const string InvalidStatusTransition = "Auction.InvalidStatusTransition";
+        public const string MinimumBidIncrementInvalid = "Auction.MinimumBidIncrementInvalid";
+        public const string NoActiveReservation = "Auction.NoActiveReservation";
+        public const string NotActive = "Auction.NotActive";
+        public const string NotEnded = "Auction.NotEnded";
+        public const string NotStarted = "Auction.NotStarted";
+        public const string PaymentAlreadyStarted = "Auction.PaymentAlreadyStarted";
+        public const string PaymentNotAvailable = "Auction.PaymentNotAvailable";
+        public const string ProductListingAlreadyInAuction = "Auction.ProductListingAlreadyInAuction";
+        public const string ProductListingRequired = "Auction.ProductListingRequired";
+        public const string ProductRequired = "Auction.ProductRequired";
+        public const string QuantityInvalid = "Auction.QuantityInvalid";
+        public const string SellerCannotBid = "Auction.SellerCannotBid";
+        public const string StartingPriceInvalid = "Auction.StartingPriceInvalid";
+        public const string WinnerRequired = "Auction.WinnerRequired";
+        public const string WinnerOnly = "Auction.WinnerOnly";
+    }
+
     public static class ProductListing
     {
         public const string AlreadyActive = "ProductListing.AlreadyActive";

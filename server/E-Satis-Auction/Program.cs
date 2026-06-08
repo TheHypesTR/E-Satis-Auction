@@ -32,6 +32,7 @@ builder.Services.AddControllers(options =>
 {
     options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
 }).AddDataAnnotationsLocalization();
+builder.Services.AddSignalR();
 builder.Services.AddScalarOpenApi();
 
 builder.Services.AddPersistenceServices(builder.Configuration);
@@ -88,5 +89,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<E_Satis_Auction.Hubs.AuctionHub>("/hubs/auctions");
 
 app.Run();

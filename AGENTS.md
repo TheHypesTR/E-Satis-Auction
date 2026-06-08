@@ -52,6 +52,13 @@
 - Future commerce list endpoints must return `PaginatedList<T>` and must not be cacheable when user-specific, searched, filtered, or paginated.
 - ProductListing lifecycle is managed through admin endpoints; public ProductListing endpoints expose only active/sellable listings.
 - Buy Now must consume `ProductListingId`, not `ProductId`.
+- SignalR is used only for live auction notifications; auction decisions must happen in backend domain/CQRS logic.
+- Auction bids must be idempotent and concurrency-safe.
+- Anti-snipe rule: valid bids in the last 5 minutes extend the auction by 5 minutes using server time.
+- Auction winner payment must reuse `PurchaseOrder`/`PaymentAttempt`; do not create a separate auction-only order/payment model.
+- Auctioned inventory must be locked/released through `Item` domain behavior/events.
+- Winning bid price must be frozen into `PurchaseOrder`/`PurchaseOrderLine`.
+- Auction payment expiration should move the auction to `PaymentExpired`/`Relistable` behavior unless a second-chance flow is explicitly implemented.
 
 ### Item Mode Invariants (MANDATORY)
 - `ItemMode.Standardized`: `ProductId` MUST be present and non-empty.
