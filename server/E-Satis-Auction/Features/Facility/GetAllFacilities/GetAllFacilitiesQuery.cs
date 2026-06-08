@@ -9,6 +9,5 @@ public record GetAllFacilitiesQuery(
     string? SearchTerm,
     string? City,
     ApprovalStatus? Status,
-    Guid? OrganizationId,
     int PageNumber = 1,
     int PageSize = 10) : IQuery<PaginatedList<FacilityDto>>, IPaginatedQuery;

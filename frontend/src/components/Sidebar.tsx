@@ -8,10 +8,14 @@ import {
   LogOut,
   ChevronRight,
   Layers,
+  ShoppingCart,
+  RefreshCcw,
 } from 'lucide-react';
 
 const navItems = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+  { label: 'Siparişler', path: '/orders', icon: ShoppingCart },
+  { label: 'İade Talepleri', path: '/returns', icon: RefreshCcw },
   { label: 'Ürünler', path: '/products', icon: Package },
   { label: 'Tesisler', path: '/facilities', icon: Building2 },
   { label: 'Kategoriler', path: '/categories', icon: Tag },

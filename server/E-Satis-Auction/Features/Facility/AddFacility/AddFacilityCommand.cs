@@ -8,7 +8,6 @@ public record AddFacilityCommand(
     bool IsVisibleOnMap,
     double CapacityM3,
     double CriticalThresholdM3,
-    Guid OrganizationId,
     string AddressTitle,
     string City,
     string District,

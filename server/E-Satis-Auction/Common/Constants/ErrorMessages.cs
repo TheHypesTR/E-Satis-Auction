@@ -51,6 +51,58 @@ public static class ErrorMessages
         public const string OptionValueRequired = "Category.OptionValueRequired";
     }
 
+    public static class Commerce
+    {
+        public const string EntityName = "Commerce.EntityName";
+    }
+
+    public static class Cart
+    {
+        public const string EntityName = "Cart.EntityName";
+        public const string NotActive = "Cart.NotActive";
+        public const string PricePreviewInvalid = "Cart.PricePreviewInvalid";
+    }
+
+    public static class ProductListing
+    {
+        public const string AlreadyActive = "ProductListing.AlreadyActive";
+        public const string AlreadyArchived = "ProductListing.AlreadyArchived";
+        public const string AlreadyInactive = "ProductListing.AlreadyInactive";
+        public const string AlreadySuspended = "ProductListing.AlreadySuspended";
+        public const string CannotDeleteWithOrders = "ProductListing.CannotDeleteWithOrders";
+        public const string CurrencyRequired = "ProductListing.CurrencyRequired";
+        public const string DuplicateActiveListing = "ProductListing.DuplicateActiveListing";
+        public const string EntityName = "ProductListing.EntityName";
+        public const string InvalidCurrency = "ProductListing.InvalidCurrency";
+        public const string InvalidActiveDateRange = "ProductListing.InvalidActiveDateRange";
+        public const string NoAvailableStock = "ProductListing.NoAvailableStock";
+        public const string NotSellable = "ProductListing.NotSellable";
+        public const string PriceMustBePositive = "ProductListing.PriceMustBePositive";
+        public const string ProductRequired = "ProductListing.ProductRequired";
+        public const string SourceFacilityRequired = "ProductListing.SourceFacilityRequired";
+    }
+
+    public static class Campaign
+    {
+        public const string AlreadyActive = "Campaign.AlreadyActive";
+        public const string AlreadySuspended = "Campaign.AlreadySuspended";
+        public const string CouponCodeMaxLength = "Campaign.CouponCodeMaxLength";
+        public const string CouponCodeRequired = "Campaign.CouponCodeRequired";
+        public const string CurrencyMismatch = "Campaign.CurrencyMismatch";
+        public const string CurrencyRequiredForFixedDiscount = "Campaign.CurrencyRequiredForFixedDiscount";
+        public const string DiscountValueMustBePositive = "Campaign.DiscountValueMustBePositive";
+        public const string EntityName = "Campaign.EntityName";
+        public const string FreeShippingDiscountMustBeZero = "Campaign.FreeShippingDiscountMustBeZero";
+        public const string InvalidDateRange = "Campaign.InvalidDateRange";
+        public const string MinimumOrderAmountInvalid = "Campaign.MinimumOrderAmountInvalid";
+        public const string NameRequired = "Campaign.NameRequired";
+        public const string NotApplicable = "Campaign.NotApplicable";
+        public const string PercentageDiscountInvalid = "Campaign.PercentageDiscountInvalid";
+        public const string ProductAlreadyAssigned = "Campaign.ProductAlreadyAssigned";
+        public const string ProductNotAssigned = "Campaign.ProductNotAssigned";
+        public const string ProductRequired = "Campaign.ProductRequired";
+    }
+
     public static class Dispatch
     {
         public const string DeliveryNoteMaxLength = "Dispatch.DeliveryNoteMaxLength";
@@ -88,6 +140,7 @@ public static class ErrorMessages
         public const string AddressTitle = "Exception.AddressTitle";
         public const string BusinessErrorTitle = "Exception.BusinessErrorTitle";
         public const string CategoryTitle = "Exception.CategoryTitle";
+        public const string CommerceTitle = "Exception.CommerceTitle";
         public const string CredentialsTitle = "Exception.CredentialsTitle";
         public const string DispatchTitle = "Exception.DispatchTitle";
         public const string InventoryTitle = "Exception.InventoryTitle";
@@ -153,12 +206,108 @@ public static class ErrorMessages
         public const string NameMaxLength = "Product.NameMaxLength";
         public const string NameRequired = "Product.NameRequired";
         public const string ProductNotEligibleForInventory = "Product.ProductNotEligibleForInventory";
+        public const string ProductNotAvailable = "Product.ProductNotAvailable";
         public const string RequiredAttributeMissing = "Product.RequiredAttributeMissing";
         public const string SkuAlreadyExists = "Product.SkuAlreadyExists";
         public const string SkuInvalidFormat = "Product.SkuInvalidFormat";
         public const string SkuMaxLength = "Product.SkuMaxLength";
         public const string SkuRequired = "Product.SkuRequired";
         public const string UnknownProduct = "Product.Unknown";
+    }
+
+    public static class PurchaseOrder
+    {
+        public const string AlreadyShipped = "PurchaseOrder.AlreadyShipped";
+        public const string AccessDenied = "PurchaseOrder.AccessDenied";
+        public const string AmountInvalid = "PurchaseOrder.AmountInvalid";
+        public const string CannotMutateSubmittedOrder = "PurchaseOrder.CannotMutateSubmittedOrder";
+        public const string CarrierNameRequired = "PurchaseOrder.CarrierNameRequired";
+        public const string CarrierNameMaxLength = "PurchaseOrder.CarrierNameMaxLength";
+        public const string CurrencyMismatch = "PurchaseOrder.CurrencyMismatch";
+        public const string CurrencyRequired = "PurchaseOrder.CurrencyRequired";
+        public const string DiscountedPriceInvalid = "PurchaseOrder.DiscountedPriceInvalid";
+        public const string EntityName = "PurchaseOrder.EntityName";
+        public const string InsufficientStock = "PurchaseOrder.InsufficientStock";
+        public const string InvalidReservedInventoryState = "PurchaseOrder.InvalidReservedInventoryState";
+        public const string LineRequired = "PurchaseOrder.LineRequired";
+        public const string LinesRequired = "PurchaseOrder.LinesRequired";
+        public const string NoteMaxLength = "PurchaseOrder.NoteMaxLength";
+        public const string OriginalItemRequired = "PurchaseOrder.OriginalItemRequired";
+        public const string ProductListingRequired = "PurchaseOrder.ProductListingRequired";
+        public const string ProductNameSnapshotRequired = "PurchaseOrder.ProductNameSnapshotRequired";
+        public const string ProductRequired = "PurchaseOrder.ProductRequired";
+        public const string QuantityMustBePositive = "PurchaseOrder.QuantityMustBePositive";
+        public const string RejectionReasonRequired = "PurchaseOrder.RejectionReasonRequired";
+        public const string ReservedItemRequired = "PurchaseOrder.ReservedItemRequired";
+        public const string ShippingInfoRequired = "PurchaseOrder.ShippingInfoRequired";
+        public const string SkuSnapshotRequired = "PurchaseOrder.SkuSnapshotRequired";
+        public const string StatusMustBeApproved = "PurchaseOrder.StatusMustBeApproved";
+        public const string StatusMustBePendingApproval = "PurchaseOrder.StatusMustBePendingApproval";
+        public const string StatusMustBePaymentPending = "PurchaseOrder.StatusMustBePaymentPending";
+        public const string TrackingNumberRequired = "PurchaseOrder.TrackingNumberRequired";
+        public const string TrackingNumberMaxLength = "PurchaseOrder.TrackingNumberMaxLength";
+        public const string TrackingUrlMaxLength = "PurchaseOrder.TrackingUrlMaxLength";
+        public const string UnitPriceMustBePositive = "PurchaseOrder.UnitPriceMustBePositive";
+        public const string UserRequired = "PurchaseOrder.UserRequired";
+    }
+
+    public static class Payment
+    {
+        public const string AmountInvalid = "Payment.AmountInvalid";
+        public const string EntityName = "Payment.EntityName";
+        public const string Expired = "Payment.Expired";
+        public const string FailureReasonMaxLength = "Payment.FailureReasonMaxLength";
+        public const string FailureReasonRequired = "Payment.FailureReasonRequired";
+        public const string IdempotencyConflict = "Payment.IdempotencyConflict";
+        public const string IdempotencyKeyMaxLength = "Payment.IdempotencyKeyMaxLength";
+        public const string IdempotencyKeyRequired = "Payment.IdempotencyKeyRequired";
+        public const string InvalidStateTransition = "Payment.InvalidStateTransition";
+        public const string NotExpired = "Payment.NotExpired";
+    }
+
+    public static class ReturnRequest
+    {
+        public const string AccessDenied = "ReturnRequest.AccessDenied";
+        public const string CannotMutateSubmittedRequest = "ReturnRequest.CannotMutateSubmittedRequest";
+        public const string AlreadyReceived = "ReturnRequest.AlreadyReceived";
+        public const string CannotReceivePending = "ReturnRequest.CannotReceivePending";
+        public const string CannotReceiveRejected = "ReturnRequest.CannotReceiveRejected";
+        public const string DuplicateLinesNotAllowed = "ReturnRequest.DuplicateLinesNotAllowed";
+        public const string EntityName = "ReturnRequest.EntityName";
+        public const string InvalidReceiveQuantity = "ReturnRequest.InvalidReceiveQuantity";
+        public const string InvalidQuantity = "ReturnRequest.InvalidQuantity";
+        public const string InvalidRestockQuantity = "ReturnRequest.InvalidRestockQuantity";
+        public const string LineNotFound = "ReturnRequestLine.NotFound";
+        public const string LinesRequired = "ReturnRequest.LinesRequired";
+        public const string NotApproved = "ReturnRequest.NotApproved";
+        public const string NotEligible = "ReturnRequest.NotEligible";
+        public const string PurchaseOrderLineRequired = "ReturnRequest.PurchaseOrderLineRequired";
+        public const string PurchaseOrderRequired = "ReturnRequest.PurchaseOrderRequired";
+        public const string QuantityMustBePositive = "ReturnRequest.QuantityMustBePositive";
+        public const string ReasonRequired = "ReturnRequest.ReasonRequired";
+        public const string ReasonMaxLength = "ReturnRequest.ReasonMaxLength";
+        public const string ResolutionNoteRequired = "ReturnRequest.ResolutionNoteRequired";
+        public const string ResolutionNoteMaxLength = "ReturnRequest.ResolutionNoteMaxLength";
+        public const string ReceiveNotAllowed = "ReturnRequest.ReceiveNotAllowed";
+        public const string StatusMustBePending = "ReturnRequest.StatusMustBePending";
+        public const string UserRequired = "ReturnRequest.UserRequired";
+    }
+
+    public static class UserSaleRequest
+    {
+        public const string AccessDenied = "UserSaleRequest.AccessDenied";
+        public const string AmountInvalid = "UserSaleRequest.AmountInvalid";
+        public const string DescriptionRequired = "UserSaleRequest.DescriptionRequired";
+        public const string EntityName = "UserSaleRequest.EntityName";
+        public const string RejectionReasonRequired = "UserSaleRequest.RejectionReasonRequired";
+        public const string StatusMustBeApproved = "UserSaleRequest.StatusMustBeApproved";
+        public const string StatusMustBePending = "UserSaleRequest.StatusMustBePending";
+        public const string TitleRequired = "UserSaleRequest.TitleRequired";
+    }
+
+    public static class PartSaleOperation
+    {
+        public const string EntityName = "PartSaleOperation.EntityName";
     }
 
     public static class User

@@ -11,5 +11,4 @@ public interface IFacilityRepository : IGenericRepository<Facility>
     Task<Facility?> GetWithManagersByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Dictionary<Guid, FacilityStockLookupDto>> GetFacilityStockInfoByIdsAsync(IEnumerable<Guid> facilityIds, CancellationToken cancellationToken = default);
     Task<Dictionary<Guid, string>> GetFacilityNamesByIdsAsync(IEnumerable<Guid> facilityIds, CancellationToken cancellationToken = default);
-    Task<List<Guid>> GetFacilityIdsByOrganizationIdsAsync(IEnumerable<Guid> organizationIds, CancellationToken cancellationToken = default);
 }

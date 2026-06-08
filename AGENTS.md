@@ -35,6 +35,24 @@
 - `Item` is **Transactional Batch/Inventory State**: Facility-level stock batch with status, quantity, optional expiration, and batch-level dynamic attributes.
 - **Never mix responsibilities:** Do not put master catalog lifecycle/business rules into `Item`. Do not use `Product` as a stock movement or batch snapshot entity.
 
+### Commerce Module Rules
+- `ProductListing` is the commerce sales surface; `Product` remains master catalog data and `Item` remains transactional inventory/batch state.
+- `PurchaseOrder` is transactional purchase data and must support multiple sources such as direct purchase and future auction wins.
+- Commerce handlers must never write inventory ledgers directly. Inventory reservation, release, shipping, and return side effects must use domain behavior/events and the existing inventory transaction pattern.
+- Buy Now reserves inventory before admin approval; admin rejection/cancellation must release reserved inventory through `Item` behavior.
+- Shipping must not directly write inventory ledgers; move reserved stock out of availability through domain behavior/events.
+- Return approval does not automatically restock inventory unless a separate return-receipt/restock flow exists.
+- Return approval only accepts the request; inventory is restocked only through the admin return receive/restock flow, which must be transactionally safe and use Item domain behavior/events instead of direct inventory ledger writes.
+- Cart is a temporary purchase-intent workspace and must not own frozen/final price; frozen price belongs on `PurchaseOrderLine` and `PurchaseOrder`.
+- Payment/reservation expiration must release reserved inventory through `Item` domain behavior/events, never by writing inventory ledgers directly.
+- Idempotency keys are mandatory for payment/checkout commands and required for safe duplicate handling on high-risk purchase operations.
+- Campaign pricing must apply line-level discounts before cart/order coupons, then recalculate free-shipping eligibility after discounts.
+- User acquisition/reseller flows must not bypass `Product`/`Item` invariants; unsafe automatic intake should remain a reviewed intake workflow.
+- Part-sale operations must preserve `SourceItemId` on created part items and use explicit transactions.
+- Future commerce list endpoints must return `PaginatedList<T>` and must not be cacheable when user-specific, searched, filtered, or paginated.
+- ProductListing lifecycle is managed through admin endpoints; public ProductListing endpoints expose only active/sellable listings.
+- Buy Now must consume `ProductListingId`, not `ProductId`.
+
 ### Item Mode Invariants (MANDATORY)
 - `ItemMode.Standardized`: `ProductId` MUST be present and non-empty.
 - `ItemMode.AdHoc`: `ProductId` MUST be null. Ad-hoc naming/context fields MUST be validated by domain guards.

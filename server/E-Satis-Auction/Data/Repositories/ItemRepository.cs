@@ -20,10 +20,56 @@ public class ItemRepository : GenericRepository<Item>, IItemRepository
     
     public async Task<List<Item>> GetItemsByIdsAsync(IEnumerable<Guid> itemIds, CancellationToken cancellationToken = default)
     {
+        return await GetItemsByIdsAsync(itemIds, enableTracking: false, cancellationToken);
+    }
+
+    public async Task<List<Item>> GetItemsByIdsAsync(IEnumerable<Guid> itemIds, bool enableTracking, CancellationToken cancellationToken = default)
+    {
+        IQueryable<Item> query = _dbSet.Where(i => itemIds.Contains(i.Id));
+        if (!enableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
+    public async Task<List<Item>> GetAvailableItemsForProductAsync(
+        Guid productId,
+        Guid facilityId,
+        bool enableTracking = false,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<Item> query = _dbSet
+            .Where(i =>
+                i.ProductId == productId &&
+                i.FacilityId == facilityId &&
+                i.Status == ItemStatus.Available &&
+                i.Quantity > 0);
+
+        if (!enableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        return await query
+            .OrderBy(i => i.CreatedAt)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<int> GetAvailableQuantityForProductAsync(
+        Guid productId,
+        Guid facilityId,
+        CancellationToken cancellationToken = default)
+    {
         return await _dbSet
             .AsNoTracking()
-            .Where(i => itemIds.Contains(i.Id))
-            .ToListAsync(cancellationToken);
+            .Where(i =>
+                i.ProductId == productId &&
+                i.FacilityId == facilityId &&
+                i.Status == ItemStatus.Available &&
+                i.Quantity > 0)
+            .SumAsync(i => i.Quantity, cancellationToken);
     }
     
     public async Task<Dictionary<Guid, int>> GetAvailableStockSummaryAsync(Guid productId, CancellationToken cancellationToken = default)
