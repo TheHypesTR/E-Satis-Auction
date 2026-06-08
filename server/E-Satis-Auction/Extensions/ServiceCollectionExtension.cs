@@ -32,6 +32,8 @@ public static class ServiceCollectionExtension
         services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
         services.AddScoped<IPaymentAttemptRepository, PaymentAttemptRepository>();
         services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
+        services.AddScoped<IAuctionRepository, AuctionRepository>();
+        services.AddScoped<IAuctionBidRepository, AuctionBidRepository>();
         services.AddScoped<IReturnRequestRepository, ReturnRequestRepository>();
         services.AddScoped<IUserSaleRequestRepository, UserSaleRequestRepository>();
         services.AddScoped<IPartSaleOperationRepository, PartSaleOperationRepository>();
@@ -40,12 +42,15 @@ public static class ServiceCollectionExtension
         
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<ICommerceWorkflowService, CommerceWorkflowService>();
+        services.AddScoped<IAuctionWorkflowService, AuctionWorkflowService>();
+        services.AddScoped<IAuctionRealtimeNotifier, AuctionRealtimeNotifier>();
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IEmailTemplateService, EmailTemplateService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserInvitationService, UserInvitationService>();
         services.AddHostedService<PaymentReservationExpirationService>();
+        services.AddHostedService<AuctionLifecycleService>();
 
         return services;
     }

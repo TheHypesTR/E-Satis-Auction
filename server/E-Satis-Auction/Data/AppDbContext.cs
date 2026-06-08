@@ -42,6 +42,9 @@ public class AppDbContext : IdentityDbContext<AppUser>
     public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
     public DbSet<PurchaseOrderLine> PurchaseOrderLines { get; set; }
     public DbSet<PurchaseOrderLineAllocation> PurchaseOrderLineAllocations { get; set; }
+    public DbSet<Auction> Auctions { get; set; }
+    public DbSet<AuctionBid> AuctionBids { get; set; }
+    public DbSet<AuctionInventoryReservation> AuctionInventoryReservations { get; set; }
     public DbSet<ReturnRequest> ReturnRequests { get; set; }
     public DbSet<ReturnRequestLine> ReturnRequestLines { get; set; }
     public DbSet<UserSaleRequest> UserSaleRequests { get; set; }

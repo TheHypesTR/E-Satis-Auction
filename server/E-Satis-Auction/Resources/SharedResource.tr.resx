@@ -1005,4 +1005,82 @@
     <data name="PartSaleOperation.EntityName" xml:space="preserve">
         <value>Parça satış işlemi</value>
     </data>
+    <data name="Auction.EntityName" xml:space="preserve">
+        <value>Açık artırma</value>
+    </data>
+    <data name="Auction.ProductListingRequired" xml:space="preserve">
+        <value>Açık artırma için ürün satış ilanı gereklidir.</value>
+    </data>
+    <data name="Auction.ProductRequired" xml:space="preserve">
+        <value>Açık artırma için ürün gereklidir.</value>
+    </data>
+    <data name="Auction.StartingPriceInvalid" xml:space="preserve">
+        <value>Başlangıç fiyatı negatif olamaz.</value>
+    </data>
+    <data name="Auction.MinimumBidIncrementInvalid" xml:space="preserve">
+        <value>Minimum teklif artışı sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="Auction.InvalidDateRange" xml:space="preserve">
+        <value>Açık artırma başlangıç tarihi bitiş tarihinden önce olmalıdır.</value>
+    </data>
+    <data name="Auction.QuantityInvalid" xml:space="preserve">
+        <value>Açık artırma miktarı sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="Auction.CurrencyRequired" xml:space="preserve">
+        <value>Açık artırma için para birimi gereklidir.</value>
+    </data>
+    <data name="Auction.ProductListingAlreadyInAuction" xml:space="preserve">
+        <value>Bu ürün satış ilanı için zaten açık bir artırma var.</value>
+    </data>
+    <data name="Auction.CannotUpdateInCurrentStatus" xml:space="preserve">
+        <value>Bu açık artırma mevcut durumunda güncellenemez.</value>
+    </data>
+    <data name="Auction.CannotUpdateAfterBids" xml:space="preserve">
+        <value>Teklif verildikten sonra bu açık artırma güncellenemez.</value>
+    </data>
+    <data name="Auction.InvalidStatusTransition" xml:space="preserve">
+        <value>İstenen açık artırma durum geçişine izin verilmiyor.</value>
+    </data>
+    <data name="Auction.NotActive" xml:space="preserve">
+        <value>Bu açık artırma aktif değil.</value>
+    </data>
+    <data name="Auction.AlreadyEnded" xml:space="preserve">
+        <value>Bu açık artırma sona ermiş.</value>
+    </data>
+    <data name="Auction.NotEnded" xml:space="preserve">
+        <value>Bu açık artırma henüz sona ermedi.</value>
+    </data>
+    <data name="Auction.NotStarted" xml:space="preserve">
+        <value>Bu planlanmış açık artırmanın başlangıç zamanı henüz gelmedi.</value>
+    </data>
+    <data name="Auction.SellerCannotBid" xml:space="preserve">
+        <value>Satıcı kendi açık artırmasına teklif veremez.</value>
+    </data>
+    <data name="Auction.BidBelowMinimumNextBid" xml:space="preserve">
+        <value>Teklif tutarı minimum sonraki teklifin altında.</value>
+    </data>
+    <data name="Auction.BidConcurrencyConflict" xml:space="preserve">
+        <value>Başka bir teklif daha önce kabul edildi. Lütfen açık artırmayı yenileyip yeni minimum teklifle tekrar deneyin.</value>
+    </data>
+    <data name="Auction.BidAmountInvalid" xml:space="preserve">
+        <value>Teklif tutarı sıfırdan büyük olmalıdır.</value>
+    </data>
+    <data name="Auction.NoActiveReservation" xml:space="preserve">
+        <value>Açık artırmanın aktif rezerve envanteri yok.</value>
+    </data>
+    <data name="Auction.InvalidReservedInventoryState" xml:space="preserve">
+        <value>Açık artırma rezerve envanter durumu geçersiz.</value>
+    </data>
+    <data name="Auction.WinnerRequired" xml:space="preserve">
+        <value>Bu açık artırma işlemi için kazanan teklif gereklidir.</value>
+    </data>
+    <data name="Auction.WinnerOnly" xml:space="preserve">
+        <value>Bu açık artırma ödeme işlemini yalnızca kazanan teklif sahibi yapabilir.</value>
+    </data>
+    <data name="Auction.PaymentNotAvailable" xml:space="preserve">
+        <value>Mevcut durumda açık artırma ödemesi kullanılamaz.</value>
+    </data>
+    <data name="Auction.PaymentAlreadyStarted" xml:space="preserve">
+        <value>Bu açık artırma için ödeme girişimi zaten başlatılmış.</value>
+    </data>
 </root>
