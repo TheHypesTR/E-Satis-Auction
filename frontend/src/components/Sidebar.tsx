@@ -14,6 +14,8 @@ import {
   Gift,
   Handshake,
   Gavel,
+  Puzzle,
+  Truck,
 } from 'lucide-react';
 
 const navItems = [
@@ -25,6 +27,8 @@ const navItems = [
   { label: 'Kampanyalar', path: '/campaigns', icon: Gift },
   { label: 'Alım Talepleri', path: '/user-sale-requests', icon: Handshake },
   { label: 'Açık Artırmalar', path: '/auctions', icon: Gavel },
+  { label: 'Parça Satış', path: '/part-sales', icon: Puzzle },
+  { label: 'Sevkiyat', path: '/dispatches', icon: Truck },
   { label: 'Tesisler', path: '/facilities', icon: Building2 },
   { label: 'Kategoriler', path: '/categories', icon: Tag },
   { label: 'Envanter', path: '/inventory', icon: Layers },
