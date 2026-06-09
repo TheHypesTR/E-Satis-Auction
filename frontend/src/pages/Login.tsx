@@ -27,10 +27,10 @@ export default function Login() {
           if (roles.includes('GeneralAdmin') || roles.includes('WarehouseManager')) {
             navigate('/dashboard');
           } else {
-            navigate('/user/catalog');
+            navigate('/user');
           }
         } catch {
-          navigate('/user/catalog'); // Fallback
+          navigate('/user'); // Fallback
         }
       } else {
         localStorage.setItem('token', 'dev-token');

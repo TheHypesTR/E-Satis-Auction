@@ -72,6 +72,55 @@ export default function Categories() {
     }
   };
 
+  // Toggle Active/Inactive
+  const handleToggleActive = async (cat: Category) => {
+    try {
+      if (cat.isActive) {
+        await api.put(`/Category/${cat.id}/deactivate`);
+      } else {
+        await api.put(`/Category/${cat.id}/activate`);
+      }
+      setCategories(prev => prev.map(c => c.id === cat.id ? { ...c, isActive: !cat.isActive } : c));
+    } catch (err) {
+      console.error('Toggle active failed', err);
+    }
+  };
+
+  // Add Attribute modal
+  const [showAddAttrModal, setShowAddAttrModal] = useState(false);
+  const [attrTargetCatId, setAttrTargetCatId] = useState('');
+  const [attrName, setAttrName] = useState('');
+  const [attrCode, setAttrCode] = useState('');
+  const [attrDataType, setAttrDataType] = useState(0);
+  const [attrTarget, setAttrTarget] = useState(1);
+  const [attrIsRequired, setAttrIsRequired] = useState(false);
+  const [attrSaved, setAttrSaved] = useState(false);
+
+  const handleAddAttribute = async () => {
+    if (!attrName || !attrCode || !attrTargetCatId) return;
+    try {
+      await api.post(`/Category/${attrTargetCatId}/attributes`, {
+        name: attrName,
+        code: attrCode.toLowerCase().replace(/\s+/g, '_'),
+        dataType: attrDataType,
+        target: attrTarget,
+        isRequired: attrIsRequired,
+        options: []
+      });
+      setAttrSaved(true);
+      setTimeout(() => {
+        setAttrSaved(false);
+        setShowAddAttrModal(false);
+        setAttrName(''); setAttrCode(''); setAttrDataType(0); setAttrTarget(1); setAttrIsRequired(false); setAttrTargetCatId('');
+        void api.get('/Category').then(res => {
+          setCategories(res.data?.items || res.data?.data || []);
+        });
+      }, 1000);
+    } catch (err) {
+      console.error('Failed to add attribute', err);
+    }
+  };
+
   useEffect(() => {
     void api.get('/Category').then(res => {
       const data = res.data?.items || res.data?.data || [];
@@ -245,10 +294,14 @@ export default function Categories() {
                     <div style={{ display: 'flex', gap: '8px', marginTop: '20px' }}>
                       <button className="btn btn-ghost" style={{ fontSize: '0.82rem', padding: '8px 14px' }}>Düzenle</button>
                       {cat.isActive
-                        ? <button className="btn btn-ghost" style={{ fontSize: '0.82rem', padding: '8px 14px', color: '#fcd34d' }}>Deaktif Et</button>
-                        : <button className="btn btn-ghost" style={{ fontSize: '0.82rem', padding: '8px 14px', color: '#6ee7b7' }}>Aktif Et</button>
+                        ? <button className="btn btn-ghost" style={{ fontSize: '0.82rem', padding: '8px 14px', color: '#fcd34d' }} onClick={() => handleToggleActive(cat)}>Deaktif Et</button>
+                        : <button className="btn btn-ghost" style={{ fontSize: '0.82rem', padding: '8px 14px', color: '#6ee7b7' }} onClick={() => handleToggleActive(cat)}>Aktif Et</button>
                       }
-                      <button className="btn btn-ghost" style={{ fontSize: '0.82rem', padding: '8px 14px' }}>
+                      <button
+                        className="btn btn-ghost"
+                        style={{ fontSize: '0.82rem', padding: '8px 14px' }}
+                        onClick={() => { setAttrTargetCatId(cat.id); setShowAddAttrModal(true); }}
+                      >
                         <Plus size={13} /> Attribute Ekle
                       </button>
                     </div>
@@ -291,6 +344,69 @@ export default function Categories() {
               <button className="btn btn-ghost" onClick={() => setShowAddCategoryModal(false)}>İptal</button>
               <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleAddCategory}>
                 {actionSaved ? <><Check size={16}/> Eklendi</> : 'Kategori Ekle'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Attribute Modal */}
+      {showAddAttrModal && (
+        <div className="modal-overlay" onClick={() => setShowAddAttrModal(false)}>
+          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 520, width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Layers size={20} color="#a78bfa" /> Attribute Ekle
+              </h2>
+              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowAddAttrModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: 8, padding: '10px 14px', marginBottom: 16, fontSize: '0.82rem', color: '#fcd34d' }}>
+              ⚠️ Attribute eklemek için kategorinin <strong>Pasif</strong> olması gerekir.
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
+              <div style={{ display: 'flex', gap: 16 }}>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Attribute Adı</label>
+                  <input type="text" className="form-input" placeholder="Örn: Renk" value={attrName} onChange={e => setAttrName(e.target.value)} />
+                </div>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Kod (slug)</label>
+                  <input type="text" className="form-input" placeholder="Örn: renk" value={attrCode} onChange={e => setAttrCode(e.target.value)} />
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 16 }}>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Veri Tipi</label>
+                  <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }} value={attrDataType} onChange={e => setAttrDataType(Number(e.target.value))}>
+                    <option value={0}>Metin</option>
+                    <option value={1}>Sayı</option>
+                    <option value={2}>Tarih</option>
+                    <option value={3}>Liste</option>
+                    <option value={4}>Onay</option>
+                  </select>
+                </div>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Hedef</label>
+                  <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }} value={attrTarget} onChange={e => setAttrTarget(Number(e.target.value))}>
+                    <option value={1}>Ürün Düzeyi</option>
+                    <option value={2}>Kalem Düzeyi</option>
+                  </select>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <input type="checkbox" id="attrRequired" checked={attrIsRequired} onChange={e => setAttrIsRequired(e.target.checked)} style={{ width: 16, height: 16, accentColor: '#a78bfa' }} />
+                <label htmlFor="attrRequired" style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', cursor: 'pointer' }}>Zorunlu Alan</label>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+              <button className="btn btn-ghost" onClick={() => setShowAddAttrModal(false)}>İptal</button>
+              <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleAddAttribute}>
+                {attrSaved ? <><Check size={16} /> Eklendi</> : 'Attribute Ekle'}
               </button>
             </div>
           </div>

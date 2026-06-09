@@ -35,10 +35,77 @@ export default function Products() {
   const [showDeleteProductModal, setShowDeleteProductModal] = useState(false);
   const [showAuctionModal, setShowAuctionModal] = useState(false);
   const [auctionStartingPrice, setAuctionStartingPrice] = useState('');
+  const [auctionMinBidIncrement, setAuctionMinBidIncrement] = useState('50');
   const [auctionDuration, setAuctionDuration] = useState('60'); // minutes
+  const [auctionError, setAuctionError] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [actionSaved, setActionSaved] = useState(false);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+
+  const handleStartAuction = async () => {
+    if (!selectedProduct || !auctionStartingPrice || !auctionDuration) return;
+    setAuctionError('');
+    try {
+      // Step 1: Find or create a ProductListing for this product
+      const listingsRes = await api.get(`/AdminProductListing?PageSize=100`);
+      const listings: any[] = listingsRes.data?.items || listingsRes.data?.data || [];
+      let listingId: string | null = null;
+
+      const existingListing = listings.find((l: any) => l.productId === selectedProduct.id);
+      if (existingListing) {
+        listingId = existingListing.id;
+      } else {
+        // We need a facilityId - fetch facilities first
+        const facRes = await api.get('/Facility?PageSize=1');
+        const facilities: any[] = facRes.data?.items || facRes.data?.data || [];
+        if (facilities.length === 0) throw new Error('Tesis bulunamadı. Önce bir tesis ekleyin.');
+        const facilityId = facilities[0].id;
+
+        const newListing = await api.post('/AdminProductListing', {
+          productId: selectedProduct.id,
+          sourceFacilityId: facilityId,
+          price: Number(auctionStartingPrice),
+          currency: 'TRY',
+          quantity: 1
+        });
+        listingId = newListing.data?.id;
+      }
+
+      if (!listingId) throw new Error('ProductListing oluşturulamadı.');
+
+      // Step 2: Create the auction
+      const startsAt = new Date().toISOString();
+      const endsAt = new Date(Date.now() + Number(auctionDuration) * 60000).toISOString();
+      const auctionRes = await api.post('/AdminAuction', {
+        productListingId: listingId,
+        startingPrice: Number(auctionStartingPrice),
+        minimumBidIncrement: Number(auctionMinBidIncrement),
+        startsAt,
+        endsAt,
+        quantity: 1,
+        currency: 'TRY'
+      });
+
+      // Step 3: Activate the auction immediately
+      const auctionId = auctionRes.data?.id;
+      if (auctionId) {
+        await api.put(`/AdminAuction/${auctionId}/activate`);
+      }
+
+      setActionSaved(true);
+      setTimeout(() => {
+        setActionSaved(false);
+        setShowAuctionModal(false);
+        setAuctionStartingPrice('');
+        setAuctionMinBidIncrement('50');
+        setAuctionDuration('60');
+      }, 1500);
+    } catch (err: any) {
+      const msg = err?.response?.data?.errors?.[0]?.message || err?.message || 'Bilinmeyen hata oluştu.';
+      setAuctionError(msg);
+      console.error('Auction creation failed', err);
+    }
+  };
 
   // Add Product form states
   const [categoriesList, setCategoriesList] = useState<{id: string, name: string}[]>([]);
@@ -338,31 +405,49 @@ export default function Products() {
 
       {/* Auction Modal */}
       {showAuctionModal && selectedProduct && (
-        <div className="modal-overlay" onClick={() => setShowAuctionModal(false)}>
-          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 450, width: '100%' }}>
+        <div className="modal-overlay" onClick={() => { setShowAuctionModal(false); setAuctionError(''); }}>
+          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 480, width: '100%' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, color: '#a78bfa' }}>
                 <Play size={20} /> Açık Artırma Başlat
               </h2>
-              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowAuctionModal(false)}>
+              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => { setShowAuctionModal(false); setAuctionError(''); }}>
                 <X size={18} />
               </button>
             </div>
-            
+
             <p style={{ color: 'var(--text-muted)', marginBottom: 20, fontSize: '0.9rem' }}>
-              <strong style={{ color: 'var(--text-primary)' }}>{selectedProduct.name}</strong> için açık artırma ayarlarını yapılandırın.
+              <strong style={{ color: 'var(--text-primary)' }}>{selectedProduct.name}</strong> için açık artırma başlatılacak. Arka planda otomatik olarak bir vitrin kaydı oluşturulacak ve artırma aktive edilecektir.
             </p>
 
+            {auctionError && (
+              <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: 8, padding: '10px 14px', color: '#f87171', fontSize: '0.85rem', marginBottom: 16 }}>
+                {auctionError}
+              </div>
+            )}
+
             <div style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div className="form-group">
-                <label className="form-label">Başlangıç Fiyatı (₺)</label>
-                <input
-                  type="number"
-                  className="form-input"
-                  placeholder="Örn: 1500"
-                  value={auctionStartingPrice}
-                  onChange={e => setAuctionStartingPrice(e.target.value)}
-                />
+              <div style={{ display: 'flex', gap: 16 }}>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Başlangıç Fiyatı (₺)</label>
+                  <input
+                    type="number"
+                    className="form-input"
+                    placeholder="Örn: 1500"
+                    value={auctionStartingPrice}
+                    onChange={e => setAuctionStartingPrice(e.target.value)}
+                  />
+                </div>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Min. Artış (₺)</label>
+                  <input
+                    type="number"
+                    className="form-input"
+                    placeholder="Örn: 50"
+                    value={auctionMinBidIncrement}
+                    onChange={e => setAuctionMinBidIncrement(e.target.value)}
+                  />
+                </div>
               </div>
               <div className="form-group">
                 <label className="form-label">Süre (Dakika)</label>
@@ -377,33 +462,13 @@ export default function Products() {
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
-              <button className="btn btn-ghost" onClick={() => setShowAuctionModal(false)}>İptal</button>
-              <button className="btn btn-primary" style={{ gap: 8 }} onClick={async () => {
-                if (!auctionStartingPrice || !auctionDuration) return;
-                try {
-                  // MOCK: In a real system, you'd need the ProductListingId, not the ProductId
-                  const res = await api.post('/AdminAuction', {
-                    productListingId: selectedProduct.id, 
-                    startingPrice: Number(auctionStartingPrice),
-                    minimumBidIncrement: 10,
-                    startsAt: new Date().toISOString(),
-                    endsAt: new Date(Date.now() + Number(auctionDuration) * 60000).toISOString()
-                  });
-                  // Optionally schedule it
-                  await api.put(`/AdminAuction/${res.data.id}/schedule`);
-                  
-                  setActionSaved(true);
-                  setTimeout(() => {
-                    setActionSaved(false);
-                    setShowAuctionModal(false);
-                    setAuctionStartingPrice('');
-                    setAuctionDuration('60');
-                  }, 1500);
-                } catch (err) {
-                  console.error('Auction creation failed', err);
-                }
-              }}>
-                {actionSaved ? <><Check size={16} /> Başlatıldı</> : 'Açık Artırmayı Başlat'}
+              <button className="btn btn-ghost" onClick={() => { setShowAuctionModal(false); setAuctionError(''); }}>İptal</button>
+              <button
+                className="btn btn-primary"
+                style={{ gap: 8, background: 'linear-gradient(135deg, #7c3aed 0%, #ec4899 100%)' }}
+                onClick={handleStartAuction}
+              >
+                {actionSaved ? <><Check size={16} /> Başlatıldı</> : 'Artırmayı Başlat'}
               </button>
             </div>
           </div>
