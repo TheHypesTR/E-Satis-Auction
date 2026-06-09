@@ -10,6 +10,10 @@ import {
   Layers,
   ShoppingCart,
   RefreshCcw,
+  Store,
+  Gift,
+  Handshake,
+  Gavel,
 } from 'lucide-react';
 
 const navItems = [
@@ -17,6 +21,10 @@ const navItems = [
   { label: 'Siparişler', path: '/orders', icon: ShoppingCart },
   { label: 'İade Talepleri', path: '/returns', icon: RefreshCcw },
   { label: 'Ürünler', path: '/products', icon: Package },
+  { label: 'Satış İlanları', path: '/listings', icon: Store },
+  { label: 'Kampanyalar', path: '/campaigns', icon: Gift },
+  { label: 'Alım Talepleri', path: '/user-sale-requests', icon: Handshake },
+  { label: 'Açık Artırmalar', path: '/auctions', icon: Gavel },
   { label: 'Tesisler', path: '/facilities', icon: Building2 },
   { label: 'Kategoriler', path: '/categories', icon: Tag },
   { label: 'Envanter', path: '/inventory', icon: Layers },

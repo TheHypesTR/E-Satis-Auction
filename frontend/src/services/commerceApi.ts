@@ -16,11 +16,11 @@ import type {
   ReturnRequestDetailDto,
   UserSaleRequestDto,
 } from '../types/commerce';
-import { itemsOf } from './apiUtils';
+import { itemsOf, normalizePaginationParams } from './apiUtils';
 
 export const commerceApi = {
   async getListings(params: Record<string, unknown> = {}) {
-    const { data } = await api.get('/ProductListing', { params });
+    const { data } = await api.get('/ProductListing', { params: normalizePaginationParams(params) });
     return itemsOf<ProductListingSummaryDto>(data);
   },
   async getListing(id: string) {
@@ -28,7 +28,7 @@ export const commerceApi = {
     return data;
   },
   async getCategories(params: Record<string, unknown> = {}) {
-    const { data } = await api.get('/Category', { params });
+    const { data } = await api.get('/Category', { params: normalizePaginationParams(params) });
     return itemsOf<CategoryDto>(data);
   },
   async updateCart(productListingId: string, quantity: number) {
@@ -67,7 +67,7 @@ export const commerceApi = {
     return data;
   },
   async getOrders(params: Record<string, unknown> = {}) {
-    const { data } = await api.get('/PurchaseOrder', { params });
+    const { data } = await api.get('/PurchaseOrder', { params: normalizePaginationParams(params) });
     return itemsOf<OrderSummaryDto>(data);
   },
   async getOrder(id: string) {
@@ -83,11 +83,11 @@ export const commerceApi = {
     return data;
   },
   async getMyUserSaleRequests(params: Record<string, unknown> = {}) {
-    const { data } = await api.get('/UserSaleRequest', { params });
+    const { data } = await api.get('/UserSaleRequest', { params: normalizePaginationParams(params) });
     return itemsOf<UserSaleRequestDto>(data);
   },
   async getAuctions(params: Record<string, unknown> = {}) {
-    const { data } = await api.get('/Auction', { params });
+    const { data } = await api.get('/Auction', { params: normalizePaginationParams(params) });
     return itemsOf<AuctionSummaryDto>(data);
   },
   async getAuction(id: string) {
@@ -95,7 +95,7 @@ export const commerceApi = {
     return data;
   },
   async getAuctionBids(id: string, pageSize = 10) {
-    const { data } = await api.get(`/Auction/${id}/bids`, { params: { pageSize } });
+    const { data } = await api.get(`/Auction/${id}/bids`, { params: normalizePaginationParams({ pageSize }) });
     return itemsOf<AuctionBidDto>(data);
   },
   async placeBid(id: string, amount: number, idempotencyKey: string) {

@@ -7,6 +7,10 @@ import Categories from './pages/Categories';
 import Inventory  from './pages/Inventory';
 import Orders     from './pages/Orders';
 import Returns    from './pages/Returns';
+import ProductListings from './pages/ProductListings';
+import Campaigns from './pages/Campaigns';
+import AdminUserSaleRequests from './pages/AdminUserSaleRequests';
+import AdminAuctions from './pages/AdminAuctions';
 import Layout     from './components/Layout';
 
 import UserLayout        from './components/UserLayout';
@@ -37,6 +41,10 @@ function App() {
           <Route path="inventory" element={<Inventory />} />
           <Route path="orders" element={<Orders />} />
           <Route path="returns" element={<Returns />} />
+          <Route path="listings" element={<ProductListings />} />
+          <Route path="campaigns" element={<Campaigns />} />
+          <Route path="user-sale-requests" element={<AdminUserSaleRequests />} />
+          <Route path="auctions" element={<AdminAuctions />} />
         </Route>
         <Route path="/user" element={<UserLayout />}>
           <Route index element={<UserHome />} />

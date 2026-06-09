@@ -1,327 +1,36 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from 'react';
-import { Layers, Search, TrendingUp, TrendingDown, ArrowRightLeft, Filter, Plus, X, CheckCircle2 } from 'lucide-react';
-import api from '../api/axios';
-
-// Matches backend InventoryTransactionType enum
-const TxType: Record<number, { label: string; badge: string; icon: React.ReactNode; dir: 'in' | 'out' | 'neutral' }> = {
-  0: { label: 'Giriş',        badge: 'badge-green',  icon: <TrendingUp  size={14} />, dir: 'in'      },
-  1: { label: 'Çıkış',        badge: 'badge-amber',  icon: <TrendingDown size={14} />, dir: 'out'    },
-  2: { label: 'Transfer',     badge: 'badge-blue',   icon: <ArrowRightLeft size={14} />, dir: 'neutral' },
-  3: { label: 'Düzeltme +',   badge: 'badge-green',  icon: <TrendingUp  size={14} />, dir: 'in'      },
-  4: { label: 'Düzeltme -',   badge: 'badge-amber',  icon: <TrendingDown size={14} />, dir: 'out'     },
-};
-
-interface InventoryTransaction {
-  id: string;
-  itemName: string;
-  unitOfMeasure: number;
-  facilityName: string;
-  transactionType: number;
-  quantityChange: number;
-  previousQuantity: number;
-  newQuantity: number;
-  referenceTrackingNumber?: string;
-  createdByUserName: string;
-  createdAt: string;
-}
-
-const UoM: Record<number, string> = { 0: 'Adet', 1: 'kg', 2: 'lt', 3: 'm', 4: 'm²', 5: 'm³' };
-
-
-
-const summaryStats = [
-  { label: 'Toplam Giriş',  value: '+860', color: '#6ee7b7', glow: '#10b981' },
-  { label: 'Toplam Çıkış',  value: '-18',  color: '#fcd34d', glow: '#f59e0b' },
-  { label: 'Transfer',      value: '5',    color: '#93c5fd', glow: '#3b82f6' },
-  { label: 'Düzeltme',      value: '3',    color: '#a78bfa', glow: '#7c3aed' },
-];
+import { Check, Layers, Plus, Search, X } from 'lucide-react';
+import { adminApi } from '../services/adminApi';
+import { getApiErrorMessage, itemStatusLabel } from '../services/apiUtils';
+import type { FacilityDto, ItemSummaryDto, ProductSummaryDto } from '../types/admin';
 
 export default function Inventory() {
-  const [transactions, setTransactions] = useState<InventoryTransaction[]>([]);
-  const [loading, setLoading]           = useState(true);
-  const [search, setSearch]             = useState('');
-  const [filterType, setFilterType]     = useState<number | null>(null);
+  const [items, setItems] = useState<ItemSummaryDto[]>([]);
+  const [products, setProducts] = useState<ProductSummaryDto[]>([]);
+  const [facilities, setFacilities] = useState<FacilityDto[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const [search, setSearch] = useState('');
+  const [showAdd, setShowAdd] = useState(false);
+  const [form, setForm] = useState({ productId: '', facilityId: '', quantity: '1', unitOfMeasure: '1', status: '1' });
 
-  const [showAddStockModal, setShowAddStockModal] = useState(false);
-  const [actionSaved, setActionSaved] = useState(false);
-  const [productsList, setProductsList] = useState<{id: string, name: string, unitOfMeasure: number}[]>([]);
-  const [facilitiesList, setFacilitiesList] = useState<{id: string, name: string}[]>([]);
-  
-  const [newStockProductId, setNewStockProductId] = useState('');
-  const [newStockFacilityId, setNewStockFacilityId] = useState('');
-  const [newStockQuantity, setNewStockQuantity] = useState('');
+  const load = () => { setLoading(true); setError(''); Promise.all([adminApi.items({ pageSize: 100 }), adminApi.products({ pageSize: 100 }), adminApi.facilities({ pageSize: 100 })]).then(([i, p, f]) => { setItems(i); setProducts(p); setFacilities(f); }).catch(err => setError(getApiErrorMessage(err, 'Envanter yüklenemedi.'))).finally(() => setLoading(false)); };
+  useEffect(load, []);
 
-  const handleAddStock = async () => {
-    if (!newStockProductId || !newStockFacilityId || !newStockQuantity) return;
-    try {
-      const prod = productsList.find(p => p.id === newStockProductId);
-      await api.post('/Item/standardized', {
-        productId: newStockProductId,
-        facilityId: newStockFacilityId,
-        quantity: Number(newStockQuantity),
-        unitOfMeasure: prod ? prod.unitOfMeasure : 1,
-        status: 1, // Available
-        dynamicAttributes: {}
-      });
-      setActionSaved(true);
-      setTimeout(() => {
-        setActionSaved(false);
-        setShowAddStockModal(false);
-        setNewStockProductId(''); setNewStockFacilityId(''); setNewStockQuantity('');
-        void api.get('/InventoryTransaction').then(res => {
-          setTransactions(res.data?.items || res.data?.data || []);
-        });
-      }, 1000);
-    } catch (err) {
-      console.error('Failed to add stock', err);
-    }
+  const filtered = items.filter(i => i.displayName.toLowerCase().includes(search.toLowerCase()) || i.facilityName.toLowerCase().includes(search.toLowerCase()) || (i.productName ?? '').toLowerCase().includes(search.toLowerCase()));
+  const add = async () => {
+    if (!form.productId || !form.facilityId || Number(form.quantity) <= 0) return;
+    setSaving(true); setError(''); setMessage('');
+    try { await adminApi.addStandardizedItem({ productId: form.productId, facilityId: form.facilityId, quantity: Number(form.quantity), unitOfMeasure: Number(form.unitOfMeasure), status: Number(form.status), dynamicAttributes: {} }); setMessage('Standardized Item stoğa eklendi.'); setShowAdd(false); load(); }
+    catch (err) { setError(getApiErrorMessage(err, 'Stok eklenemedi.')); }
+    finally { setSaving(false); }
   };
 
-  useEffect(() => {
-    void api.get('/InventoryTransaction').then(res => {
-      const data = res.data?.items || res.data?.data || [];
-      setTransactions(data); setLoading(false);
-    }).catch(() => { setTransactions([]); setLoading(false); });
-
-    void api.get('/Product?PageSize=100').then(res => {
-      setProductsList(res.data?.items || res.data?.data || []);
-    }).catch(() => {});
-    
-    void api.get('/Facility?PageSize=100').then(res => {
-      setFacilitiesList(res.data?.items || res.data?.data || []);
-    }).catch(() => {});
-  }, []);
-
-  const filtered = transactions.filter(t => {
-    const matchSearch = t.itemName.toLowerCase().includes(search.toLowerCase()) ||
-      t.facilityName.toLowerCase().includes(search.toLowerCase());
-    const matchFilter = filterType === null ? true : t.transactionType === filterType;
-    return matchSearch && matchFilter;
-  });
-
-  const formatDate = (s: string) =>
-    new Date(s).toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-
-  return (
-    <div>
-      {/* Header */}
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Envanter Hareketleri</h1>
-          <p className="page-subtitle">Tüm stok giriş-çıkış ve transfer kayıtları</p>
-        </div>
-        <button className="btn btn-primary" onClick={() => setShowAddStockModal(true)}>
-          <Plus size={16} />
-          Yeni Stok
-        </button>
-      </div>
-
-      {/* Summary strip */}
-      <div style={{ display: 'flex', gap: '16px', marginBottom: '28px', flexWrap: 'wrap' }}>
-        {summaryStats.map((s, i) => (
-          <div key={i} className="animate-fade-up" style={{
-            animationDelay: `${i * 0.07}s`,
-            display: 'flex', alignItems: 'center', gap: '14px',
-            background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)',
-            borderRadius: '14px', padding: '16px 22px',
-          }}>
-            <div style={{
-              width: '10px', height: '10px', borderRadius: '50%',
-              background: s.glow, boxShadow: `0 0 14px ${s.glow}`, flexShrink: 0,
-            }} />
-            <div>
-              <div style={{
-                fontSize: '1.5rem', fontWeight: 700, lineHeight: 1,
-                color: s.color, fontFamily: "'Space Grotesk', sans-serif",
-              }}>{s.value}</div>
-              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '3px' }}>{s.label}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Table wrapper */}
-      <div className="data-table-wrapper animate-fade-up">
-        {/* Toolbar */}
-        <div className="data-table-header" style={{ flexWrap: 'wrap', gap: '10px' }}>
-          <div className="search-bar" style={{ minWidth: 280 }}>
-            <Search size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
-            <input
-              type="text"
-              placeholder="Kalem adı veya tesis ara..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
-          </div>
-
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <button
-              className="btn btn-ghost"
-              onClick={() => setFilterType(null)}
-              style={{
-                padding: '8px 14px', fontSize: '0.8rem',
-                background: filterType === null ? 'rgba(124,58,237,0.15)' : undefined,
-                color: filterType === null ? '#a78bfa' : undefined,
-              }}
-            >
-              <Filter size={13} /> Tümü
-            </button>
-            {Object.entries(TxType).map(([key, cfg]) => (
-              <button
-                key={key}
-                className="btn btn-ghost"
-                onClick={() => setFilterType(Number(key))}
-                style={{
-                  padding: '8px 14px', fontSize: '0.8rem',
-                  background: filterType === Number(key) ? 'rgba(124,58,237,0.15)' : undefined,
-                  color: filterType === Number(key) ? '#a78bfa' : undefined,
-                }}
-              >
-                {cfg.icon} {cfg.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Table */}
-        {loading ? (
-          <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>
-            <Layers size={36} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
-            <p>Yükleniyor...</p>
-          </div>
-        ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table className="data-table" style={{ minWidth: '860px' }}>
-              <thead>
-                <tr>
-                  <th>Tarih</th>
-                  <th>Kalem</th>
-                  <th>Tesis</th>
-                  <th>İşlem Tipi</th>
-                  <th style={{ textAlign: 'right' }}>Değişim</th>
-                  <th style={{ textAlign: 'right' }}>Önceki</th>
-                  <th style={{ textAlign: 'right' }}>Sonraki</th>
-                  <th>Ref. No</th>
-                  <th>Kullanıcı</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.length === 0 ? (
-                  <tr>
-                    <td colSpan={9} style={{ textAlign: 'center', padding: '48px', color: 'var(--text-muted)' }}>
-                      Kayıt bulunamadı.
-                    </td>
-                  </tr>
-                ) : filtered.map(tx => {
-                  const cfg = TxType[tx.transactionType] ?? TxType[0];
-                  const isIn  = cfg.dir === 'in';
-                  const isOut = cfg.dir === 'out';
-                  return (
-                    <tr key={tx.id}>
-                      <td style={{ whiteSpace: 'nowrap', fontSize: '0.8rem' }}>{formatDate(tx.createdAt)}</td>
-                      <td style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{tx.itemName}</td>
-                      <td style={{ fontSize: '0.85rem' }}>{tx.facilityName}</td>
-                      <td><span className={`badge ${cfg.badge}`}>{cfg.icon}{cfg.label}</span></td>
-                      <td style={{ textAlign: 'right' }}>
-                        <span style={{
-                          fontFamily: "'Space Grotesk', sans-serif",
-                          fontWeight: 700,
-                          fontSize: '0.95rem',
-                          color: isIn ? '#6ee7b7' : isOut ? '#f87171' : '#93c5fd',
-                        }}>
-                          {isIn ? '+' : isOut ? '−' : '⇄'}{tx.quantityChange} {UoM[tx.unitOfMeasure] ?? ''}
-                        </span>
-                      </td>
-                      <td style={{ textAlign: 'right', fontFamily: 'monospace', fontSize: '0.85rem' }}>
-                        {tx.previousQuantity}
-                      </td>
-                      <td style={{ textAlign: 'right', fontFamily: 'monospace', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-                        {tx.newQuantity}
-                      </td>
-                      <td>
-                        {tx.referenceTrackingNumber ? (
-                          <code style={{
-                            fontSize: '0.78rem', background: 'rgba(255,255,255,0.05)',
-                            padding: '2px 7px', borderRadius: '4px', color: '#a78bfa',
-                          }}>{tx.referenceTrackingNumber}</code>
-                        ) : (
-                          <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>—</span>
-                        )}
-                      </td>
-                      <td style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{tx.createdByUserName}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {/* Footer */}
-        <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '14px 24px', borderTop: '1px solid var(--glass-border)',
-          color: 'var(--text-muted)', fontSize: '0.82rem',
-        }}>
-          <span>{filtered.length} kayıt gösteriliyor</span>
-          <div style={{ display: 'flex', gap: '6px' }}>
-            {[1, 2, 3].map(n => (
-              <button key={n} className="btn btn-ghost" style={{
-                width: '32px', height: '32px', padding: 0, fontSize: '0.82rem',
-                background: n === 1 ? 'rgba(124,58,237,0.15)' : undefined,
-                color:      n === 1 ? '#a78bfa' : undefined,
-                borderColor: n === 1 ? 'rgba(124,58,237,0.3)' : undefined,
-              }}>{n}</button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Add Stock Modal */}
-      {showAddStockModal && (
-        <div className="modal-overlay" onClick={() => setShowAddStockModal(false)}>
-          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Layers size={20} color="#a78bfa" /> Yeni Stok Ekle
-              </h2>
-              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowAddStockModal(false)}>
-                <X size={18} />
-              </button>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
-              <div className="form-group">
-                <label className="form-label">Tesis Seçimi</label>
-                <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }} value={newStockFacilityId} onChange={e => setNewStockFacilityId(e.target.value)}>
-                  <option value="">Tesis seçin...</option>
-                  {facilitiesList.map(f => (
-                    <option key={f.id} value={f.id}>{f.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Ürün Seçimi</label>
-                <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }} value={newStockProductId} onChange={e => setNewStockProductId(e.target.value)}>
-                  <option value="">Ürün seçin...</option>
-                  {productsList.map(p => (
-                    <option key={p.id} value={p.id}>{p.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Miktar</label>
-                <input type="number" className="form-input" placeholder="Örn: 100" value={newStockQuantity} onChange={e => setNewStockQuantity(e.target.value)} />
-              </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
-              <button className="btn btn-ghost" onClick={() => setShowAddStockModal(false)}>İptal</button>
-              <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleAddStock}>
-                {actionSaved ? <><CheckCircle2 size={16}/> Eklendi</> : 'Stok Ekle'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  return <div><div className="page-header"><div><h1 className="page-title">Envanter / Item</h1><p className="page-subtitle">Item fiziksel stok gerçekliğidir; Product veya Listing değildir.</p></div><button className="btn btn-primary" onClick={() => setShowAdd(true)}><Plus size={16} /> Standardized Item Ekle</button></div>{error && <div className="error-banner" style={{ marginBottom: 16 }}>{error}</div>}{message && <div style={{ marginBottom: 16, color: '#6ee7b7' }}>{message}</div>}<div className="data-table-wrapper animate-fade-up"><div className="data-table-header"><div className="search-bar" style={{ minWidth: 300 }}><Search size={15} /><input placeholder="Item, product veya tesis ara..." value={search} onChange={e => setSearch(e.target.value)} /></div></div>{loading ? <Empty text="Item listesi yükleniyor..." /> : filtered.length === 0 ? <Empty text="Item bulunamadı." /> : <table className="data-table"><thead><tr><th>Item</th><th>Mode</th><th>Durum</th><th>Miktar</th><th>Tesis</th><th>Product</th></tr></thead><tbody>{filtered.map(item => <tr key={item.id}><td><strong>{item.displayName}</strong><div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{item.categoryName}</div></td><td>{String(item.mode)}</td><td><span className="badge badge-purple">{itemStatusLabel[String(item.status)] ?? String(item.status)}</span></td><td>{item.quantity} {String(item.unitOfMeasure)}</td><td>{item.facilityName}</td><td>{item.productName ?? 'AdHoc'}</td></tr>)}</tbody></table>}</div>{showAdd && <div className="modal-overlay" onClick={() => setShowAdd(false)}><div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 520 }}><div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}><h2>Standardized Item Ekle</h2><button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowAdd(false)}><X size={18} /></button></div><div style={{ display: 'grid', gap: 14 }}><Select label="Product" value={form.productId} onChange={v => setForm(p => ({ ...p, productId: v }))} options={products.filter(p => p.isActive).map(p => ({ value: p.id, label: `${p.name} (${p.sku})` }))} /><Select label="Facility" value={form.facilityId} onChange={v => setForm(p => ({ ...p, facilityId: v }))} options={facilities.map(f => ({ value: f.id, label: `${f.name} - ${f.city}` }))} /><Input label="Miktar" value={form.quantity} onChange={v => setForm(p => ({ ...p, quantity: v }))} /><Select label="Birim" value={form.unitOfMeasure} onChange={v => setForm(p => ({ ...p, unitOfMeasure: v }))} options={[{ value: '1', label: 'Piece' }, { value: '2', label: 'Kg' }, { value: '3', label: 'Liter' }, { value: '4', label: 'Box' }, { value: '5', label: 'Pack' }, { value: '6', label: 'Pallet' }]} /><Select label="Başlangıç Durumu" value={form.status} onChange={v => setForm(p => ({ ...p, status: v }))} options={[{ value: '1', label: 'Available' }, { value: '4', label: 'Damaged' }]} /></div><p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: 14 }}>Backend’de genel Item update/status-change endpoint’i yok; operasyonel stok hareketleri domain akışlarından gelir.</p><div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 24 }}><button className="btn btn-ghost" onClick={() => setShowAdd(false)}>İptal</button><button className="btn btn-primary" disabled={saving} onClick={add}><Check size={16} /> Stok Ekle</button></div></div></div>}</div>;
 }
+function Empty({ text }: { text: string }) { return <div style={{ padding: '60px 0', textAlign: 'center', color: 'var(--text-muted)' }}><Layers size={32} style={{ margin: '0 auto 12px', opacity: 0.3 }} /><p>{text}</p></div>; }
+function Input({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) { return <div className="form-group"><label className="form-label">{label}</label><input type="number" className="form-input" value={value} onChange={e => onChange(e.target.value)} /></div>; }
+function Select({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: Array<{ value: string; label: string }> }) { return <div className="form-group"><label className="form-label">{label}</label><select className="form-input" style={{ appearance: 'auto' }} value={value} onChange={e => onChange(e.target.value)}><option value="">Seçiniz</option>{options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></div>; }
