@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Plus, Search, Filter, MoreVertical, Package, Play, Square, Gift, X, Check, Edit2, Trash2 } from 'lucide-react';
 import api from '../api/axios';
+import laptopMock from '../assets/laptop-mock.png';
 
 interface Product {
   id: string;
@@ -17,6 +18,15 @@ const categoryColors: Record<string, string> = {
   Medikal: 'green',
   'Su & Gıda': 'blue',
   İletişim: 'blue',
+};
+
+// Map product keywords → mock image URL
+const getProductMockImage = (name: string, sku: string): string | null => {
+  const lower = (name + ' ' + sku).toLowerCase();
+  if (lower.includes('laptop') || lower.includes('dizüstü') || lower.includes('notebook') || lower.includes('lpt')) {
+    return laptopMock;
+  }
+  return null;
 };
 
 export default function Products() {
@@ -281,8 +291,30 @@ export default function Products() {
                       </code>
                     </td>
                     <td>
-                      <div style={{ fontWeight: 500, color: 'var(--text-primary)', fontSize: '0.92rem' }}>
-                        {p.name}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        {(() => {
+                          const img = getProductMockImage(p.name, p.sku);
+                          return img ? (
+                            <div style={{
+                              width: 48, height: 48, borderRadius: 10, overflow: 'hidden', flexShrink: 0,
+                              background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)',
+                              boxShadow: '0 0 16px rgba(124,58,237,0.2)'
+                            }}>
+                              <img src={img} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            </div>
+                          ) : (
+                            <div style={{
+                              width: 48, height: 48, borderRadius: 10, flexShrink: 0,
+                              background: 'rgba(255,255,255,0.04)', border: '1px solid var(--glass-border)',
+                              display: 'flex', alignItems: 'center', justifyContent: 'center'
+                            }}>
+                              <Package size={18} style={{ opacity: 0.3 }} />
+                            </div>
+                          );
+                        })()}
+                        <div style={{ fontWeight: 500, color: 'var(--text-primary)', fontSize: '0.92rem' }}>
+                          {p.name}
+                        </div>
                       </div>
                     </td>
                     <td>
