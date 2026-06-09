@@ -34,6 +34,9 @@ export interface CategoryDto {
   name: string;
   description?: string | null;
   isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  attributes?: Array<{ name: string; dataType: string | number; target: string | number; isRequired: boolean }>;
 }
 
 export interface CartDto {

@@ -1,269 +1,84 @@
-import { Package, Building2, Users, Zap, TrendingUp, ArrowUpRight, Activity } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useEffect, useState } from 'react';
+import { Activity, Building2, Gavel, Package, RefreshCcw, ShoppingCart, Tag, Users } from 'lucide-react';
+import { adminApi } from '../services/adminApi';
+import { auctionStatusLabel, getApiErrorMessage, itemStatusLabel, listingStatusLabel, orderStatusLabel, returnStatusLabel, userSaleRequestStatusLabel } from '../services/apiUtils';
 
-const stats = [
-  {
-    label: 'Toplam Ürün',
-    value: '1,284',
-    change: '+12%',
-    positive: true,
-    icon: Package,
-    iconBg: 'rgba(124, 58, 237, 0.15)',
-    iconColor: '#a78bfa',
-    badgeBg: 'rgba(16, 185, 129, 0.1)',
-    badgeColor: '#6ee7b7',
-  },
-  {
-    label: 'Kayıtlı Tesis',
-    value: '48',
-    change: '+3',
-    positive: true,
-    icon: Building2,
-    iconBg: 'rgba(59, 130, 246, 0.15)',
-    iconColor: '#93c5fd',
-    badgeBg: 'rgba(16, 185, 129, 0.1)',
-    badgeColor: '#6ee7b7',
-  },
-  {
-    label: 'Aktif Kullanıcı',
-    value: '215',
-    change: '-2%',
-    positive: false,
-    icon: Users,
-    iconBg: 'rgba(236, 72, 153, 0.15)',
-    iconColor: '#f9a8d4',
-    badgeBg: 'rgba(239, 68, 68, 0.1)',
-    badgeColor: '#f87171',
-  },
-  {
-    label: 'İşlem Hacmi',
-    value: '₺4.2M',
-    change: '+28%',
-    positive: true,
-    icon: Zap,
-    iconBg: 'rgba(245, 158, 11, 0.15)',
-    iconColor: '#fcd34d',
-    badgeBg: 'rgba(16, 185, 129, 0.1)',
-    badgeColor: '#6ee7b7',
-  },
-];
+interface StatCard { label: string; value: string; sub: string; icon: typeof Package; color: string; }
+interface Breakdown { title: string; rows: Array<{ label: string; value: number }> }
 
-const recentActivity = [
-  { action: 'Yeni ürün eklendi', subject: 'Çadır XL 6 Kişilik', time: '2 dakika önce', type: 'success' },
-  { action: 'Stok güncellendi', subject: 'Jeneratör 5kW', time: '14 dakika önce', type: 'info' },
-  { action: 'Tesis oluşturuldu', subject: 'Ankara Depo B3', time: '1 saat önce', type: 'purple' },
-  { action: 'Kullanıcı kaydoldu', subject: 'operator@esatis.com', time: '3 saat önce', type: 'info' },
-  { action: 'Envanter sevkiyatı', subject: 'İlk Yardım Seti x200', time: '5 saat önce', type: 'amber' },
-];
-
-const typeColor: Record<string, string> = {
-  success: '#6ee7b7',
-  info: '#93c5fd',
-  purple: '#a78bfa',
-  amber: '#fcd34d',
-};
+function countByStatus<T extends { status: string | number }>(items: T[], labels: Record<string, string>) {
+  const map = new Map<string, number>();
+  items.forEach(item => {
+    const label = labels[String(item.status)] ?? String(item.status);
+    map.set(label, (map.get(label) ?? 0) + 1);
+  });
+  return Array.from(map.entries()).map(([label, value]) => ({ label, value }));
+}
 
 export default function Dashboard() {
-  const navigate = useNavigate();
+  const [stats, setStats] = useState<StatCard[]>([]);
+  const [breakdowns, setBreakdowns] = useState<Breakdown[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    setLoading(true);
+    Promise.all([
+      adminApi.products({ pageSize: 100 }),
+      adminApi.facilities({ pageSize: 100 }),
+      adminApi.items({ pageSize: 100 }),
+      adminApi.listings({ pageSize: 100 }),
+      adminApi.orders({ pageSize: 100 }),
+      adminApi.returns({ pageSize: 100 }),
+      adminApi.auctions({ pageSize: 100 }),
+      adminApi.userSaleRequests({ pageSize: 100 }),
+    ])
+      .then(([products, facilities, items, listings, orders, returns, auctions, saleRequests]) => {
+        setStats([
+          { label: 'Katalog Ürünleri', value: String(products.length), sub: 'Product master data', icon: Package, color: '#a78bfa' },
+          { label: 'Tesisler', value: String(facilities.length), sub: 'Stok lokasyonları', icon: Building2, color: '#93c5fd' },
+          { label: 'Fiziksel Item', value: String(items.length), sub: `${items.reduce((sum, item) => sum + item.quantity, 0)} toplam adet`, icon: Activity, color: '#6ee7b7' },
+          { label: 'Satış Listingleri', value: String(listings.length), sub: 'ProductListing yüzeyi', icon: Tag, color: '#fcd34d' },
+          { label: 'Siparişler', value: String(orders.length), sub: 'Admin onay/kargo akışı', icon: ShoppingCart, color: '#fb7185' },
+          { label: 'İade Talepleri', value: String(returns.length), sub: 'Restock ayrı aksiyon', icon: RefreshCcw, color: '#38bdf8' },
+          { label: 'Açık Artırmalar', value: String(auctions.length), sub: 'Schedule/active/finalize', icon: Gavel, color: '#f59e0b' },
+          { label: 'Alım Talepleri', value: String(saleRequests.length), sub: 'Approve/reject/intake', icon: Users, color: '#c084fc' },
+        ]);
+        setBreakdowns([
+          { title: 'Item Durumları', rows: countByStatus(items, itemStatusLabel) },
+          { title: 'Listing Durumları', rows: countByStatus(listings, listingStatusLabel) },
+          { title: 'Sipariş Durumları', rows: countByStatus(orders, orderStatusLabel) },
+          { title: 'İade Durumları', rows: countByStatus(returns, returnStatusLabel) },
+          { title: 'Auction Durumları', rows: countByStatus(auctions, auctionStatusLabel) },
+          { title: 'UserSaleRequest Durumları', rows: countByStatus(saleRequests, userSaleRequestStatusLabel) },
+        ]);
+      })
+      .catch(err => setError(getApiErrorMessage(err, 'Dashboard verileri yüklenemedi.')))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div>
-      {/* Page header */}
       <div className="page-header">
         <div>
           <h1 className="page-title">Dashboard</h1>
-          <p className="page-subtitle">Sistemin genel durumuna hoş geldiniz.</p>
-        </div>
-        <button className="btn btn-primary">
-          <TrendingUp size={16} />
-          Rapor Oluştur
-        </button>
-      </div>
-
-      {/* Stat cards */}
-      <div className="stat-grid">
-        {stats.map((s, i) => {
-          const Icon = s.icon;
-          return (
-            <div
-              className={`stat-card animate-fade-up animate-fade-up-${i + 1}`}
-              key={s.label}
-            >
-              <div className="stat-card-top">
-                <div
-                  className="stat-icon"
-                  style={{ background: s.iconBg }}
-                >
-                  <Icon size={22} color={s.iconColor} />
-                </div>
-                <span
-                  className="stat-badge"
-                  style={{ background: s.badgeBg, color: s.badgeColor }}
-                >
-                  {s.change}
-                </span>
-              </div>
-              <div>
-                <div className="stat-value">{s.value}</div>
-                <div className="stat-label">{s.label}</div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Bottom grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-
-        {/* Recent Activity */}
-        <div className="data-table-wrapper animate-fade-up animate-fade-up-3">
-          <div className="data-table-header">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Activity size={18} style={{ color: 'var(--neon-purple-light)' }} />
-              <span style={{ fontWeight: 600 }}>Son Aktiviteler</span>
-            </div>
-            <button className="btn btn-ghost" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>
-              Tümünü gör <ArrowUpRight size={13} />
-            </button>
-          </div>
-
-          <div style={{ padding: '8px 0' }}>
-            {recentActivity.map((a, idx) => (
-              <div key={idx} style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px',
-                padding: '14px 24px',
-                borderBottom: idx < recentActivity.length - 1 ? '1px solid rgba(255,255,255,0.03)' : 'none',
-                transition: 'background 0.15s',
-                cursor: 'default',
-              }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-              >
-                {/* Indicator dot */}
-                <div style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  background: typeColor[a.type],
-                  boxShadow: `0 0 10px ${typeColor[a.type]}`,
-                  flexShrink: 0,
-                }} />
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-                    {a.action} —{' '}
-                    <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{a.subject}</span>
-                  </div>
-                </div>
-                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
-                  {a.time}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Quick Access */}
-        <div className="data-table-wrapper animate-fade-up animate-fade-up-4">
-          <div className="data-table-header">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Zap size={18} style={{ color: '#fcd34d' }} />
-              <span style={{ fontWeight: 600 }}>Hızlı Erişim</span>
-            </div>
-          </div>
-          <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {[
-              { label: 'Yeni Ürün Ekle', sub: 'Katalog veritabanına ürün ekle', color: '#a78bfa', bg: 'rgba(124,58,237,0.08)', border: 'rgba(124,58,237,0.2)', path: '/products' },
-              { label: 'Yeni Tesis Oluştur', sub: 'Bölge veya depo kaydı aç', color: '#93c5fd', bg: 'rgba(59,130,246,0.08)', border: 'rgba(59,130,246,0.2)', path: '/facilities' },
-              { label: 'Envanter Sevk Et', sub: 'Stok sevkiyat emri oluştur', color: '#6ee7b7', bg: 'rgba(16,185,129,0.08)', border: 'rgba(16,185,129,0.2)', path: '/inventory' },
-              { label: 'Kategori Yönet', sub: 'Şema ve attribute düzenle', color: '#fcd34d', bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)', path: '/categories' },
-            ].map((item, i) => (
-              <div key={i} style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '14px 18px',
-                background: item.bg,
-                border: `1px solid ${item.border}`,
-                borderRadius: '12px',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-                onClick={() => navigate(item.path)}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLDivElement).style.transform = 'translateX(4px)';
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = `0 4px 20px rgba(0,0,0,0.2)`;
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLDivElement).style.transform = '';
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = '';
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: '0.9rem', fontWeight: 600, color: item.color, marginBottom: '2px' }}>{item.label}</div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{item.sub}</div>
-                </div>
-                <ArrowUpRight size={16} style={{ color: item.color, flexShrink: 0 }} />
-              </div>
-            ))}
-          </div>
-        </div>
-
-      </div>
-
-      {/* Test Links */}
-      <div className="data-table-wrapper animate-fade-up animate-fade-up-5" style={{ marginTop: '20px' }}>
-        <div className="data-table-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Activity size={18} style={{ color: '#f87171' }} />
-            <span style={{ fontWeight: 600 }}>Tüm Sayfalar (Test İçin Hızlı Erişim)</span>
-          </div>
-        </div>
-        <div style={{ padding: '20px', display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-          {[
-            { label: 'Admin - Dashboard', path: '/dashboard', color: '#a78bfa' },
-            { label: 'Admin - Products', path: '/products', color: '#a78bfa' },
-            { label: 'Admin - Facilities', path: '/facilities', color: '#a78bfa' },
-            { label: 'Admin - Categories', path: '/categories', color: '#a78bfa' },
-            { label: 'Admin - Inventory', path: '/inventory', color: '#a78bfa' },
-            { label: 'User - Home', path: '/user', color: '#6ee7b7' },
-            { label: 'User - Catalog', path: '/user/catalog', color: '#6ee7b7' },
-            { label: 'User - Product Detail (Test ID)', path: '/user/catalog/test-id', color: '#6ee7b7' },
-            { label: 'User - Cart', path: '/user/cart', color: '#6ee7b7' },
-            { label: 'User - Checkout', path: '/user/checkout', color: '#6ee7b7' },
-            { label: 'User - Order Success', path: '/user/order-success', color: '#6ee7b7' },
-            { label: 'User - Profile', path: '/user/profile', color: '#6ee7b7' },
-            { label: 'Login', path: '/login', color: '#fcd34d' },
-          ].map((item, i) => (
-            <Link key={i} to={item.path} style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '10px 16px',
-              background: `rgba(255,255,255,0.05)`,
-              border: `1px solid ${item.color}40`,
-              borderRadius: '8px',
-              textDecoration: 'none',
-              color: 'var(--text-primary)',
-              fontSize: '0.85rem',
-              transition: 'all 0.2s',
-            }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLAnchorElement).style.background = `rgba(255,255,255,0.1)`;
-                (e.currentTarget as HTMLAnchorElement).style.borderColor = item.color;
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLAnchorElement).style.background = `rgba(255,255,255,0.05)`;
-                (e.currentTarget as HTMLAnchorElement).style.borderColor = `${item.color}40`;
-              }}
-            >
-              {item.label}
-              <ArrowUpRight size={14} style={{ color: item.color }} />
-            </Link>
-          ))}
+          <p className="page-subtitle">Hazır analytics endpoint yok; özetler mevcut operasyonel endpointlerden türetilir.</p>
         </div>
       </div>
+      {error && <div className="error-banner" style={{ marginBottom: 16 }}>{error}</div>}
+      {loading ? <Empty text="Dashboard verileri yükleniyor..." /> : (
+        <>
+          <div className="stat-grid">
+            {stats.map((s, i) => { const Icon = s.icon; return <div className={`stat-card animate-fade-up animate-fade-up-${Math.min(i + 1, 4)}`} key={s.label}><div className="stat-card-top"><div className="stat-icon" style={{ background: `${s.color}22` }}><Icon size={22} color={s.color} /></div></div><div><div className="stat-value">{s.value}</div><div className="stat-label">{s.label}</div><div style={{ color: 'var(--text-muted)', fontSize: '0.78rem', marginTop: 6 }}>{s.sub}</div></div></div>; })}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+            {breakdowns.map(section => <div className="data-table-wrapper" key={section.title}><div className="data-table-header"><strong>{section.title}</strong></div><div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>{section.rows.length === 0 ? <span style={{ color: 'var(--text-muted)' }}>Veri yok.</span> : section.rows.map(row => <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--glass-border)', paddingBottom: 8 }}><span>{row.label}</span><strong>{row.value}</strong></div>)}</div></div>)}
+          </div>
+        </>
+      )}
     </div>
   );
 }
+
+function Empty({ text }: { text: string }) { return <div style={{ padding: '70px 0', textAlign: 'center', color: 'var(--text-muted)' }}><Activity size={34} style={{ margin: '0 auto 12px', opacity: 0.3 }} /><p>{text}</p></div>; }

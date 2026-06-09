@@ -1,417 +1,150 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from 'react';
-import { Tag, Plus, Search, ChevronRight, CheckCircle2, XCircle, Layers, X, Check } from 'lucide-react';
-import api from '../api/axios';
+import type { Dispatch, SetStateAction } from 'react';
+import { Check, CheckCircle2, ChevronRight, Layers, Plus, Search, Tag, Trash2, X, XCircle } from 'lucide-react';
+import { adminApi } from '../services/adminApi';
+import { attributeDataTypeLabel, attributeTargetLabel, getApiErrorMessage } from '../services/apiUtils';
+import type { CategoryAttributeDto, CategoryDetailDto } from '../types/admin';
+import type { CategoryDto } from '../types/commerce';
 
-interface AttributeSummary {
-  name: string;
-  dataType: number; // enum
-  target: number;
-  isRequired: boolean;
-}
-
-interface Category {
-  id: string;
-  name: string;
-  description?: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  attributes: AttributeSummary[];
-}
-
-const dataTypeLabel: Record<number, string> = {
-  0: 'Metin',
-  1: 'Sayı',
-  2: 'Tarih',
-  3: 'Liste',
-  4: 'Onay',
-};
-
-const targetLabel: Record<number, { text: string; badge: string }> = {
-  1: { text: 'Ürün Düzeyi', badge: 'badge-purple' },
-  2: { text: 'Kalem Düzeyi', badge: 'badge-blue' },
-};
-
-
+const emptyAttribute = { name: '', code: '', dataType: '1', target: '1', isRequired: false };
+const typeOptions: Array<[string, string]> = [['1', 'Metin'], ['2', 'Sayı'], ['3', 'Tarih'], ['4', 'Boolean'], ['5', 'Seçim listesi']];
+const targetOptions: Array<[string, string]> = [['1', 'ProductLevel'], ['2', 'ItemLevel']];
 
 export default function Categories() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading]       = useState(true);
-  const [search, setSearch]         = useState('');
-  const [expanded, setExpanded]     = useState<string | null>(null);
+  const [categories, setCategories] = useState<CategoryDto[]>([]);
+  const [selected, setSelected] = useState<CategoryDetailDto | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const [search, setSearch] = useState('');
   const [filterActive, setFilterActive] = useState<boolean | null>(null);
-  
-  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
-  const [actionSaved, setActionSaved] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
+  const [categoryForm, setCategoryForm] = useState({ name: '', description: '', isActive: true });
+  const [attributeForm, setAttributeForm] = useState(emptyAttribute);
+  const [editingAttributeId, setEditingAttributeId] = useState<string | null>(null);
+  const [optionValue, setOptionValue] = useState<Record<string, string>>({});
 
-  // Add Category form states
-  const [newCatName, setNewCatName] = useState('');
-  const [newCatDesc, setNewCatDesc] = useState('');
-  const [newCatIsActive, setNewCatIsActive] = useState(true);
+  const load = () => {
+    setLoading(true); setError('');
+    adminApi.categories({ pageSize: 100 })
+      .then(setCategories)
+      .catch(err => setError(getApiErrorMessage(err, 'Kategoriler yüklenemedi.')))
+      .finally(() => setLoading(false));
+  };
 
-  const handleAddCategory = async () => {
-    if (!newCatName) return;
+  useEffect(load, []);
+
+  const open = async (id: string) => {
+    setError(''); setMessage('');
     try {
-      await api.post('/Category', {
-        name: newCatName,
-        description: newCatDesc || null,
-        isActive: newCatIsActive,
-        attributes: []
-      });
-      setActionSaved(true);
-      setTimeout(() => {
-        setActionSaved(false);
-        setShowAddCategoryModal(false);
-        setNewCatName(''); setNewCatDesc(''); setNewCatIsActive(true);
-        void api.get('/Category').then(res => {
-          setCategories(res.data?.items || res.data?.data || []);
-        });
-      }, 1000);
+      const detail = await adminApi.category(id);
+      setSelected(detail);
+      setCategoryForm({ name: detail.name, description: detail.description ?? '', isActive: detail.isActive ?? false });
+      setAttributeForm(emptyAttribute);
+      setEditingAttributeId(null);
     } catch (err) {
-      console.error('Failed to add category', err);
+      setError(getApiErrorMessage(err, 'Kategori detayı alınamadı.'));
     }
   };
 
-  // Toggle Active/Inactive
-  const handleToggleActive = async (cat: Category) => {
+  const create = async () => {
+    if (!categoryForm.name.trim()) return;
+    setSaving(true); setError(''); setMessage('');
     try {
-      if (cat.isActive) {
-        await api.put(`/Category/${cat.id}/deactivate`);
-      } else {
-        await api.put(`/Category/${cat.id}/activate`);
-      }
-      setCategories(prev => prev.map(c => c.id === cat.id ? { ...c, isActive: !cat.isActive } : c));
-    } catch (err) {
-      console.error('Toggle active failed', err);
-    }
+      await adminApi.createCategory({ name: categoryForm.name.trim(), description: categoryForm.description || null, isActive: categoryForm.isActive, attributes: [] });
+      setMessage('Kategori oluşturuldu. Attribute şeması Product/Item dynamic attributes altyapısının temelidir.');
+      setShowAdd(false); setCategoryForm({ name: '', description: '', isActive: true }); load();
+    } catch (err) { setError(getApiErrorMessage(err, 'Kategori oluşturulamadı.')); }
+    finally { setSaving(false); }
   };
 
-  // Add Attribute modal
-  const [showAddAttrModal, setShowAddAttrModal] = useState(false);
-  const [attrTargetCatId, setAttrTargetCatId] = useState('');
-  const [attrName, setAttrName] = useState('');
-  const [attrCode, setAttrCode] = useState('');
-  const [attrDataType, setAttrDataType] = useState(0);
-  const [attrTarget, setAttrTarget] = useState(1);
-  const [attrIsRequired, setAttrIsRequired] = useState(false);
-  const [attrSaved, setAttrSaved] = useState(false);
-
-  const handleAddAttribute = async () => {
-    if (!attrName || !attrCode || !attrTargetCatId) return;
+  const updateCategory = async () => {
+    if (!selected || !categoryForm.name.trim()) return;
+    setSaving(true); setError(''); setMessage('');
     try {
-      await api.post(`/Category/${attrTargetCatId}/attributes`, {
-        name: attrName,
-        code: attrCode.toLowerCase().replace(/\s+/g, '_'),
-        dataType: attrDataType,
-        target: attrTarget,
-        isRequired: attrIsRequired,
-        options: []
-      });
-      setAttrSaved(true);
-      setTimeout(() => {
-        setAttrSaved(false);
-        setShowAddAttrModal(false);
-        setAttrName(''); setAttrCode(''); setAttrDataType(0); setAttrTarget(1); setAttrIsRequired(false); setAttrTargetCatId('');
-        void api.get('/Category').then(res => {
-          setCategories(res.data?.items || res.data?.data || []);
-        });
-      }, 1000);
-    } catch (err) {
-      console.error('Failed to add attribute', err);
-    }
+      await adminApi.updateCategory(selected.id, { name: categoryForm.name.trim(), description: categoryForm.description || null });
+      setMessage('Kategori temel bilgileri güncellendi.');
+      await open(selected.id); load();
+    } catch (err) { setError(getApiErrorMessage(err, 'Kategori güncellenemedi.')); }
+    finally { setSaving(false); }
   };
 
-  useEffect(() => {
-    void api.get('/Category').then(res => {
-      const data = res.data?.items || res.data?.data || [];
-      setCategories(data); setLoading(false);
-    }).catch(() => { setCategories([]); setLoading(false); });
-  }, []);
+  const toggleCategory = async (category: CategoryDto | CategoryDetailDto) => {
+    setSaving(true); setError(''); setMessage('');
+    try {
+      if (category.isActive) await adminApi.deactivateCategory(category.id); else await adminApi.activateCategory(category.id);
+      setMessage(category.isActive ? 'Kategori pasifleştirildi. Attribute/option şema değişiklikleri yalnız pasif kategoride yapılabilir.' : 'Kategori aktifleştirildi.');
+      if (selected?.id === category.id) await open(category.id);
+      load();
+    } catch (err) { setError(getApiErrorMessage(err, 'Kategori durumu değiştirilemedi.')); }
+    finally { setSaving(false); }
+  };
+
+  const saveAttribute = async () => {
+    if (!selected || !attributeForm.name.trim() || !attributeForm.code.trim()) return;
+    setSaving(true); setError(''); setMessage('');
+    const payload = { name: attributeForm.name.trim(), code: attributeForm.code.trim(), dataType: Number(attributeForm.dataType), target: Number(attributeForm.target), isRequired: attributeForm.isRequired };
+    try {
+      if (editingAttributeId) await adminApi.updateCategoryAttribute(selected.id, editingAttributeId, payload);
+      else await adminApi.addCategoryAttribute(selected.id, payload);
+      setMessage(editingAttributeId ? 'Attribute güncellendi.' : 'Attribute eklendi. ProductLevel ürün baseAttributes, ItemLevel item dynamicAttributes için kullanılır.');
+      setAttributeForm(emptyAttribute); setEditingAttributeId(null); await open(selected.id); load();
+    } catch (err) { setError(getApiErrorMessage(err, 'Attribute işlemi başarısız. Kategori aktifse backend bu işlemi engeller.')); }
+    finally { setSaving(false); }
+  };
+
+  const editAttribute = (attr: CategoryAttributeDto) => {
+    setEditingAttributeId(attr.id);
+    setAttributeForm({ name: attr.name, code: attr.code, dataType: String(attr.dataType), target: String(attr.target), isRequired: attr.isRequired });
+  };
+
+  const deleteAttribute = async (attributeId: string) => {
+    if (!selected || !confirm('Attribute soft-delete edilecek. Devam edilsin mi?')) return;
+    setSaving(true); setError('');
+    try { await adminApi.deleteCategoryAttribute(selected.id, attributeId); setMessage('Attribute silindi.'); await open(selected.id); load(); }
+    catch (err) { setError(getApiErrorMessage(err, 'Attribute silinemedi.')); }
+    finally { setSaving(false); }
+  };
+
+  const addOption = async (attributeId: string) => {
+    if (!selected || !optionValue[attributeId]?.trim()) return;
+    setSaving(true); setError('');
+    try { await adminApi.addCategoryAttributeOption(selected.id, attributeId, optionValue[attributeId].trim()); setOptionValue(p => ({ ...p, [attributeId]: '' })); setMessage('Seçim opsiyonu eklendi.'); await open(selected.id); }
+    catch (err) { setError(getApiErrorMessage(err, 'Option eklenemedi. Sadece SelectList attribute için geçerlidir.')); }
+    finally { setSaving(false); }
+  };
+
+  const updateOption = async (attributeId: string, optionId: string, currentValue: string) => {
+    if (!selected) return;
+    const next = prompt('Yeni option değeri', currentValue);
+    if (!next?.trim()) return;
+    setSaving(true); setError('');
+    try { await adminApi.updateCategoryAttributeOption(selected.id, attributeId, optionId, next.trim()); setMessage('Option güncellendi.'); await open(selected.id); }
+    catch (err) { setError(getApiErrorMessage(err, 'Option güncellenemedi.')); }
+    finally { setSaving(false); }
+  };
+
+  const deleteOption = async (attributeId: string, optionId: string) => {
+    if (!selected || !confirm('Option soft-delete edilecek. Devam edilsin mi?')) return;
+    setSaving(true); setError('');
+    try { await adminApi.deleteCategoryAttributeOption(selected.id, attributeId, optionId); setMessage('Option silindi.'); await open(selected.id); }
+    catch (err) { setError(getApiErrorMessage(err, 'Option silinemedi.')); }
+    finally { setSaving(false); }
+  };
 
   const filtered = categories.filter(c => {
-    const matchSearch = c.name.toLowerCase().includes(search.toLowerCase());
-    const matchFilter = filterActive === null ? true : c.isActive === filterActive;
-    return matchSearch && matchFilter;
+    const bySearch = c.name.toLowerCase().includes(search.toLowerCase());
+    const byActive = filterActive === null ? true : c.isActive === filterActive;
+    return bySearch && byActive;
   });
 
-  const toggleExpand = (id: string) => setExpanded(prev => prev === id ? null : id);
-
-  return (
-    <div>
-      {/* Header */}
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Kategoriler</h1>
-          <p className="page-subtitle">{categories.length} kategori — dinamik attribute şeması</p>
-        </div>
-        <button className="btn btn-primary" onClick={() => setShowAddCategoryModal(true)}>
-          <Plus size={16} />
-          Yeni Kategori
-        </button>
-      </div>
-
-      {/* Toolbar */}
-      <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
-        <div className="search-bar" style={{ minWidth: 280 }}>
-          <Search size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
-          <input
-            type="text"
-            placeholder="Kategori ara..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-        </div>
-        {/* Filter chips */}
-        {([null, true, false] as const).map((val, i) => {
-          const label = val === null ? 'Tümü' : val ? 'Aktif' : 'Pasif';
-          const active = filterActive === val;
-          return (
-            <button
-              key={i}
-              onClick={() => setFilterActive(val)}
-              className="btn btn-ghost"
-              style={{
-                padding: '9px 16px', fontSize: '0.82rem',
-                background: active ? (val === false ? 'rgba(245,158,11,0.15)' : 'rgba(124,58,237,0.15)') : undefined,
-                color:      active ? (val === false ? '#fcd34d' : '#a78bfa') : undefined,
-                borderColor: active ? (val === false ? 'rgba(245,158,11,0.3)' : 'rgba(124,58,237,0.3)') : undefined,
-              }}
-            >
-              {label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Accordion list */}
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '80px', color: 'var(--text-muted)' }}>
-          <Tag size={36} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
-          <p>Yükleniyor...</p>
-        </div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {filtered.map((cat, i) => {
-            const isOpen = expanded === cat.id;
-            return (
-              <div
-                key={cat.id}
-                className="animate-fade-up"
-                style={{
-                  animationDelay: `${i * 0.05}s`,
-                  background: 'var(--glass-1)',
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)',
-                  border: isOpen ? '1px solid rgba(124,58,237,0.35)' : '1px solid var(--glass-border)',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  transition: 'border-color 0.3s',
-                }}
-              >
-                {/* Accordion header */}
-                <div
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '16px',
-                    padding: '20px 24px', cursor: 'pointer', userSelect: 'none',
-                  }}
-                  onClick={() => toggleExpand(cat.id)}
-                >
-                  {/* Icon */}
-                  <div style={{
-                    width: '40px', height: '40px', borderRadius: '11px', flexShrink: 0,
-                    background: isOpen ? 'rgba(124,58,237,0.18)' : 'rgba(255,255,255,0.05)',
-                    border: isOpen ? '1px solid rgba(124,58,237,0.3)' : '1px solid var(--glass-border)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'all 0.3s',
-                  }}>
-                    <Tag size={17} color={isOpen ? '#a78bfa' : 'var(--text-muted)'} />
-                  </div>
-
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                      <span style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--text-primary)' }}>{cat.name}</span>
-                      {cat.isActive
-                        ? <span className="badge badge-green"><CheckCircle2 size={11} /> Aktif</span>
-                        : <span className="badge badge-amber"><XCircle size={11} /> Pasif</span>
-                      }
-                      <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Layers size={11} /> {cat.attributes.length} attribute
-                      </span>
-                    </div>
-                    {cat.description && (
-                      <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '3px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        {cat.description}
-                      </p>
-                    )}
-                  </div>
-
-                  <div style={{ color: 'var(--text-muted)', transition: 'transform 0.3s', transform: isOpen ? 'rotate(90deg)' : 'none' }}>
-                    <ChevronRight size={18} />
-                  </div>
-                </div>
-
-                {/* Expanded details */}
-                {isOpen && (
-                  <div style={{ borderTop: '1px solid var(--glass-border)', padding: '20px 24px' }}>
-                    <div style={{ marginBottom: '16px', display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-                      <div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' }}>Oluşturulma</div>
-                        <div style={{ fontSize: '0.88rem' }}>{new Date(cat.createdAt).toLocaleDateString('tr-TR')}</div>
-                      </div>
-                      <div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' }}>Son Güncelleme</div>
-                        <div style={{ fontSize: '0.88rem' }}>{new Date(cat.updatedAt).toLocaleDateString('tr-TR')}</div>
-                      </div>
-                    </div>
-
-                    {cat.attributes.length > 0 ? (
-                      <>
-                        <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px', fontWeight: 600 }}>
-                          Dinamik Attribute'lar
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                          {cat.attributes.map((attr, ai) => (
-                            <div key={ai} style={{
-                              display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap',
-                              padding: '11px 16px', background: 'rgba(0,0,0,0.2)',
-                              border: '1px solid var(--glass-border)', borderRadius: '10px',
-                            }}>
-                              <span style={{ fontWeight: 500, fontSize: '0.88rem', color: 'var(--text-primary)', flex: 1, minWidth: 120 }}>{attr.name}</span>
-                              <span className="badge badge-blue">{dataTypeLabel[attr.dataType] ?? 'Bilinmiyor'}</span>
-                              <span className={`badge ${(targetLabel[attr.target] ?? targetLabel[1]).badge}`}>{(targetLabel[attr.target] ?? targetLabel[1]).text}</span>
-                              {attr.isRequired
-                                ? <span className="badge badge-green">Zorunlu</span>
-                                : <span style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>İsteğe Bağlı</span>
-                              }
-                            </div>
-                          ))}
-                        </div>
-                      </>
-                    ) : (
-                      <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Bu kategoriye henüz attribute eklenmemiş.</p>
-                    )}
-
-                    <div style={{ display: 'flex', gap: '8px', marginTop: '20px' }}>
-                      <button className="btn btn-ghost" style={{ fontSize: '0.82rem', padding: '8px 14px' }}>Düzenle</button>
-                      {cat.isActive
-                        ? <button className="btn btn-ghost" style={{ fontSize: '0.82rem', padding: '8px 14px', color: '#fcd34d' }} onClick={() => handleToggleActive(cat)}>Deaktif Et</button>
-                        : <button className="btn btn-ghost" style={{ fontSize: '0.82rem', padding: '8px 14px', color: '#6ee7b7' }} onClick={() => handleToggleActive(cat)}>Aktif Et</button>
-                      }
-                      <button
-                        className="btn btn-ghost"
-                        style={{ fontSize: '0.82rem', padding: '8px 14px' }}
-                        onClick={() => { setAttrTargetCatId(cat.id); setShowAddAttrModal(true); }}
-                      >
-                        <Plus size={13} /> Attribute Ekle
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
-      {showAddCategoryModal && (
-        <div className="modal-overlay" onClick={() => setShowAddCategoryModal(false)}>
-          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Tag size={20} color="#a78bfa" /> Yeni Kategori Ekle
-              </h2>
-              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowAddCategoryModal(false)}>
-                <X size={18} />
-              </button>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
-              <div className="form-group">
-                <label className="form-label">Kategori Adı</label>
-                <input type="text" className="form-input" placeholder="Örn: Elektronik" value={newCatName} onChange={e => setNewCatName(e.target.value)} />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Açıklama</label>
-                <textarea className="form-input" placeholder="Kategori açıklaması (opsiyonel)" rows={3} style={{ resize: 'vertical' }} value={newCatDesc} onChange={e => setNewCatDesc(e.target.value)}></textarea>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Durum</label>
-                <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }} value={newCatIsActive ? 'active' : 'inactive'} onChange={e => setNewCatIsActive(e.target.value === 'active')}>
-                  <option value="active">Aktif</option>
-                  <option value="inactive">Pasif</option>
-                </select>
-              </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
-              <button className="btn btn-ghost" onClick={() => setShowAddCategoryModal(false)}>İptal</button>
-              <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleAddCategory}>
-                {actionSaved ? <><Check size={16}/> Eklendi</> : 'Kategori Ekle'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Add Attribute Modal */}
-      {showAddAttrModal && (
-        <div className="modal-overlay" onClick={() => setShowAddAttrModal(false)}>
-          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 520, width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Layers size={20} color="#a78bfa" /> Attribute Ekle
-              </h2>
-              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowAddAttrModal(false)}>
-                <X size={18} />
-              </button>
-            </div>
-
-            <div style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: 8, padding: '10px 14px', marginBottom: 16, fontSize: '0.82rem', color: '#fcd34d' }}>
-              ⚠️ Attribute eklemek için kategorinin <strong>Pasif</strong> olması gerekir.
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
-              <div style={{ display: 'flex', gap: 16 }}>
-                <div className="form-group" style={{ flex: 1 }}>
-                  <label className="form-label">Attribute Adı</label>
-                  <input type="text" className="form-input" placeholder="Örn: Renk" value={attrName} onChange={e => setAttrName(e.target.value)} />
-                </div>
-                <div className="form-group" style={{ flex: 1 }}>
-                  <label className="form-label">Kod (slug)</label>
-                  <input type="text" className="form-input" placeholder="Örn: renk" value={attrCode} onChange={e => setAttrCode(e.target.value)} />
-                </div>
-              </div>
-              <div style={{ display: 'flex', gap: 16 }}>
-                <div className="form-group" style={{ flex: 1 }}>
-                  <label className="form-label">Veri Tipi</label>
-                  <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }} value={attrDataType} onChange={e => setAttrDataType(Number(e.target.value))}>
-                    <option value={0}>Metin</option>
-                    <option value={1}>Sayı</option>
-                    <option value={2}>Tarih</option>
-                    <option value={3}>Liste</option>
-                    <option value={4}>Onay</option>
-                  </select>
-                </div>
-                <div className="form-group" style={{ flex: 1 }}>
-                  <label className="form-label">Hedef</label>
-                  <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }} value={attrTarget} onChange={e => setAttrTarget(Number(e.target.value))}>
-                    <option value={1}>Ürün Düzeyi</option>
-                    <option value={2}>Kalem Düzeyi</option>
-                  </select>
-                </div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <input type="checkbox" id="attrRequired" checked={attrIsRequired} onChange={e => setAttrIsRequired(e.target.checked)} style={{ width: 16, height: 16, accentColor: '#a78bfa' }} />
-                <label htmlFor="attrRequired" style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', cursor: 'pointer' }}>Zorunlu Alan</label>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
-              <button className="btn btn-ghost" onClick={() => setShowAddAttrModal(false)}>İptal</button>
-              <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleAddAttribute}>
-                {attrSaved ? <><Check size={16} /> Eklendi</> : 'Attribute Ekle'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  return <div><div className="page-header"><div><h1 className="page-title">Kategoriler</h1><p className="page-subtitle">Category dynamic attribute altyapısının temelidir; ProductLevel ve ItemLevel ayrımı backend şemasına göre tutulur.</p></div><button className="btn btn-primary" onClick={() => { setCategoryForm({ name: '', description: '', isActive: true }); setShowAdd(true); }}><Plus size={16} /> Yeni Kategori</button></div>{error && <div className="error-banner" style={{ marginBottom: 16 }}>{error}</div>}{message && <div style={{ color: '#6ee7b7', marginBottom: 16 }}>{message}</div>}<div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}><div className="search-bar" style={{ minWidth: 280 }}><Search size={15} /><input placeholder="Kategori ara..." value={search} onChange={e => setSearch(e.target.value)} /></div>{([null, true, false] as const).map(value => <button key={String(value)} className="btn btn-ghost" onClick={() => setFilterActive(value)}>{value === null ? 'Tümü' : value ? 'Aktif' : 'Pasif'}</button>)}</div>{loading ? <Empty text="Kategoriler yükleniyor..." /> : filtered.length === 0 ? <Empty text="Kategori bulunamadı." /> : <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>{filtered.map(cat => <div key={cat.id} className="glass-card" style={{ padding: 20 }}><div style={{ display: 'flex', alignItems: 'center', gap: 14 }}><Tag size={18} color="#a78bfa" /><div style={{ flex: 1 }}><strong>{cat.name}</strong><div style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>{cat.description || 'Açıklama yok'} · {cat.attributes?.length ?? 0} attribute</div></div>{cat.isActive ? <span className="badge badge-green"><CheckCircle2 size={11} /> Aktif</span> : <span className="badge badge-amber"><XCircle size={11} /> Pasif</span>}<button className="btn btn-ghost" onClick={() => open(cat.id)}>Detay <ChevronRight size={14} /></button><button className="btn btn-ghost" disabled={saving} onClick={() => toggleCategory(cat)}>{cat.isActive ? 'Deaktif Et' : 'Aktif Et'}</button></div></div>)}</div>}{showAdd && <CategoryModal title="Yeni Kategori" saving={saving} form={categoryForm} setForm={setCategoryForm} close={() => setShowAdd(false)} submit={create} />}{selected && <div className="modal-overlay" onClick={() => setSelected(null)}><div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 900, width: '100%', maxHeight: '90vh', overflowY: 'auto' }}><Header title="Kategori Detayı" close={() => setSelected(null)} /><div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, marginBottom: 20 }}><div className="glass-card" style={{ padding: 16 }}><h3 style={{ marginBottom: 12 }}>Temel Bilgi</h3><Input label="Kategori adı" value={categoryForm.name} onChange={v => setCategoryForm(p => ({ ...p, name: v }))} /><Input label="Açıklama" value={categoryForm.description} onChange={v => setCategoryForm(p => ({ ...p, description: v }))} /><div style={{ display: 'flex', gap: 10, marginTop: 12 }}><button className="btn btn-primary" disabled={saving} onClick={updateCategory}><Check size={16} /> Güncelle</button><button className="btn btn-ghost" disabled={saving} onClick={() => toggleCategory(selected)}>{selected.isActive ? 'Deaktif Et' : 'Aktif Et'}</button></div></div><div className="glass-card" style={{ padding: 16 }}><h3 style={{ marginBottom: 12 }}>{editingAttributeId ? 'Attribute Güncelle' : 'Attribute Ekle'}</h3><Input label="Ad" value={attributeForm.name} onChange={v => setAttributeForm(p => ({ ...p, name: v }))} /><Input label="Kod" value={attributeForm.code} onChange={v => setAttributeForm(p => ({ ...p, code: v.toLowerCase().replace(/\s+/g, '_') }))} /><Select label="Tip" value={attributeForm.dataType} onChange={v => setAttributeForm(p => ({ ...p, dataType: v }))} options={typeOptions} /><Select label="Target" value={attributeForm.target} onChange={v => setAttributeForm(p => ({ ...p, target: v }))} options={targetOptions} /><label style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 8 }}><input type="checkbox" checked={attributeForm.isRequired} onChange={e => setAttributeForm(p => ({ ...p, isRequired: e.target.checked }))} /> Zorunlu</label><div style={{ display: 'flex', gap: 10, marginTop: 12 }}><button className="btn btn-primary" disabled={saving} onClick={saveAttribute}><Plus size={16} /> {editingAttributeId ? 'Güncelle' : 'Ekle'}</button>{editingAttributeId && <button className="btn btn-ghost" onClick={() => { setEditingAttributeId(null); setAttributeForm(emptyAttribute); }}>Vazgeç</button>}</div><p style={{ color: 'var(--text-muted)', fontSize: '0.78rem', marginTop: 10 }}>Backend kuralı: Attribute/option schema değişiklikleri aktif kategoride reddedilebilir.</p></div></div><div style={{ display: 'grid', gap: 12 }}>{selected.attributes.map(attr => <div key={attr.id} className="glass-card" style={{ padding: 16 }}><div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}><Layers size={15} /><strong>{attr.name}</strong><code style={{ color: '#a78bfa' }}>{attr.code}</code><span className="badge badge-blue">{attributeDataTypeLabel[String(attr.dataType)] ?? String(attr.dataType)}</span><span className="badge badge-purple">{attributeTargetLabel[String(attr.target)] ?? String(attr.target)}</span>{attr.isRequired ? <span className="badge badge-green">Zorunlu</span> : <span className="badge badge-amber">Opsiyonel</span>}<div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}><button className="btn btn-ghost" disabled={saving} onClick={() => editAttribute(attr)}>Düzenle</button><button className="btn btn-ghost" disabled={saving} style={{ color: '#f87171' }} onClick={() => deleteAttribute(attr.id)}><Trash2 size={14} /> Sil</button></div></div>{String(attr.dataType) === '5' && <div style={{ marginTop: 14 }}><div style={{ display: 'flex', gap: 8, marginBottom: 10 }}><input className="form-input" placeholder="Yeni option" value={optionValue[attr.id] ?? ''} onChange={e => setOptionValue(p => ({ ...p, [attr.id]: e.target.value }))} /><button className="btn btn-primary" disabled={saving} onClick={() => addOption(attr.id)}>Option Ekle</button></div><div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>{attr.options.map(opt => <span key={opt.id} className="badge badge-blue" style={{ gap: 8 }}>{opt.value}<button className="btn btn-ghost" style={{ padding: '2px 6px' }} disabled={saving} onClick={() => updateOption(attr.id, opt.id, opt.value)}>Düzenle</button><button className="btn btn-ghost" style={{ padding: '2px 6px', color: '#f87171' }} disabled={saving} onClick={() => deleteOption(attr.id, opt.id)}>Sil</button></span>)}</div></div>}</div>)}</div></div></div>}</div>;
 }
+
+function CategoryModal({ title, saving, form, setForm, close, submit }: { title: string; saving: boolean; form: { name: string; description: string; isActive: boolean }; setForm: Dispatch<SetStateAction<{ name: string; description: string; isActive: boolean }>>; close: () => void; submit: () => void }) { return <div className="modal-overlay" onClick={close}><div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 520 }}><Header title={title} close={close} /><Input label="Kategori adı" value={form.name} onChange={v => setForm(p => ({ ...p, name: v }))} /><Input label="Açıklama" value={form.description} onChange={v => setForm(p => ({ ...p, description: v }))} /><label style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 12 }}><input type="checkbox" checked={form.isActive} onChange={e => setForm(p => ({ ...p, isActive: e.target.checked }))} /> Aktif oluştur</label><div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 24 }}><button className="btn btn-ghost" onClick={close}>İptal</button><button className="btn btn-primary" disabled={saving} onClick={submit}><Check size={16} /> Kaydet</button></div></div></div>; }
+function Empty({ text }: { text: string }) { return <div style={{ textAlign: 'center', padding: 70, color: 'var(--text-muted)' }}><Tag size={34} style={{ margin: '0 auto 12px', opacity: 0.3 }} /><p>{text}</p></div>; }
+function Header({ title, close }: { title: string; close: () => void }) { return <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}><h2>{title}</h2><button className="btn btn-ghost" style={{ padding: 4 }} onClick={close}><X size={18} /></button></div>; }
+function Input({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) { return <div className="form-group" style={{ marginBottom: 10 }}><label className="form-label">{label}</label><input className="form-input" value={value} onChange={e => onChange(e.target.value)} /></div>; }
+function Select({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: Array<[string, string]> }) { return <div className="form-group" style={{ marginBottom: 10 }}><label className="form-label">{label}</label><select className="form-input" style={{ appearance: 'auto' }} value={value} onChange={e => onChange(e.target.value)}>{options.map(([valueKey, labelText]) => <option key={valueKey} value={valueKey}>{labelText}</option>)}</select></div>; }

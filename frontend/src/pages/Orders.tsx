@@ -1,231 +1,28 @@
-import { useState, useEffect } from 'react';
-import { Search, Filter, Package, CheckCircle, Truck, X } from 'lucide-react';
-import api from '../api/axios';
-
-interface Order {
-  id: string;
-  orderNumber: string;
-  userDisplayName: string;
-  totalAmount: number;
-  createdAt: string;
-  status: string | number;
-}
-
-const statusEnumMap: Record<number, string> = {
-  1: 'PendingApproval',
-  2: 'Approved',
-  3: 'Rejected',
-  4: 'Shipped',
-  5: 'Delivered',
-  6: 'Cancelled',
-  7: 'PaymentPending'
-};
-
-const statusColors: Record<string, string> = {
-  'PendingApproval': 'amber',
-  'Approved': 'blue',
-  'Shipped': 'green',
-  'Cancelled': 'red',
-  'Rejected': 'red',
-  'Delivered': 'green',
-  'PaymentPending': 'amber'
-};
-
-const statusTranslations: Record<string, string> = {
-  'PendingApproval': 'Bekliyor',
-  'Approved': 'Onaylandı',
-  'Shipped': 'Kargolandı',
-  'Cancelled': 'İptal',
-  'Rejected': 'Reddedildi',
-  'Delivered': 'Teslim Edildi',
-  'PaymentPending': 'Ödeme Bekleniyor'
-};
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useEffect, useState } from 'react';
+import { CheckCircle, Package, Search, Truck, X, XCircle } from 'lucide-react';
+import { adminApi } from '../services/adminApi';
+import { formatMoney, getApiErrorMessage, orderStatusLabel } from '../services/apiUtils';
+import type { AdminOrderDetailDto, AdminOrderSummaryDto } from '../types/admin';
 
 export default function Orders() {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<AdminOrderSummaryDto[]>([]);
+  const [selected, setSelected] = useState<AdminOrderDetailDto | null>(null);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const [search, setSearch] = useState('');
+  const [rejectReason, setRejectReason] = useState('');
+  const [ship, setShip] = useState({ carrierName: '', trackingNumber: '', trackingUrl: '', notes: '' });
 
-  const fetchOrders = () => {
-    setLoading(true);
-    api.get('/AdminPurchaseOrder')
-      .then(res => {
-        const data = res.data?.items || res.data?.data || [];
-        setOrders(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setOrders([]);
-        setLoading(false);
-      });
-  };
+  const load = () => { setLoading(true); setError(''); adminApi.orders({ pageSize: 100 }).then(setOrders).catch(err => setError(getApiErrorMessage(err, 'Siparişler yüklenemedi.'))).finally(() => setLoading(false)); };
+  useEffect(load, []);
+  const open = async (id: string) => { setError(''); try { setSelected(await adminApi.order(id)); } catch (err) { setError(getApiErrorMessage(err, 'Sipariş detayı alınamadı.')); } };
+  const filtered = orders.filter(o => o.orderNumber.toLowerCase().includes(search.toLowerCase()) || o.userDisplayName.toLowerCase().includes(search.toLowerCase()));
+  const act = async (kind: 'approve' | 'reject' | 'ship') => { if (!selected) return; setSaving(true); setError(''); setMessage(''); try { if (kind === 'approve') await adminApi.approveOrder(selected.id, 'Admin panelinden onaylandı.'); if (kind === 'reject') await adminApi.rejectOrder(selected.id, rejectReason || 'Admin tarafından reddedildi.'); if (kind === 'ship') await adminApi.shipOrder(selected.id, { carrierName: ship.carrierName, trackingNumber: ship.trackingNumber, shippedAt: new Date().toISOString(), trackingUrl: ship.trackingUrl || null, notes: ship.notes || null }); setMessage(kind === 'reject' ? 'Sipariş reddedildi; backend rezerve stokları geri bırakır.' : kind === 'ship' ? 'Sipariş kargoya verildi. Delivered kargo entegrasyonu future scope.' : 'Sipariş onaylandı. Kargoya verme ayrı aksiyondur.'); setSelected(null); load(); } catch (err) { setError(getApiErrorMessage(err, 'Sipariş işlemi başarısız.')); } finally { setSaving(false); } };
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const filtered = orders.filter(o =>
-    o.orderNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (o.userDisplayName && o.userDisplayName.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
-
-  const handleUpdateStatus = (id: string, action: 'approve' | 'ship') => {
-    api.put(`/AdminPurchaseOrder/${id}/${action}`, {})
-      .then(() => {
-        fetchOrders();
-        setSelectedOrder(null);
-      })
-      .catch(err => {
-        console.error('Status update failed', err);
-      });
-  };
-
-  return (
-    <div>
-      {/* Page header */}
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Siparişler</h1>
-          <p className="page-subtitle">{orders.length} sipariş listeleniyor</p>
-        </div>
-      </div>
-
-      {/* Table */}
-      <div className="data-table-wrapper animate-fade-up">
-        {/* Table toolbar */}
-        <div className="data-table-header">
-          <div className="search-bar" style={{ minWidth: 300 }}>
-            <Search size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
-            <input
-              type="text"
-              placeholder="Sipariş no veya müşteri adı ara..."
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <button className="btn btn-ghost" style={{ padding: '9px 14px', gap: '6px', fontSize: '0.85rem' }}>
-              <Filter size={14} />
-              Filtrele
-            </button>
-          </div>
-        </div>
-
-        {loading ? (
-           <div style={{ padding: '60px 0', textAlign: 'center', color: 'var(--text-muted)' }}>
-             <Package size={32} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
-             <p>Yükleniyor...</p>
-           </div>
-        ) : filtered.length === 0 ? (
-           <div style={{ padding: '60px 0', textAlign: 'center', color: 'var(--text-muted)' }}>
-             <Package size={32} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
-             <p>Sipariş bulunamadı.</p>
-           </div>
-        ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Sipariş No</th>
-                <th>Müşteri</th>
-                <th>Tarih</th>
-                <th>Tutar</th>
-                <th>Durum</th>
-                <th style={{ textAlign: 'right' }}>İşlemler</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((o) => {
-                const statusStr = typeof o.status === 'number' ? statusEnumMap[o.status] : o.status;
-                const colorKey = statusColors[statusStr] || 'purple';
-                const statusName = statusTranslations[statusStr] || statusStr;
-                return (
-                  <tr key={o.id}>
-                    <td>
-                      <code style={{ fontFamily: 'monospace', fontSize: '0.82rem', background: 'rgba(255,255,255,0.05)', padding: '3px 8px', borderRadius: '5px', color: '#a78bfa' }}>
-                        {o.orderNumber}
-                      </code>
-                    </td>
-                    <td>
-                      <div style={{ fontWeight: 500, color: 'var(--text-primary)', fontSize: '0.92rem' }}>
-                        {o.userDisplayName}
-                      </div>
-                    </td>
-                    <td>
-                      <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{new Date(o.createdAt).toLocaleDateString('tr-TR')}</span>
-                    </td>
-                    <td>
-                      <span style={{ fontWeight: 600 }}>₺{o.totalAmount.toLocaleString('tr-TR')}</span>
-                    </td>
-                    <td>
-                      <span className={`badge badge-${colorKey}`}>
-                        {statusName}
-                      </span>
-                    </td>
-                    <td style={{ textAlign: 'right' }}>
-                      <button
-                        className="btn btn-ghost"
-                        style={{ padding: '7px 14px', fontSize: '0.8rem' }}
-                        onClick={() => setSelectedOrder(o)}
-                      >
-                        Yönet
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        )}
-      </div>
-
-      {/* Order Management Modal */}
-      {selectedOrder && (() => {
-        const statusStr = typeof selectedOrder.status === 'number' ? statusEnumMap[selectedOrder.status] : selectedOrder.status;
-        return (
-        <div className="modal-overlay" onClick={() => setSelectedOrder(null)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h2 style={{ fontSize: '1.2rem', fontWeight: 600 }}>Sipariş Yönetimi</h2>
-              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setSelectedOrder(null)}>
-                <X size={18} />
-              </button>
-            </div>
-
-            <div style={{ marginBottom: 24 }}>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8 }}>Sipariş No: <strong style={{ color: 'var(--text-primary)' }}>{selectedOrder.orderNumber}</strong></p>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8 }}>Müşteri: <strong style={{ color: 'var(--text-primary)' }}>{selectedOrder.userDisplayName}</strong></p>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8 }}>Tutar: <strong style={{ color: 'var(--text-primary)' }}>₺{selectedOrder.totalAmount.toLocaleString('tr-TR')}</strong></p>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 24 }}>Mevcut Durum: <span className={`badge badge-${statusColors[statusStr]}`}>{statusTranslations[statusStr] || statusStr}</span></p>
-
-              <div className="glow-divider" style={{ marginBottom: 20 }} />
-
-              <h3 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: 12 }}>Durum Güncelle</h3>
-              <div style={{ display: 'flex', gap: 12 }}>
-                <button 
-                  className={`btn ${statusStr === 'Approved' ? 'btn-primary' : 'btn-ghost'}`}
-                  style={{ flex: 1, gap: 8, padding: '10px' }}
-                  onClick={() => handleUpdateStatus(selectedOrder.id, 'approve')}
-                >
-                  <CheckCircle size={16} /> Onayla
-                </button>
-                <button 
-                  className={`btn ${statusStr === 'Shipped' ? 'btn-primary' : 'btn-ghost'}`}
-                  style={{ flex: 1, gap: 8, padding: '10px' }}
-                  onClick={() => handleUpdateStatus(selectedOrder.id, 'ship')}
-                >
-                  <Truck size={16} /> Kargola
-                </button>
-              </div>
-            </div>
-            
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
-               <button className="btn btn-ghost" onClick={() => setSelectedOrder(null)}>Kapat</button>
-            </div>
-          </div>
-        </div>
-        );
-      })()}
-    </div>
-  );
+  return <div><div className="page-header"><div><h1 className="page-title">Siparişler</h1><p className="page-subtitle">Ödeme sonrası admin onayı; approve ve ship ayrı aksiyonlardır.</p></div></div>{error && <div className="error-banner" style={{ marginBottom: 16 }}>{error}</div>}{message && <div style={{ marginBottom: 16, color: '#6ee7b7' }}>{message}</div>}<div className="data-table-wrapper animate-fade-up"><div className="data-table-header"><div className="search-bar" style={{ minWidth: 300 }}><Search size={15} /><input placeholder="Sipariş no veya müşteri ara..." value={search} onChange={e => setSearch(e.target.value)} /></div></div>{loading ? <Empty text="Siparişler yükleniyor..." /> : filtered.length === 0 ? <Empty text="Sipariş bulunamadı." /> : <table className="data-table"><thead><tr><th>Sipariş</th><th>Müşteri</th><th>Tarih</th><th>Tutar</th><th>Durum</th><th style={{ textAlign: 'right' }}>İşlem</th></tr></thead><tbody>{filtered.map(o => <tr key={o.id}><td><code style={{ color: '#a78bfa' }}>{o.orderNumber}</code></td><td>{o.userDisplayName}</td><td>{new Date(o.createdAt).toLocaleDateString('tr-TR')}</td><td>{formatMoney(o.totalAmount, o.currency)}</td><td><span className="badge badge-purple">{orderStatusLabel[String(o.status)] ?? String(o.status)}</span></td><td style={{ textAlign: 'right' }}><button className="btn btn-ghost" onClick={() => open(o.id)}>Yönet</button></td></tr>)}</tbody></table>}</div>{selected && <div className="modal-overlay" onClick={() => setSelected(null)}><div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 720 }}><Header title="Sipariş Yönetimi" close={() => setSelected(null)} /><div style={{ display: 'grid', gap: 10, marginBottom: 18 }}><strong>{selected.orderNumber}</strong><span>Müşteri: {selected.userDisplayName}</span><span>Durum: {orderStatusLabel[String(selected.status)] ?? String(selected.status)}</span><span>Toplam: {formatMoney(selected.totalAmount, selected.currency)}</span><span style={{ color: 'var(--text-muted)' }}>Frozen price/snapshot order line üzerinde gösterilir.</span></div><table className="data-table" style={{ marginBottom: 20 }}><thead><tr><th>Ürün</th><th>SKU</th><th>Adet</th><th>Birim</th></tr></thead><tbody>{selected.lines.map(l => <tr key={l.id}><td>{l.productName}</td><td>{l.sku}</td><td>{l.quantity}</td><td>{formatMoney(l.discountedUnitPrice, l.currency)}</td></tr>)}</tbody></table><div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}><div className="glass-card" style={{ padding: 16 }}><h3 style={{ marginBottom: 12 }}>Onay / Red</h3><textarea className="form-input" rows={3} placeholder="Red nedeni" value={rejectReason} onChange={e => setRejectReason(e.target.value)} /><div style={{ display: 'flex', gap: 10, marginTop: 12 }}><button className="btn btn-primary" disabled={saving} onClick={() => act('approve')}><CheckCircle size={16} /> Onayla</button><button className="btn btn-ghost" disabled={saving} style={{ color: '#f87171' }} onClick={() => act('reject')}><XCircle size={16} /> Reddet</button></div></div><div className="glass-card" style={{ padding: 16 }}><h3 style={{ marginBottom: 12 }}>Kargoya Ver</h3><input className="form-input" placeholder="Kargo firması" value={ship.carrierName} onChange={e => setShip(p => ({ ...p, carrierName: e.target.value }))} style={{ marginBottom: 8 }} /><input className="form-input" placeholder="Takip numarası" value={ship.trackingNumber} onChange={e => setShip(p => ({ ...p, trackingNumber: e.target.value }))} style={{ marginBottom: 8 }} /><input className="form-input" placeholder="Takip URL opsiyonel" value={ship.trackingUrl} onChange={e => setShip(p => ({ ...p, trackingUrl: e.target.value }))} /><button className="btn btn-primary" disabled={saving || !ship.carrierName || !ship.trackingNumber} style={{ marginTop: 12 }} onClick={() => act('ship')}><Truck size={16} /> Ship</button></div></div></div></div>}</div>;
 }
+function Empty({ text }: { text: string }) { return <div style={{ padding: '60px 0', textAlign: 'center', color: 'var(--text-muted)' }}><Package size={32} style={{ margin: '0 auto 12px', opacity: 0.3 }} /><p>{text}</p></div>; }
+function Header({ title, close }: { title: string; close: () => void }) { return <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}><h2>{title}</h2><button className="btn btn-ghost" style={{ padding: 4 }} onClick={close}><X size={18} /></button></div>; }

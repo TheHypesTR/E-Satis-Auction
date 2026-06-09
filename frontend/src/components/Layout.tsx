@@ -8,6 +8,14 @@ const routeLabels: Record<string, string> = {
   '/facilities': 'Tesisler',
   '/categories': 'Kategoriler',
   '/inventory':  'Envanter',
+  '/orders': 'Siparişler',
+  '/returns': 'İade Talepleri',
+  '/listings': 'Satış İlanları',
+  '/campaigns': 'Kampanyalar',
+  '/user-sale-requests': 'Alım Talepleri',
+  '/auctions': 'Açık Artırmalar',
+  '/part-sales': 'Parça Satış',
+  '/dispatches': 'Sevkiyat',
 };
 
 export default function Layout() {
