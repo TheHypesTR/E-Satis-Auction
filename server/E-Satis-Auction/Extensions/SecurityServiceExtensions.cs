@@ -1,4 +1,4 @@
-﻿using E_Satis_Auction.Common.Options;
+using E_Satis_Auction.Common.Options;
 using Microsoft.AspNetCore.HttpOverrides;
 
 namespace E_Satis_Auction.Extensions;
@@ -23,7 +23,7 @@ public static class SecurityServiceExtensions
         {
             options.AddPolicy(CorsPolicyName, policy =>
             {
-                policy.WithOrigins(clientSettings.Url)
+                policy.WithOrigins(clientSettings.Url, "http://localhost:5173", "http://127.0.0.1:5173")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials(); 

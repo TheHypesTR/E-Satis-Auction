@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://api.e-satis.thehypes.tr/api', // Doğrudan API sunucusuna istek atacak
+  baseURL: 'http://localhost:5067/api', // Local backend URL
   headers: {
     'Content-Type': 'application/json',
   },
