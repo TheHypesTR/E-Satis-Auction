@@ -40,6 +40,51 @@ export default function Products() {
   const [actionSaved, setActionSaved] = useState(false);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
+  // Add Product form states
+  const [categoriesList, setCategoriesList] = useState<{id: string, name: string}[]>([]);
+  const [newProductName, setNewProductName] = useState('');
+  const [newProductSku, setNewProductSku] = useState('');
+  const [newProductBarcode, setNewProductBarcode] = useState('');
+  const [newProductCategoryId, setNewProductCategoryId] = useState('');
+
+  const mapCategoryToUnit = (categoryName: string) => {
+    const lower = categoryName.toLowerCase();
+    if (lower.includes('gıda') || lower.includes('su')) return 2; // Kg
+    if (lower.includes('enerji') || lower.includes('medikal') || lower.includes('barınma') || lower.includes('elektronik')) return 1; // Piece
+    return 1; // Default to Piece
+  };
+
+  const handleAddProduct = async () => {
+    if (!newProductName || !newProductSku || !newProductCategoryId) return;
+    try {
+      const cat = categoriesList.find(c => c.id === newProductCategoryId);
+      const unit = cat ? mapCategoryToUnit(cat.name) : 1;
+      await api.post('/Product', {
+        sku: newProductSku,
+        barcode: newProductBarcode || null,
+        name: newProductName,
+        categoryId: newProductCategoryId,
+        unitOfMeasure: unit,
+        baseAttributes: {}
+      });
+      
+      setActionSaved(true);
+      setTimeout(() => {
+        setActionSaved(false);
+        setShowAddProductModal(false);
+        setNewProductName(''); setNewProductSku(''); setNewProductBarcode(''); setNewProductCategoryId('');
+        
+        void api.get('/Product').then(res => {
+          const data = res.data?.items || res.data?.data || [];
+          const enrichedData = data.map((p: any) => ({ ...p, saleStatus: p.saleStatus || 'Kapalı' }));
+          setProducts(enrichedData);
+        });
+      }, 1000);
+    } catch (err) {
+      console.error('Failed to add product', err);
+    }
+  };
+
   useEffect(() => {
     void api.get('/Product').then(res => {
       const data = res.data?.items || res.data?.data || [];
@@ -48,6 +93,10 @@ export default function Products() {
       setProducts(enrichedData);
       setLoading(false);
     }).catch(() => { setProducts([]); setLoading(false); });
+
+    void api.get('/Category?PageSize=100').then(res => {
+      setCategoriesList(res.data?.items || res.data?.data || []);
+    }).catch(() => {});
   }, []);
 
   const filtered = products.filter(p =>
@@ -376,36 +425,31 @@ export default function Products() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
               <div className="form-group">
                 <label className="form-label">Ürün Adı</label>
-                <input type="text" className="form-input" placeholder="Örn: Portatif Jeneratör" />
+                <input type="text" className="form-input" placeholder="Örn: Portatif Jeneratör" value={newProductName} onChange={e => setNewProductName(e.target.value)} />
               </div>
               <div style={{ display: 'flex', gap: 16 }}>
                 <div className="form-group" style={{ flex: 1 }}>
                   <label className="form-label">SKU Kodu</label>
-                  <input type="text" className="form-input" placeholder="Örn: JNR-5000" />
+                  <input type="text" className="form-input" placeholder="Örn: JNR-5000" value={newProductSku} onChange={e => setNewProductSku(e.target.value)} />
                 </div>
                 <div className="form-group" style={{ flex: 1 }}>
                   <label className="form-label">Barkod</label>
-                  <input type="text" className="form-input" placeholder="Opsiyonel" />
+                  <input type="text" className="form-input" placeholder="Opsiyonel" value={newProductBarcode} onChange={e => setNewProductBarcode(e.target.value)} />
                 </div>
               </div>
               <div className="form-group">
                 <label className="form-label">Kategori</label>
-                <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }}>
+                <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }} value={newProductCategoryId} onChange={e => setNewProductCategoryId(e.target.value)}>
                   <option value="">Seçiniz...</option>
-                  <option value="Enerji">Enerji</option>
-                  <option value="Medikal">Medikal</option>
-                  <option value="Barınma">Barınma</option>
-                  <option value="Su & Gıda">Su & Gıda</option>
+                  {categoriesList.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
                 </select>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Birim Fiyat (₺)</label>
-                <input type="number" className="form-input" placeholder="0.00" />
               </div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
               <button className="btn btn-ghost" onClick={() => setShowAddProductModal(false)}>İptal</button>
-              <button className="btn btn-primary" style={{ gap: 8 }} onClick={() => handleMockAction(setShowAddProductModal)}>
+              <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleAddProduct}>
                 {actionSaved ? <><Check size={16} /> Kaydedildi</> : 'Ürünü Ekle'}
               </button>
             </div>

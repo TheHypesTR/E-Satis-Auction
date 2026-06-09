@@ -229,6 +229,11 @@ h1, h2, h3, h4, h5 {
   color: var(--text-muted);
 }
 
+.form-input option, select option {
+  background: var(--bg-dark);
+  color: var(--text-primary);
+}
+
 /* ─── Layout Shell ─── */
 .shell {
   display: flex;
@@ -1193,7 +1198,8 @@ h1, h2, h3, h4, h5 {
 }
 
 .user-select option {
-  background: #0a0f1e;
+  background: var(--bg-dark);
+  color: var(--text-primary);
 }
 
 .user-filter-panel {
