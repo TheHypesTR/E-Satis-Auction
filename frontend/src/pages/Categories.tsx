@@ -44,6 +44,34 @@ export default function Categories() {
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
   const [actionSaved, setActionSaved] = useState(false);
 
+  // Add Category form states
+  const [newCatName, setNewCatName] = useState('');
+  const [newCatDesc, setNewCatDesc] = useState('');
+  const [newCatIsActive, setNewCatIsActive] = useState(true);
+
+  const handleAddCategory = async () => {
+    if (!newCatName) return;
+    try {
+      await api.post('/Category', {
+        name: newCatName,
+        description: newCatDesc || null,
+        isActive: newCatIsActive,
+        attributes: []
+      });
+      setActionSaved(true);
+      setTimeout(() => {
+        setActionSaved(false);
+        setShowAddCategoryModal(false);
+        setNewCatName(''); setNewCatDesc(''); setNewCatIsActive(true);
+        void api.get('/Category').then(res => {
+          setCategories(res.data?.items || res.data?.data || []);
+        });
+      }, 1000);
+    } catch (err) {
+      console.error('Failed to add category', err);
+    }
+  };
+
   const handleMockAction = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
     setActionSaved(true);
     setTimeout(() => {
@@ -253,15 +281,15 @@ export default function Categories() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
               <div className="form-group">
                 <label className="form-label">Kategori Adı</label>
-                <input type="text" className="form-input" placeholder="Örn: Elektronik" />
+                <input type="text" className="form-input" placeholder="Örn: Elektronik" value={newCatName} onChange={e => setNewCatName(e.target.value)} />
               </div>
               <div className="form-group">
                 <label className="form-label">Açıklama</label>
-                <textarea className="form-input" placeholder="Kategori açıklaması (opsiyonel)" rows={3} style={{ resize: 'vertical' }}></textarea>
+                <textarea className="form-input" placeholder="Kategori açıklaması (opsiyonel)" rows={3} style={{ resize: 'vertical' }} value={newCatDesc} onChange={e => setNewCatDesc(e.target.value)}></textarea>
               </div>
               <div className="form-group">
                 <label className="form-label">Durum</label>
-                <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }}>
+                <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }} value={newCatIsActive ? 'active' : 'inactive'} onChange={e => setNewCatIsActive(e.target.value === 'active')}>
                   <option value="active">Aktif</option>
                   <option value="inactive">Pasif</option>
                 </select>
@@ -269,7 +297,7 @@ export default function Categories() {
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
               <button className="btn btn-ghost" onClick={() => setShowAddCategoryModal(false)}>İptal</button>
-              <button className="btn btn-primary" style={{ gap: 8 }} onClick={() => handleMockAction(setShowAddCategoryModal)}>
+              <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleAddCategory}>
                 {actionSaved ? <><Check size={16}/> Eklendi</> : 'Kategori Ekle'}
               </button>
             </div>

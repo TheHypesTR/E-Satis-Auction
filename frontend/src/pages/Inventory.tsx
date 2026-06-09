@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Layers, Search, TrendingUp, TrendingDown, ArrowRightLeft, Filter } from 'lucide-react';
+import { Layers, Search, TrendingUp, TrendingDown, ArrowRightLeft, Filter, Plus, X, CheckCircle2 } from 'lucide-react';
 import api from '../api/axios';
 
 // Matches backend InventoryTransactionType enum
@@ -42,11 +42,54 @@ export default function Inventory() {
   const [search, setSearch]             = useState('');
   const [filterType, setFilterType]     = useState<number | null>(null);
 
+  const [showAddStockModal, setShowAddStockModal] = useState(false);
+  const [actionSaved, setActionSaved] = useState(false);
+  const [productsList, setProductsList] = useState<{id: string, name: string, unitOfMeasure: number}[]>([]);
+  const [facilitiesList, setFacilitiesList] = useState<{id: string, name: string}[]>([]);
+  
+  const [newStockProductId, setNewStockProductId] = useState('');
+  const [newStockFacilityId, setNewStockFacilityId] = useState('');
+  const [newStockQuantity, setNewStockQuantity] = useState('');
+
+  const handleAddStock = async () => {
+    if (!newStockProductId || !newStockFacilityId || !newStockQuantity) return;
+    try {
+      const prod = productsList.find(p => p.id === newStockProductId);
+      await api.post('/Item/standardized', {
+        productId: newStockProductId,
+        facilityId: newStockFacilityId,
+        quantity: Number(newStockQuantity),
+        unitOfMeasure: prod ? prod.unitOfMeasure : 1,
+        status: 1, // Available
+        dynamicAttributes: {}
+      });
+      setActionSaved(true);
+      setTimeout(() => {
+        setActionSaved(false);
+        setShowAddStockModal(false);
+        setNewStockProductId(''); setNewStockFacilityId(''); setNewStockQuantity('');
+        void api.get('/InventoryTransaction').then(res => {
+          setTransactions(res.data?.items || res.data?.data || []);
+        });
+      }, 1000);
+    } catch (err) {
+      console.error('Failed to add stock', err);
+    }
+  };
+
   useEffect(() => {
     void api.get('/InventoryTransaction').then(res => {
       const data = res.data?.items || res.data?.data || [];
       setTransactions(data); setLoading(false);
     }).catch(() => { setTransactions([]); setLoading(false); });
+
+    void api.get('/Product?PageSize=100').then(res => {
+      setProductsList(res.data?.items || res.data?.data || []);
+    }).catch(() => {});
+    
+    void api.get('/Facility?PageSize=100').then(res => {
+      setFacilitiesList(res.data?.items || res.data?.data || []);
+    }).catch(() => {});
   }, []);
 
   const filtered = transactions.filter(t => {
@@ -67,6 +110,10 @@ export default function Inventory() {
           <h1 className="page-title">Envanter Hareketleri</h1>
           <p className="page-subtitle">Tüm stok giriş-çıkış ve transfer kayıtları</p>
         </div>
+        <button className="btn btn-primary" onClick={() => setShowAddStockModal(true)}>
+          <Plus size={16} />
+          Yeni Stok
+        </button>
       </div>
 
       {/* Summary strip */}
@@ -229,6 +276,52 @@ export default function Inventory() {
           </div>
         </div>
       </div>
+
+      {/* Add Stock Modal */}
+      {showAddStockModal && (
+        <div className="modal-overlay" onClick={() => setShowAddStockModal(false)}>
+          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Layers size={20} color="#a78bfa" /> Yeni Stok Ekle
+              </h2>
+              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowAddStockModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
+              <div className="form-group">
+                <label className="form-label">Tesis Seçimi</label>
+                <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }} value={newStockFacilityId} onChange={e => setNewStockFacilityId(e.target.value)}>
+                  <option value="">Tesis seçin...</option>
+                  {facilitiesList.map(f => (
+                    <option key={f.id} value={f.id}>{f.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Ürün Seçimi</label>
+                <select className="form-input" style={{ appearance: 'auto', backgroundColor: 'var(--bg-secondary)' }} value={newStockProductId} onChange={e => setNewStockProductId(e.target.value)}>
+                  <option value="">Ürün seçin...</option>
+                  {productsList.map(p => (
+                    <option key={p.id} value={p.id}>{p.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Miktar</label>
+                <input type="number" className="form-input" placeholder="Örn: 100" value={newStockQuantity} onChange={e => setNewStockQuantity(e.target.value)} />
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+              <button className="btn btn-ghost" onClick={() => setShowAddStockModal(false)}>İptal</button>
+              <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleAddStock}>
+                {actionSaved ? <><CheckCircle2 size={16}/> Eklendi</> : 'Stok Ekle'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

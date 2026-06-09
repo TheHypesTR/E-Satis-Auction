@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Building2, Plus, Search, MapPin, Users, MoreVertical, Shield } from 'lucide-react';
+import { Building2, Plus, Search, MapPin, Users, MoreVertical, Shield, X, CheckCircle2 } from 'lucide-react';
 import api from '../api/axios';
 
 interface Facility {
@@ -25,6 +25,47 @@ export default function Facilities() {
   const [loading, setLoading]       = useState(true);
   const [search, setSearch]         = useState('');
   const [view, setView]             = useState<'grid' | 'table'>('grid');
+
+  const [showAddFacilityModal, setShowAddFacilityModal] = useState(false);
+  const [actionSaved, setActionSaved] = useState(false);
+
+  // Add Facility form states
+  const [newFacName, setNewFacName] = useState('');
+  const [newFacDesc, setNewFacDesc] = useState('');
+  const [newFacCapacity, setNewFacCapacity] = useState('1000');
+  const [newFacCity, setNewFacCity] = useState('');
+  const [newFacDistrict, setNewFacDistrict] = useState('');
+  const [newFacAddress, setNewFacAddress] = useState('');
+
+  const handleAddFacility = async () => {
+    if (!newFacName || !newFacCity || !newFacDistrict) return;
+    try {
+      await api.post('/Facility', {
+        name: newFacName,
+        description: newFacDesc || null,
+        isVisibleOnMap: true,
+        capacityM3: Number(newFacCapacity),
+        criticalThresholdM3: Number(newFacCapacity) * 0.8,
+        addressTitle: 'Merkez',
+        city: newFacCity,
+        district: newFacDistrict,
+        openAddress: newFacAddress,
+        latitude: 39.92077,
+        longitude: 32.85411
+      });
+      setActionSaved(true);
+      setTimeout(() => {
+        setActionSaved(false);
+        setShowAddFacilityModal(false);
+        setNewFacName(''); setNewFacDesc(''); setNewFacCity(''); setNewFacDistrict(''); setNewFacAddress(''); setNewFacCapacity('1000');
+        void api.get('/Facility').then(res => {
+          setFacilities(res.data?.items || res.data?.data || []);
+        });
+      }, 1000);
+    } catch (err) {
+      console.error('Failed to add facility', err);
+    }
+  };
 
   useEffect(() => {
     void api.get('/Facility').then(res => {
@@ -52,7 +93,7 @@ export default function Facilities() {
           <h1 className="page-title">Tesisler</h1>
           <p className="page-subtitle">{facilities.length} tesis kayıtlı</p>
         </div>
-        <button className="btn btn-primary">
+        <button className="btn btn-primary" onClick={() => setShowAddFacilityModal(true)}>
           <Plus size={16} />
           Yeni Tesis
         </button>
@@ -202,6 +243,56 @@ export default function Facilities() {
           </table>
           <div style={{ padding: '14px 24px', borderTop: '1px solid var(--glass-border)', color: 'var(--text-muted)', fontSize: '0.82rem' }}>
             {filtered.length} kayıt
+          </div>
+        </div>
+      )}
+
+      {/* Add Facility Modal */}
+      {showAddFacilityModal && (
+        <div className="modal-overlay" onClick={() => setShowAddFacilityModal(false)}>
+          <div className="modal-content animate-fade-up" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Building2 size={20} color="#a78bfa" /> Yeni Tesis Ekle
+              </h2>
+              <button className="btn btn-ghost" style={{ padding: 4 }} onClick={() => setShowAddFacilityModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
+              <div className="form-group">
+                <label className="form-label">Tesis Adı</label>
+                <input type="text" className="form-input" placeholder="Örn: Ankara Ana Depo" value={newFacName} onChange={e => setNewFacName(e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Açıklama</label>
+                <textarea className="form-input" placeholder="Opsiyonel" rows={2} style={{ resize: 'vertical' }} value={newFacDesc} onChange={e => setNewFacDesc(e.target.value)}></textarea>
+              </div>
+              <div style={{ display: 'flex', gap: 16 }}>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Şehir</label>
+                  <input type="text" className="form-input" placeholder="Örn: Ankara" value={newFacCity} onChange={e => setNewFacCity(e.target.value)} />
+                </div>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">İlçe</label>
+                  <input type="text" className="form-input" placeholder="Örn: Çankaya" value={newFacDistrict} onChange={e => setNewFacDistrict(e.target.value)} />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Kapasite (m³)</label>
+                <input type="number" className="form-input" placeholder="Örn: 1000" value={newFacCapacity} onChange={e => setNewFacCapacity(e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Açık Adres</label>
+                <textarea className="form-input" placeholder="Tam adres" rows={2} style={{ resize: 'vertical' }} value={newFacAddress} onChange={e => setNewFacAddress(e.target.value)}></textarea>
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+              <button className="btn btn-ghost" onClick={() => setShowAddFacilityModal(false)}>İptal</button>
+              <button className="btn btn-primary" style={{ gap: 8 }} onClick={handleAddFacility}>
+                {actionSaved ? <><CheckCircle2 size={16}/> Eklendi</> : 'Tesis Ekle'}
+              </button>
+            </div>
           </div>
         </div>
       )}
