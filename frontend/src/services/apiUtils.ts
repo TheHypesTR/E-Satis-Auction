@@ -172,6 +172,80 @@ export const itemStatusLabel: Record<string, string> = {
   '6': 'Arşiv',
 };
 
+export const itemModeLabel: Record<string, string> = {
+  Standardized: 'Standardized',
+  AdHoc: 'AdHoc',
+  '1': 'Standardized',
+  '2': 'AdHoc',
+};
+
+export const unitOfMeasureLabel: Record<string, string> = {
+  Piece: 'Adet',
+  Kg: 'Kg',
+  Liter: 'Litre',
+  Box: 'Kutu',
+  Pack: 'Paket',
+  Pallet: 'Palet',
+  '1': 'Adet',
+  '2': 'Kg',
+  '3': 'Litre',
+  '4': 'Kutu',
+  '5': 'Paket',
+  '6': 'Palet',
+};
+
+export const attributeDataTypeLabel: Record<string, string> = {
+  Text: 'Metin',
+  Number: 'Sayı',
+  Date: 'Tarih',
+  Boolean: 'Boolean',
+  SelectList: 'Seçim listesi',
+  '1': 'Metin',
+  '2': 'Sayı',
+  '3': 'Tarih',
+  '4': 'Boolean',
+  '5': 'Seçim listesi',
+};
+
+export const attributeTargetLabel: Record<string, string> = {
+  ProductLevel: 'ProductLevel',
+  ItemLevel: 'ItemLevel',
+  '1': 'ProductLevel',
+  '2': 'ItemLevel',
+};
+
+export const inventoryTransactionTypeLabel: Record<string, string> = {
+  '1': 'AdHoc oluşturuldu',
+  '2': 'Standardized oluşturuldu',
+  '3': 'Rezerve',
+  '4': 'Dispatch',
+  '5': 'Receive',
+  '6': 'Cancel',
+  '7': 'Damaged',
+  '8': 'Archived',
+  '9': 'Adjusted',
+  '10': 'Purchase reserved',
+  '11': 'Purchase released',
+  '12': 'Purchase shipped',
+  '13': 'Purchase returned',
+  '14': 'Part sale consumed',
+  '15': 'Part sale created',
+  '16': 'Auction reserved',
+  '17': 'Auction released',
+  '18': 'Auction sold',
+};
+
+export const dispatchStatusLabel: Record<string, string> = {
+  Pending: 'Bekliyor',
+  InTransit: 'Transferde',
+  Completed: 'Tamamlandı',
+  Cancelled: 'İptal edildi',
+  '1': 'Bekliyor',
+  '2': 'Transferde',
+  '3': 'Tamamlandı',
+  '4': 'İptal edildi',
+};
+
 export const isActiveListing = (status: string | number) => ['Active', '2'].includes(normalizeStatus(status));
 export const isActiveAuction = (status: string | number) => ['Active', '3'].includes(normalizeStatus(status));
 export const isScheduledAuction = (status: string | number) => ['Scheduled', '2'].includes(normalizeStatus(status));

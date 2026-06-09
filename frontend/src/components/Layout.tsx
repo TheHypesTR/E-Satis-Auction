@@ -14,6 +14,8 @@ const routeLabels: Record<string, string> = {
   '/campaigns': 'Kampanyalar',
   '/user-sale-requests': 'Alım Talepleri',
   '/auctions': 'Açık Artırmalar',
+  '/part-sales': 'Parça Satış',
+  '/dispatches': 'Sevkiyat',
 };
 
 export default function Layout() {
