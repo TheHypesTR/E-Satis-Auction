@@ -23,7 +23,7 @@ public static class SecurityServiceExtensions
         {
             options.AddPolicy(CorsPolicyName, policy =>
             {
-                policy.WithOrigins(clientSettings.Url, "http://localhost:5173", "http://127.0.0.1:5173")
+                policy.WithOrigins(clientSettings.Url)
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials(); 
