@@ -122,6 +122,17 @@ export const auctionStatusLabel: Record<string, string> = {
   '10': 'Yeniden listelenebilir',
 };
 
+export const auctionBidStatusLabel: Record<string, string> = {
+  Active: 'Aktif',
+  Outbid: 'Geçildi',
+  Winning: 'Kazanan',
+  Cancelled: 'İptal edildi',
+  '1': 'Aktif',
+  '2': 'Geçildi',
+  '3': 'Kazanan',
+  '4': 'İptal edildi',
+};
+
 export const returnStatusLabel: Record<string, string> = {
   Pending: 'Bekliyor',
   Approved: 'Onaylandı',
@@ -250,4 +261,34 @@ export const isActiveListing = (status: string | number) => ['Active', '2'].incl
 export const isActiveAuction = (status: string | number) => ['Active', '3'].includes(normalizeStatus(status));
 export const isScheduledAuction = (status: string | number) => ['Scheduled', '2'].includes(normalizeStatus(status));
 export const isAuctionPaymentPending = (status: string | number) => ['PaymentPending', '5'].includes(normalizeStatus(status));
+export const isPublicAuctionStatus = (status: string | number) => ['Scheduled', 'Active', 'Ended', 'PaymentPending', 'Completed', 'PaymentExpired', 'Relistable', '2', '3', '4', '5', '6', '8', '10'].includes(normalizeStatus(status));
+
+export function getCurrentUserIdFromToken(): string | null {
+  const token = localStorage.getItem('token');
+  const payloadPart = token?.split('.')[1];
+  if (!payloadPart) return null;
+
+  try {
+    const normalized = payloadPart.replace(/-/g, '+').replace(/_/g, '/');
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=');
+    const payload = JSON.parse(atob(padded)) as Record<string, unknown>;
+    const claimKeys = [
+      'sub',
+      'nameid',
+      'userId',
+      'id',
+      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier',
+      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name',
+    ];
+
+    for (const key of claimKeys) {
+      const value = payload[key];
+      if (typeof value === 'string' && value.trim()) return value;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
 
