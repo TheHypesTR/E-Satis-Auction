@@ -72,14 +72,6 @@ export default function Categories() {
     }
   };
 
-  const handleMockAction = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
-    setActionSaved(true);
-    setTimeout(() => {
-      setActionSaved(false);
-      setter(false);
-    }, 1000);
-  };
-
   useEffect(() => {
     void api.get('/Category').then(res => {
       const data = res.data?.items || res.data?.data || [];
