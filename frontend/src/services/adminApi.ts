@@ -96,7 +96,7 @@ export const adminApi = {
   async auction(id: string) { const { data } = await api.get<AuctionDetailDto>(`/AdminAuction/${id}`); return data; },
   async auctionBids(id: string, params: Record<string, unknown> = {}) { const { data } = await api.get(`/Auction/${id}/bids`, { params: normalizePaginationParams(params) }); return itemsOf<AdminAuctionBidDto>(data); },
   async createAuction(payload: AuctionPayload) { const { data } = await api.post<AuctionDetailDto>('/AdminAuction', payload); return data; },
-  async updateAuction(id: string, payload: AuctionPayload) { const { data } = await api.put<AuctionDetailDto>(`/AdminAuction/${id}`, payload); return data; },
+  async updateAuction(id: string, payload: AuctionUpdatePayload) { const { data } = await api.put<AuctionDetailDto>(`/AdminAuction/${id}`, payload); return data; },
   async scheduleAuction(id: string, payload: { startsAt: string; endsAt: string }) { const { data } = await api.put<AuctionDetailDto>(`/AdminAuction/${id}/schedule`, payload); return data; },
   async activateAuction(id: string) { const { data } = await api.put<AuctionDetailDto>(`/AdminAuction/${id}/activate`); return data; },
   async finalizeAuction(id: string) { const { data } = await api.post<AuctionDetailDto>(`/AdminAuction/${id}/finalize`); return data; },
@@ -147,3 +147,5 @@ export interface AuctionPayload {
   quantity: number;
   currency: string;
 }
+
+export type AuctionUpdatePayload = Omit<AuctionPayload, 'productListingId'>;
