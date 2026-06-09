@@ -24,7 +24,7 @@ export default function Login() {
         try {
           const meResponse = await api.get('/Auth/me', { headers: { Authorization: `Bearer ${token}` } });
           const roles = meResponse.data?.roles || [];
-          if (roles.includes('Admin') || roles.includes('SystemAdmin')) {
+          if (roles.includes('GeneralAdmin') || roles.includes('WarehouseManager')) {
             navigate('/dashboard');
           } else {
             navigate('/user/catalog');

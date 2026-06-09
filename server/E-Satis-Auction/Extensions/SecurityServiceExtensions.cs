@@ -1,4 +1,4 @@
-﻿using E_Satis_Auction.Common.Options;
+using E_Satis_Auction.Common.Options;
 using Microsoft.AspNetCore.HttpOverrides;
 
 namespace E_Satis_Auction.Extensions;

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://api.e-satis.thehypes.tr/api', // Doğrudan API sunucusuna istek atacak
+  baseURL: import.meta.env.DEV ? '/api' : 'https://api.e-satis.thehypes.tr/api',
   headers: {
     'Content-Type': 'application/json',
   },

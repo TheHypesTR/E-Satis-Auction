@@ -36,9 +36,13 @@ export default function UserHome() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get('/Product?pageSize=6').then(res => {
+    api.get('/ProductListing?pageSize=6').then(res => {
       const data = res.data?.items || res.data?.data || [];
-      setFeatured(data.slice(0, 6));
+      const mappedData = data.slice(0, 6).map((item: any) => ({
+        ...item,
+        name: item.productName || item.name,
+      }));
+      setFeatured(mappedData);
     }).catch(() => setFeatured([]));
   }, []);
 

@@ -1,5 +1,5 @@
 import { Package, Building2, Users, Zap, TrendingUp, ArrowUpRight, Activity } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const stats = [
   {
@@ -64,6 +64,8 @@ const typeColor: Record<string, string> = {
 };
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+
   return (
     <div>
       {/* Page header */}
@@ -172,10 +174,10 @@ export default function Dashboard() {
           </div>
           <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
-              { label: 'Yeni Ürün Ekle', sub: 'Katalog veritabanına ürün ekle', color: '#a78bfa', bg: 'rgba(124,58,237,0.08)', border: 'rgba(124,58,237,0.2)' },
-              { label: 'Yeni Tesis Oluştur', sub: 'Bölge veya depo kaydı aç', color: '#93c5fd', bg: 'rgba(59,130,246,0.08)', border: 'rgba(59,130,246,0.2)' },
-              { label: 'Envanter Sevk Et', sub: 'Stok sevkiyat emri oluştur', color: '#6ee7b7', bg: 'rgba(16,185,129,0.08)', border: 'rgba(16,185,129,0.2)' },
-              { label: 'Kategori Yönet', sub: 'Şema ve attribute düzenle', color: '#fcd34d', bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)' },
+              { label: 'Yeni Ürün Ekle', sub: 'Katalog veritabanına ürün ekle', color: '#a78bfa', bg: 'rgba(124,58,237,0.08)', border: 'rgba(124,58,237,0.2)', path: '/products' },
+              { label: 'Yeni Tesis Oluştur', sub: 'Bölge veya depo kaydı aç', color: '#93c5fd', bg: 'rgba(59,130,246,0.08)', border: 'rgba(59,130,246,0.2)', path: '/facilities' },
+              { label: 'Envanter Sevk Et', sub: 'Stok sevkiyat emri oluştur', color: '#6ee7b7', bg: 'rgba(16,185,129,0.08)', border: 'rgba(16,185,129,0.2)', path: '/inventory' },
+              { label: 'Kategori Yönet', sub: 'Şema ve attribute düzenle', color: '#fcd34d', bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)', path: '/categories' },
             ].map((item, i) => (
               <div key={i} style={{
                 display: 'flex',
@@ -188,6 +190,7 @@ export default function Dashboard() {
                 cursor: 'pointer',
                 transition: 'all 0.2s',
               }}
+                onClick={() => navigate(item.path)}
                 onMouseEnter={e => {
                   (e.currentTarget as HTMLDivElement).style.transform = 'translateX(4px)';
                   (e.currentTarget as HTMLDivElement).style.boxShadow = `0 4px 20px rgba(0,0,0,0.2)`;
